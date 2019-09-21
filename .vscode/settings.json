@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "connectionTimeout": 30,
+            "database": "sisnoc",
+            "dialect": "MySQL",
+            "name": "Local",
+            "password": "Casa1803",
+            "port": 3306,
+            "server": "127.0.0.1",
+            "username": "admin"
+        }
+    ]
+}
