@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Called extends Model
 {
+
+    protected $table = 'called';
+
     protected $fillable = [
         'caller_number',
         'id_establishment',
@@ -51,8 +54,4 @@ class Called extends Model
     public function getHrDownAttribute($value){
         return DateUtils::convertDataToBR($value);
     }
-
-
-
-
 }

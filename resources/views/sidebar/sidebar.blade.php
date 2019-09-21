@@ -36,7 +36,7 @@
                                     <a href="{{route('regionalManager.index')}}"><i class="fas fa-map"></i> Gerentes Regionais</a>
                                 </li>
                                 <li>
-                                    <a href="{{route('technicalManager.index')}}"><i class="fas fa-user-shield"></i> Responsáveis Técnicos</a>
+                                    <a href="{{route('technicalManager.index')}}"><i class="fas fa-user"></i> Responsáveis Técnicos</a>
                                 </li>
                             </ul>
                     </li>
@@ -60,7 +60,7 @@
                                 <a href="#"><i class="fas fa-search"></i> Consultar</a>
                             </li>
                             <li>
-                                <a href="#"><i class="fas fa-network-wired"></i> Cadastrar novo link</a>
+                                <a href="#"><i class="fas fa-file"></i> Cadastrar novo link</a>
                             </li>
                         </ul>
 
@@ -91,7 +91,7 @@
                     </li>
                     <li>
                         <a class="js-arrow" href="#">
-                            <i class="fas fa-chart-bar"></i>Estabelecimentos</a>
+                            <i class="fas fa-building"></i>Estabelecimentos</a>
                             <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
                                 <li>
                                     <a href="{{route('estabilishment.index')}}"> <i class="fas fa-search"></i> Consultar</a>
@@ -103,7 +103,7 @@
                                     <a href="{{route('regionalManager.index')}}"><i class="fas fa-map"></i> Gerentes Regionais</a>
                                 </li>
                                 <li>
-                                    <a href="{{route('technicalManager.index')}}"><i class="fas fa-user-shield"></i>Resp. Técnicos</a>
+                                    <a href="{{route('technicalManager.index')}}"><i class="fas fa-user"></i>Resp. Técnicos</a>
                                 </li>
                             </ul>
                     </li>
@@ -112,29 +112,33 @@
                             <i class="fas fa-table"></i>Chamados</a>
                             <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
                                 <li>
-                                    <a href="#"><i class="fas fa-search"></i> Consultar</a>
+                                    <a href="{{route('called.index')}}"><i class="fas fa-search"></i> Consultar</a>
                                 </li>
                                 <li>
-                                    <a href="#"><i class="fas fa-file"></i> Abrir novo chamado</a>
+                                    <a href="{{route('called.create')}}"><i class="fas fa-file"></i> Abrir novo chamado</a>
                                 </li>
                             </ul>
                     </li>
                     <li>
                         <a class="js-arrow" href="#">
-                        <i class="far fa-check-square"></i>Links</a>
+                        <i class="fas fa-link"></i>Links</a>
                         <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
                             <li>
                                 <a href="{{route('links.index')}}"><i class="fas fa-search"></i> Consultar</a>
                             </li>
                             <li>
-                                <a href="{{route('links.create')}}"><i class="fas fa-network-wired"></i> Cadastrar novo link</a>
+                                <a href="{{route('links.create')}}"><i class="fas fa-file"></i> Cadastrar novo link</a>
                             </li>
                         </ul>
 
                     </li>
                     <li>
                         <a href="#">
-                            <i class="fas fa-calendar-alt"></i>Configurações</a>
+                            <i class="fas  fa-files-o"></i>Relatórios</a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-gears"></i>Configurações</a>
                     </li>
 
                 </ul>

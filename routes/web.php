@@ -33,4 +33,9 @@ Route::group(['middleware' => 'auth'], function () {
     //Rotas para os links
     Route::resource('links', 'LinksController');
     Route::get('table-links', 'LinksController@table');
+
+    //Rotas para Chamados
+    Route::resource('called', 'CalledController');
+    Route::get('table-called', 'CalledController@table');
+
 });
