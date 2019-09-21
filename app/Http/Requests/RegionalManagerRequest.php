@@ -28,7 +28,6 @@ class RegionalManagerRequest extends FormRequest
             'name' => 'required|min:3',
             'contact' => 'required|min:13',
             'email' => 'required|email',
-            'selected_establishment' => 'digits_between:1,100'
         ];
     }
 

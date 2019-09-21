@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LinksRequest;
+use App\Models\Establishment;
 use App\Models\Links;
+use Exception;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 class LinksController extends Controller
 {
 
-    private $typeTlink = ['MPLS', 'ADSL', 'XDSL', 'IPConnect', 'Radio', 'SDWAN'];
+    private $typeLink = ['MPLS', 'ADSL', 'XDSL', 'IPConnect', 'Radio', 'SDWAN'];
 
 
     /**
@@ -49,7 +52,8 @@ class LinksController extends Controller
      */
     public function create()
     {
-        return view('links.create', ['typeLink' => $this->typeTlink]);
+        $establishments = Establishment::select(['id', 'establishment_code'])->get();
+        return view('links.create', ['typeLink' => $this->typeLink, 'establishments' => $establishments]);
     }
 
     /**
@@ -58,9 +62,23 @@ class LinksController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(LinksRequest $request)
     {
-        //
+
+        try {
+            $link = new Links();
+            $link->fill($request->all());
+            $link->status = 'active';
+    
+            if(!$link->save()){
+                throw new Exception("Houve uma Falha ao cadastrar o link");
+            }
+
+            return redirect()->route('links.index')->with('alert', ['messageType' => 'success', 'message' => 'Link cadastrado com sucesso!']);
+
+        } catch (Exception $e) {
+            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -82,7 +100,14 @@ class LinksController extends Controller
      */
     public function edit($id)
     {
-        //
+        $link = Links::find($id);
+        $establishments = Establishment::select(['id', 'establishment_code'])->get();
+
+        return view('links.edit', [
+            'link' => $link,
+            'establishments' => $establishments,
+            'typeLink' => $this->typeLink
+        ]);
     }
 
     /**
@@ -92,9 +117,21 @@ class LinksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(LinksRequest $request, $id)
     {
-        //
+        try {
+            $link = Links::find($id);
+            $link->fill($request->all());
+
+            if(!$link->save()){
+                throw new Exception("Houve uma Falha ao atualizar o link");
+            }
+
+            return redirect()->route('links.index')->with('alert', ['messageType' => 'success', 'message' => 'Link atualizado com sucesso!']);
+
+        } catch (Exception $e) {
+            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
+        }
     }
 
     /**

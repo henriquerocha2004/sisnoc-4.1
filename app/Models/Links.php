@@ -16,7 +16,8 @@ class Links extends Model
         'monitoring_ip',
         'installed_router_model',
         'local_ip_router',
-        'establishment_id'
+        'establishment_id',
+        'serial_router'
     ];
 
 

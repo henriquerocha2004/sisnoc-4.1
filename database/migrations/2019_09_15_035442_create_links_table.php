@@ -21,6 +21,7 @@ class CreateLinksTable extends Migration
             $table->string('telecommunications_company');
             $table->string('monitoring_ip');
             $table->string('installed_router_model');
+            $table->string('serial_router');
             $table->string('local_ip_router');
             $table->unsignedBigInteger('establishment_id');
             $table->timestamps();

@@ -30,6 +30,7 @@ mix
         'resources/CoolAdmin-master/vendor/perfect-scrollbar/perfect-scrollbar.css',
         'node_modules/datatables.net-dt/css/jquery.dataTables.min.css',
         'node_modules/multi.js-master/dist/multi.min.css',
+        'node_modules/select2/dist/css/select2.css',
     ], 'public/css/vendor.css')
 
     .styles([
@@ -54,7 +55,8 @@ mix
         'resources/CoolAdmin-master/vendor/select2/select2.min.js',
         'resources/CoolAdmin-master/vendor/perfect-scrollbar/perfect-scrollbar.js',
         'node_modules/jquery-mask-plugin/dist/jquery.mask.min.js',
-        'node_modules/multi.js-master/dist/multi.min.js'
+        'node_modules/multi.js-master/dist/multi.min.js',
+        'node_modules/select2/dist/js/select2.js'
     ], 'public/js/vendors.js')
     .scripts([
         'node_modules/datatables.net/js/jquery.dataTables.min.js',
@@ -67,6 +69,7 @@ mix
     .copyDirectory('resources/CoolAdmin-master/vendor/font-awesome-5/webfonts', 'public/webfonts')
     .copyDirectory('resources/CoolAdmin-master/vendor/mdi-font/fonts', 'public/fonts')
     .copyDirectory('resources/CoolAdmin-master/fonts/poppins', 'public/fonts/poppins')
+    .copyDirectory('node_modules/select2/dist/js/i18n', 'public/i18n')
     .options({
         processCssUrls: false
     })

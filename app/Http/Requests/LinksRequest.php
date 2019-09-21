@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class TechnicalManagerRequest extends FormRequest
+class LinksRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,16 +25,20 @@ class TechnicalManagerRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:3',
-            'contact' => 'required|min:13',
-            'email' => 'required|email',
+           'type_link' => 'required',
+           'link_identification' => 'required|min:3',
+           'bandwidth' => ['required', 'regex:/^[0-9]{1,}KB|MB|GB/'],
+           'telecommunications_company' => 'required',
+           'monitoring_ip' => 'required|ipv4',
+           'local_ip_router' => 'required|ipv4',
+           'establishment_id' => 'required|numeric'
         ];
     }
 
     public function messages()
     {
         return [
-            'selected_establishment.digits_between' => 'Favor informar um estabelecimento para associar!'
+            'bandwidth.regex' => 'O campo banda precisa corresponder o formato solicitado: Ex.: 512MB, 2MB ...'
         ];
     }
 }

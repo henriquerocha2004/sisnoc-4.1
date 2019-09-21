@@ -79,13 +79,15 @@ class RegionalManagerController extends Controller
                 throw new Exception("Houve uma Falha ao cadastrar os dados");
             }
 
-            /* $establishmentsUpdate = Establishment::whereIn('id', $request->establishment_code);
-            $establishmentsUpdate->update(['regional_manager_code' => $regionalManager->id]);
+            if(!empty($request->establishment_code)){
+                $establishmentsUpdate = Establishment::whereIn('id', $request->establishment_code);
+                $establishmentsUpdate->update(['regional_manager_code' => $regionalManager->id]);
 
-            if (!$establishmentsUpdate) {
-                throw new Exception("Houve uma Falha ao cadastrar os dados");
-            }*/
-
+                if (!$establishmentsUpdate) {
+                    throw new Exception("Houve uma Falha ao cadastrar os dados");
+                }
+            }
+            
             DB::commit();
 
             return redirect()->route('regionalManager.index')->with('alert', ['messageType' => 'success', 'message' => 'Gerente Regional cadastrado com sucesso!']);

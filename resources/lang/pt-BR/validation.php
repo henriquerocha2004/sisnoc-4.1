@@ -232,7 +232,17 @@ return [
         'manager_name' => 'Gerente',
         'manager_contact' => 'Contato Gerente',
         'regional_manager_code' => 'Gerente Regional',
-        'technician_code' => 'Responável Técnico'
+        'technician_code' => 'Responável Técnico',
+        
+        //Links
+        'type_link' => 'Tipo de link',
+        'bandwidth' => 'Banda',
+        'link_identification' => 'Identificação',
+        'telecommunications_company' => 'Operadora',
+        'monitoring_ip' => 'Ip de monitoramento',
+        'installed_router_model' => 'Modelo do Roteador',
+        'local_ip_router' => 'Ip Lan Roteador',
+        'establishment_id' => 'Estabelecimento'
 
     ],
 

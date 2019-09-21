@@ -59,14 +59,14 @@
                     ajax: "{!! url('table-links')!!}",
                     columns: [
                         {data: 'type_link', name: 'type_link'},
-                        {data: 'link_indentification', name: 'link_indentification'},
-                        {data: 'establishment.establishment_code', name: 'establishment.establishment_code'},
+                        {data: 'link_identification', name: 'link_identification'},
+                        {data: 'establishment_code', name: 'establishment.establishment_code'},
                         {data: 'telecommunications_company', name: 'telecommunications_company'},
                         {data: 'bandwidth', name: 'bandwidth'},
                         {data: 'id', render: function (data, type, row, meta) {
                             return `
                                 <div class="table-data-feature">
-                                    <a class="item" href="{!! url('technicalManager') !!}/${data}/edit" data-toggle="tooltip" data-placement="top" title="Editar">
+                                    <a class="item" href="{!! url('links') !!}/${data}/edit" data-toggle="tooltip" data-placement="top" title="Editar">
                                         <i class="zmdi zmdi-edit"></i>
                                     </a>
                                 </div>

@@ -74,12 +74,16 @@ class TechnicalManagerController extends Controller
                 throw new Exception("Houve uma Falha ao cadastrar os dados");
             }
 
-            $establishmentsUpdate = Establishment::whereIn('id', $request->establishment_code);
-            $establishmentsUpdate->update(['technician_code' => $technicalManager->id]);
+            if(!empty($request->establishment_code)){
+                $establishmentsUpdate = Establishment::whereIn('id', $request->establishment_code);
+                $establishmentsUpdate->update(['technician_code' => $technicalManager->id]);
 
-            if (!$establishmentsUpdate) {
-                throw new Exception("Houve uma Falha ao cadastrar os dados");
+                if (!$establishmentsUpdate) {
+                    throw new Exception("Houve uma Falha ao cadastrar os dados");
+                }
             }
+
+            
 
             DB::commit();
 
