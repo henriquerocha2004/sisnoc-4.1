@@ -31,6 +31,7 @@ mix
         'node_modules/datatables.net-dt/css/jquery.dataTables.min.css',
         'node_modules/multi.js-master/dist/multi.min.css',
         'node_modules/select2/dist/css/select2.css',
+        'node_modules/jquery-confirm/dist/jquery-confirm.min.css'
     ], 'public/css/vendor.css')
 
     .styles([
@@ -56,12 +57,13 @@ mix
         'resources/CoolAdmin-master/vendor/perfect-scrollbar/perfect-scrollbar.js',
         'node_modules/jquery-mask-plugin/dist/jquery.mask.min.js',
         'node_modules/multi.js-master/dist/multi.min.js',
-        'node_modules/select2/dist/js/select2.js'
+        'node_modules/select2/dist/js/select2.js',
+        'node_modules/jquery-confirm/dist/jquery-confirm.min.js'
     ], 'public/js/vendors.js')
     .scripts([
         'node_modules/datatables.net/js/jquery.dataTables.min.js',
         'node_modules/datatables.net-dt/js/dataTables.dataTables.min.js'
-    ],'public/js/datatables.js')
+    ], 'public/js/datatables.js')
 
     .scripts(['resources/CoolAdmin-master/js/main.js'], 'public/js/main.js')
 

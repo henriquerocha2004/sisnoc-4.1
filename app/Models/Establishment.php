@@ -32,34 +32,45 @@ class Establishment extends Model
 
     //Relations
 
-    public function regionalManager(){
+    public function regionalManager()
+    {
         return $this->hasOne(RegionalManager::class, 'id', 'regional_manager_code');
     }
 
-    public function technicalManager(){
+    public function technicalManager()
+    {
         return $this->hasOne(TechnicalManager::class, 'id', 'technician_code');
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->hasOne(User::class, 'id', 'id_user');
     }
 
-    public function calls(){
+    public function calls()
+    {
         return $this->hasMany(Called::class, 'id_establishment', 'id');
+    }
+
+    public function links()
+    {
+        return $this->hasMany(Links::class, 'establishment_id', 'id');
     }
 
 
     //Access e Mutators
-    public function setDocumentEstablishmentAttribute($value){
+    public function setDocumentEstablishmentAttribute($value)
+    {
         $this->attributes['document_establishment'] = TextUtil::clearText($value);
     }
 
-    public function setPhoneEstablishmentAttribute($value){
+    public function setPhoneEstablishmentAttribute($value)
+    {
         $this->attributes['phone_establishment'] = TextUtil::clearText($value);
     }
 
-    public function setManagerContactAttribute($value){
+    public function setManagerContactAttribute($value)
+    {
         $this->attributes['manager_contact'] = TextUtil::clearText($value);
     }
-
 }

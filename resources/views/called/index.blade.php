@@ -17,7 +17,7 @@
 
                             <div class="table-data__tool">
                                 <div class="table-data__tool-right">
-                                    <a href="{{route('links.create')}}" class="au-btn au-btn-icon au-btn--green au-btn--small">
+                                    <a href="{{route('called.create')}}" class="au-btn au-btn-icon au-btn--green au-btn--small">
                                         <i class="zmdi zmdi-plus"></i>Abrir Novo Chamado</a>
                                 </div>
                             </div>
