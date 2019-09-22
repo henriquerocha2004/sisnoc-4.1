@@ -31,7 +31,10 @@ mix
         'node_modules/datatables.net-dt/css/jquery.dataTables.min.css',
         'node_modules/multi.js-master/dist/multi.min.css',
         'node_modules/select2/dist/css/select2.css',
-        'node_modules/jquery-confirm/dist/jquery-confirm.min.css'
+        'node_modules/jquery-confirm/dist/jquery-confirm.min.css',
+        'node_modules/flatpickr/dist/flatpickr.min.css',
+        'resources/CoolAdmin-master/vendor/Checkbox2Button/css/checkbox2button.css',
+        'node_modules/ckeditor/contents.css',
     ], 'public/css/vendor.css')
 
     .styles([
@@ -58,7 +61,9 @@ mix
         'node_modules/jquery-mask-plugin/dist/jquery.mask.min.js',
         'node_modules/multi.js-master/dist/multi.min.js',
         'node_modules/select2/dist/js/select2.js',
-        'node_modules/jquery-confirm/dist/jquery-confirm.min.js'
+        'node_modules/jquery-confirm/dist/jquery-confirm.min.js',
+        'node_modules/flatpickr/dist/flatpickr.min.js',
+        'resources/CoolAdmin-master/vendor/Checkbox2Button/js/checkbox2button.min.js',
     ], 'public/js/vendors.js')
     .scripts([
         'node_modules/datatables.net/js/jquery.dataTables.min.js',
@@ -72,6 +77,7 @@ mix
     .copyDirectory('resources/CoolAdmin-master/vendor/mdi-font/fonts', 'public/fonts')
     .copyDirectory('resources/CoolAdmin-master/fonts/poppins', 'public/fonts/poppins')
     .copyDirectory('node_modules/select2/dist/js/i18n', 'public/i18n')
+    .copyDirectory('node_modules/flatpickr/dist/l10n/pt.js', 'public/l10n/pt.js')
     .options({
         processCssUrls: false
     })

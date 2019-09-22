@@ -53,7 +53,6 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="id_link" class=" form-control-label">Status do Estabelecimento<i style="color:red">*</i></label>
@@ -69,7 +68,76 @@
                                             @endif
                                         </div>
                                     </div>
-                                </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="hr_down" class=" form-control-label">Momento do Incidente<i style="color:red">*</i></label>
+                                            <input readonly  type="text" id="hr_down" name="hr_down" value="{{old('hr_down')}}" class="form-control {{ ($errors->has('hr_down') ? 'is-invalid': '') }}">
+                                            @if($errors->has('hr_down'))
+                                                @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
+                                                    {{$errors->first('hr_down')}}
+                                                @endcomponent
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group ml-4">
+                                           <label class="form-control-label"> Tipo de Problema</label>
+                                            @foreach ($typeProblems as $problem)
+                                                <div class="checkbox checkbox2button">
+                                                    <label>
+                                                         <input type="checkbox" name="typeProblem[]" value="{{$problem->id}}"> - {{$problem->problem_description}}   
+                                                    </label>
+                                                </div>             
+                                            @endforeach
+                                           
+                                            @if($errors->has('hr_down'))
+                                                @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
+                                                    {{$errors->first('hr_down')}}
+                                                @endcomponent
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                           <label class="form-control-label"> Ação Tomada</label>
+                                            @foreach ($actionsTaken as $action)
+                                                <div class="checkbox checkbox2button">
+                                                    <label>
+                                                         <input type="checkbox" name="actionsTaken[]" value="{{$action->id}}"> - {{$action->action_description}}   
+                                                    </label>
+                                                </div>             
+                                            @endforeach
+                                           
+                                            @if($errors->has('hr_down'))
+                                                @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
+                                                    {{$errors->first('hr_down')}}
+                                                @endcomponent
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                           <label class="form-control-label"> Observações </label>
+                                           <textarea name="content" id="content" cols="30" rows="10"></textarea>
+                                            @if($errors->has('hr_down'))
+                                                @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
+                                                    {{$errors->first('hr_down')}}
+                                                @endcomponent
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                           <label class="form-control-label"> Direcionar Chamado para: </label>
+                                           <textarea name="content" id="content" cols="30" rows="10"></textarea>
+                                            @if($errors->has('hr_down'))
+                                                @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
+                                                    {{$errors->first('hr_down')}}
+                                                @endcomponent
+                                            @endif
+                                        </div>
+                                    </div>
+
                             </div>
                         </div>
                         <div class="card-footer">
@@ -89,9 +157,21 @@
 @endsection
 
 @section('js')
+    <script src="{{url('/l10n/pt.js')}}"></script>
+    <script src="{{url('/js/ckeditor/ckeditor.js')}}"></script>
     <script>
        $(function(){
         var popoverData = null;
+
+        $("#hr_down").flatpickr({
+            enableTime:true,
+            dateFormat: "d/m/Y H:i",
+            locale: "pt",
+            {{--  minDate: "today"  --}}
+        });
+
+        CKEDITOR.replace('content');
+
         // action when the user enters the establishment code
             $("#establishment_code").focusout(function(){
                  var establishmentCode = $(this).val();
@@ -133,9 +213,7 @@
                                 content: "Existe Chamado aberto para esse link!"
                             })
                         }else{
-
                             //First insert information into popover
-                            console.log(popoverData);
                             var dataContent =
                             `
                             <div>
@@ -159,9 +237,7 @@
                         }
                     });
                 }
-
             });
-
        });
     </script>
 @endsection

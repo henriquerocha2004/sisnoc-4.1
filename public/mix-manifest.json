@@ -1,9 +1,10 @@
 {
     "/css/fonts.css": "/css/fonts.css?id=c81a94788a5f58c4b489",
-    "/css/vendor.css": "/css/vendor.css?id=e05fbccf96e0b183bd7d",
-    "/css/theme.css": "/css/theme.css?id=85b293330421079d1974",
-    "/css/login.css": "/css/login.css?id=69a0f4e1d0ae99e047d9",
-    "/js/vendors.js": "/js/vendors.js?id=411fc1afba1a6796aeef",
+    "/css/vendor.css": "/css/vendor.css?id=b0df048d42606969fe17",
+    "/css/theme.css": "/css/theme.css?id=07db6771fef15fc2dfaa",
+    "/css/login.css": "/css/login.css?id=4c9dd32adaba3e09cdcb",
+    "/js/vendors.js": "/js/vendors.js?id=60e6dba7adc420d18cec",
     "/js/datatables.js": "/js/datatables.js?id=ad95fcbfbf1442e29439",
-    "/js/main.js": "/js/main.js?id=ade54eabb55996314add"
+    "/js/main.js": "/js/main.js?id=26f439d6c3fec4a86360",
+    "/l10n/pt.js": "/l10n/pt.js?id=31ed33e19d10d4fd24e4"
 }

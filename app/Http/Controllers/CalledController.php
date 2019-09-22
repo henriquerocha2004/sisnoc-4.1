@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActionTake;
 use App\Models\Called;
 use App\Models\Establishment;
 use App\Models\Links;
+use App\Models\TypeProblem;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -99,7 +101,14 @@ class CalledController extends Controller
      */
     public function create()
     {
-        return view('called.create');
+
+        $typeProblems = TypeProblem::select(['id', 'problem_description'])->get();
+        $actionsTaken = ActionTake::select(['id', 'action_description'])->get();
+
+        return view('called.create', [
+            'typeProblems' => $typeProblems,
+            'actionsTaken' => $actionsTaken
+        ]);
     }
 
     /**

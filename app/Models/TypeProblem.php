@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class TypeProblem extends Model
 {
-    //
+    protected $table = 'type_problem';
 }
