@@ -12,6 +12,7 @@ use Yajra\DataTables\Facades\DataTables;
 
 class CalledController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *

@@ -14,8 +14,13 @@
                     @endif
                     <div class="card">
                         <div class="card-header">
-                            <strong>Novo </strong> Chamado
-                            <small style="color:red" class="text-right"><i>*</i> Campos Obrigatórios</small>
+                            <div class="row">
+                                <div class="col-md-12">
+                                        <strong>Novo </strong> Chamado
+                                        <small style="color:red" class="text-right"><i>*</i> Campos Obrigatórios</small>
+                                    <button type="button" id="btn-popover" class="btn btn-sm btn-primary" style="margin-left: 38%" data-toggle="popover" title="Informações do Estabelecimento" data-content="">Aguardando estabelecimento ...</button>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body card-block">
                             <form action="{{route('called.store')}}" method="post" class="" autocomplete="off">
@@ -46,12 +51,7 @@
                                         </div>
                                     </div>
                         </div>
-                        <div class="">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <button type="button" id="btn-popover" class="btn btn-lg btn-primary" style="margin-left: 75%;margin-bottom: 2%;margin-top: 2%" data-toggle="popover" title="Informações do Estabelecimento" data-content="">Mais informações ...</button>
-                                </div>
-                            </div>
+                        <div id="called" style="display: none">
                             <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -85,11 +85,11 @@
                                             @foreach ($typeProblems as $problem)
                                                 <div class="checkbox checkbox2button">
                                                     <label>
-                                                         <input type="checkbox" name="typeProblem[]" value="{{$problem->id}}"> - {{$problem->problem_description}}   
+                                                         <input type="checkbox" name="typeProblem[]" value="{{$problem->id}}"> - {{$problem->problem_description}}
                                                     </label>
-                                                </div>             
+                                                </div>
                                             @endforeach
-                                           
+
                                             @if($errors->has('hr_down'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('hr_down')}}
@@ -103,11 +103,11 @@
                                             @foreach ($actionsTaken as $action)
                                                 <div class="checkbox checkbox2button">
                                                     <label>
-                                                         <input type="checkbox" name="actionsTaken[]" value="{{$action->id}}"> - {{$action->action_description}}   
+                                                         <input type="checkbox" name="actionsTaken[]" value="{{$action->id}}"> - {{$action->action_description}}
                                                     </label>
-                                                </div>             
+                                                </div>
                                             @endforeach
-                                           
+
                                             @if($errors->has('hr_down'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('hr_down')}}
@@ -129,16 +129,76 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                            <label class="form-control-label"> Direcionar Chamado para: </label>
-                                           <textarea name="content" id="content" cols="30" rows="10"></textarea>
-                                            @if($errors->has('hr_down'))
+                                            <select  name="next_action" id="next_action" class="form-control {{ ($errors->has('next_action') ? 'is-invalid': '') }}">
+                                                    <option value="">Selecione</option>
+                                                    <option value="1">Finalizar Atendimento</option>
+                                                    <option value="2">Abertura de Chamado na operadora</option>
+                                                    <option value="3">Técnico (Infra)</option>
+                                                    <option value="4">SEMEP (Infra)</option>
+                                                    <option value="5">Falta de Energia</option>
+                                            </select>
+                                            @if($errors->has('next_action'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
-                                                    {{$errors->first('hr_down')}}
+                                                    {{$errors->first('next_action')}}
                                                 @endcomponent
                                             @endif
                                         </div>
                                     </div>
-
-                            </div>
+                                    <div id="divOTRS" class="col-md-4" style="display: none">
+                                        <div class="form-group">
+                                           <label class="form-control-label"> OTRS: </label>
+                                           <input  type="text" id="otrs" name="otrs" value="{{old('otrs')}}" class="form-control {{ ($errors->has('otrs') ? 'is-invalid': '') }}"">
+                                            @if($errors->has('otrs'))
+                                                @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
+                                                    {{$errors->first('otrs')}}
+                                                @endcomponent
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div id="divSEMEP" class="col-md-4" style="display: none">
+                                        <div class="form-group">
+                                           <label class="form-control-label"> SEMEP: </label>
+                                           <input  type="text" id="sisman" name="otrs" value="{{old('sisman')}}" class="form-control {{ ($errors->has('sisman') ? 'is-invalid': '') }}"">
+                                            @if($errors->has('sisman'))
+                                                @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
+                                                    {{$errors->first('sisman')}}
+                                                @endcomponent
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div id="divHrUP" class="col-md-4" style="display: none">
+                                        <div class="form-group">
+                                           <label class="form-control-label"> Horário da Normalização: </label>
+                                           <input  type="text" id="hr_up" name="hr_up" value="{{old('hr_up')}}" class="form-control {{ ($errors->has('hr_up') ? 'is-invalid': '') }}"">
+                                            @if($errors->has('hr_up'))
+                                                @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
+                                                    {{$errors->first('hr_up')}}
+                                                @endcomponent
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div id="divCallTel" class="col-md-4" style="display: none">
+                                        <div class="form-group">
+                                           <label for="call_telecommunications_company" class="form-control-label"> Protocolo Operadora: </label>
+                                           <input  type="text" id="call_telecommunications_company" name="call_telecommunications_company" value="{{old('call_telecommunications_company')}}" class="form-control {{ ($errors->has('hr_up') ? 'is-invalid': '') }}"">
+                                            @if($errors->has('call_telecommunications_company'))
+                                                @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
+                                                    {{$errors->first('call_telecommunications_company')}}
+                                                @endcomponent
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div id="divDeadLine" class="col-md-4" style="display: none">
+                                        <div class="form-group">
+                                           <label for="deadline" class="form-control-label"> Prazo de Normalização: </label>
+                                           <input  type="text" id="deadline" name="deadline" value="{{old('deadline')}}" class="form-control {{ ($errors->has('deadline') ? 'is-invalid': '') }}"">
+                                            @if($errors->has('deadline'))
+                                                @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
+                                                    {{$errors->first('deadline')}}
+                                                @endcomponent
+                                            @endif
+                                        </div>
+                                    </div>
                         </div>
                         <div class="card-footer">
                             <button type="submit" disabled class="btn btn-primary btn-sm disabled">
@@ -163,13 +223,14 @@
        $(function(){
         var popoverData = null;
 
-        $("#hr_down").flatpickr({
+        $("#hr_down, #hr_up, #deadline").flatpickr({
             enableTime:true,
             dateFormat: "d/m/Y H:i",
             locale: "pt",
             {{--  minDate: "today"  --}}
         });
 
+        // ativated editor
         CKEDITOR.replace('content');
 
         // action when the user enters the establishment code
@@ -197,6 +258,8 @@
                         }
                     }, 'json');
 
+                 }else{
+                    $("#called").hide(800);
                  }
             });
 
@@ -228,15 +291,36 @@
                             `;
 
                             $("#btn-popover").attr('data-content', dataContent);
+                            $("#btn-popover").html('Informações do Estabelecimento');
 
                             $(function () {
                                 $('[data-toggle="popover"]').popover({
                                     html: true
                                 })
                             });
+
+                            $("#called").show(800);
                         }
                     });
                 }
+            });
+
+            $("#next_action").change(function(){
+                var action = $(this).val();
+
+                if(action !== ''){
+                    switch(action){
+                        case 1:
+                            $("#divOTRS").hide();
+                            $("#divSEMEP").hide();
+                        break;
+                        case 2:
+                        break;
+                        case 3:
+                        break;
+                    }
+                }
+
             });
        });
     </script>
