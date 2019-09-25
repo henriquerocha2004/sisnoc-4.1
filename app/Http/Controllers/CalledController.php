@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CalledRequest;
 use App\Models\ActionTake;
 use App\Models\Called;
+use App\Models\CategoryProblem;
 use App\Models\Establishment;
 use App\Models\Links;
 use App\Models\TypeProblem;
@@ -106,10 +107,12 @@ class CalledController extends Controller
 
         $typeProblems = TypeProblem::select(['id', 'problem_description'])->get();
         $actionsTaken = ActionTake::select(['id', 'action_description'])->get();
+        $categoryProblems = CategoryProblem::select(['id', 'description_category'])->get();
 
         return view('called.create', [
             'typeProblems' => $typeProblems,
-            'actionsTaken' => $actionsTaken
+            'actionsTaken' => $actionsTaken,
+            'categoryProblems' => $categoryProblems
         ]);
     }
 

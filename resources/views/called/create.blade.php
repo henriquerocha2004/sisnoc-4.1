@@ -18,7 +18,7 @@
                                 <div class="col-md-12">
                                         <strong>Novo </strong> Chamado
                                         <small style="color:red" class="text-right"><i>*</i> Campos Obrigatórios</small>
-                                        <button type="button" id="btn-popover" class="btn btn-sm btn-primary" style="margin-left: 45%" data-toggle="popover" title="Informações do Estabelecimento" data-content="">Aguardando estabelecimento ...</button>
+                                        <button type="button" id="btn-popover" class="btn btn-sm btn-primary" style="margin-left: 70%" data-toggle="popover" title="Informações do Estabelecimento" data-content="">Aguardando estabelecimento ...</button>
                                 </div>
                             </div>
                         </div>
@@ -80,13 +80,13 @@
                                         </div>
                                     </div>
                                     <div class="col-md-5">
-                                        <div class="form-group ml-4 {{ ($errors->has('typeProblem') ? 'is-invalid': '') }}">
+                                        <div class="form-group ml-4">
                                            <label class="form-control-label"> Tipo de Problema</label>
                                             @php $id = 0; @endphp
 
                                             @foreach ($typeProblems as $problem)
                                                 <div class="checkbox checkbox2button">
-                                                    <label>
+                                                    <label class=" {{ ($errors->has('typeProblem') ? 'is-invalid': '') }}">
                                                          <input type="checkbox" name="typeProblem[]" value="{{$problem->id}}" {{old('typeProblem')[$id] == $problem->id ? 'checked' : ''}}> - {{$problem->problem_description}}
                                                     </label>
                                                 </div>
@@ -94,7 +94,7 @@
                                             @endforeach
 
                                             @if($errors->has('typeProblem'))
-                                                @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
+                                                @component('compoments.feedbackInputs', ['typeFeed' => 'invalid', 'force' => true ])
                                                     {{$errors->first('typeProblem')}}
                                                 @endcomponent
                                             @endif
@@ -116,7 +116,7 @@
                                             @endforeach
 
                                             @if($errors->has('actionsTaken'))
-                                                @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
+                                                @component('compoments.feedbackInputs', ['typeFeed' => 'invalid', 'force' => true])
                                                     {{$errors->first('actionsTaken')}}
                                                 @endcomponent
                                             @endif
@@ -184,6 +184,26 @@
                                             @endif
                                         </div>
                                     </div>
+                                    <div id="divCauseProb" class="col-md-4 extra-input" style="display: none">
+                                        <div class="form-group">
+                                           <label class="form-control-label"> Causa do Problema: </label>
+                                           <select  name="id_problem_cause" id="id_problem_cause" class="form-control {{ ($errors->has('id_problem_cause') ? 'is-invalid': '') }}">
+                                                <option value="">Selecione</option>
+                                                @foreach ($categoryProblems as $category)
+                                                    <optgroup label="{{ $category->description_category }}">
+                                                        @foreach ($category->problems()->get() as $problem)
+                                                            <option value="{{ $problem->id }}">{{ $problem->description_cause}}</option>
+                                                        @endforeach
+                                                    </optgroup>
+                                                @endforeach
+                                           </select>
+                                            @if($errors->has('id_problem_cause'))
+                                                @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
+                                                    {{$errors->first('id_problem_cause')}}
+                                                @endcomponent
+                                            @endif
+                                        </div>
+                                    </div>
                                     <div id="divCallTel" class="col-md-4 extra-input" style="display: none">
                                         <div class="form-group">
                                            <label for="call_telecommunications_company" class="form-control-label"> Protocolo Operadora: </label>
@@ -231,12 +251,13 @@
         var popoverData = null;
 
         //Verify if exists return of validation
-
         if($('#establishment_code').val() !== ''){
              getLinks($('#establishment_code').val());
              $("#called").show(800);
+             showInputExtras($("#next_action").val());
+             $("#btn-save").attr('disabled', false).removeClass('disabled');
+             getInfoEstablishment({{ old('id_link') }});
         }
-
 
         $("#hr_down, #hr_up, #deadline").flatpickr({
             enableTime:true,
@@ -265,40 +286,7 @@
                 var idLink = $(this).val();
 
                 if(idLink !== ''){
-                    $.get('{{url('verify-open-called')}}', {id_link: idLink}, function(r){
-                        if(r.response){
-                            $.alert({
-                                title: "Aviso | Sisnoc",
-                                content: "Existe Chamado aberto para esse link!"
-                            })
-                        }else{
-                            //First insert information into popover
-                            var dataContent =
-                            `
-                            <div>
-                                <p>Endereço: ${popoverData.establishment.info.address}<p>
-                                <p>Cidade: ${popoverData.establishment.info.city}<p>
-                                <p>UF: ${popoverData.establishment.info.state}<p>
-                                <p>Gerente: ${popoverData.establishment.info.manager_name}<p>
-                                <p>Contato Gerente: ${popoverData.establishment.info.manager_contact}<p>
-                                <p>Gerente Regional: ${popoverData.establishment.regionalManager.name}<p>
-                                <p>Contato Gerente Regional: ${popoverData.establishment.regionalManager.contact}<p>
-                            </div>
-                            `;
-
-                            $("#btn-popover").attr('data-content', dataContent);
-                            $("#btn-popover").html('Informações do Estabelecimento');
-
-                            $(function () {
-                                $('[data-toggle="popover"]').popover({
-                                    html: true
-                                })
-                            });
-
-                            $("#called").show(800);
-                            $("#btn-save").attr('disabled', false).removeClass('disabled');
-                        }
-                    });
+                    getInfoEstablishment(idLink);
                 }
             });
 
@@ -306,26 +294,7 @@
                 var action = $(this).val();
 
                 if(action !== ''){
-                    $(".extra-input").hide();
-
-                    switch(action){
-                        case '1':
-                            $("#divHrUP").show();
-                        break;
-                        case '2':
-                            $("#divCallTel").show();
-                            $("#divDeadLine").show();
-                        break;
-                        case '3':
-                            $("#divOTRS").show();
-                        break;
-                        case '4':
-                            $("#divSemep").show();
-                        break;
-                        default:
-                            $(".extra-input").hide();
-                        break
-                    }
+                    showInputExtras(action);
                 }else{
                     $(".extra-input").hide();
                 }
@@ -354,6 +323,67 @@
                 }, 'json');
             }
 
+            function showInputExtras(action){
+                $(".extra-input").hide();
+
+                    switch(action){
+                        case '1':
+                            $("#divHrUP").show();
+                            $("#divCauseProb").show();
+                        break;
+                        case '2':
+                            $("#divCallTel").show();
+                            $("#divDeadLine").show();
+                        break;
+                        case '3':
+                            $("#divOTRS").show();
+                        break;
+                        case '4':
+                            $("#divSemep").show();
+                        break;
+                        default:
+                            $(".extra-input").hide();
+                        break
+                    }
+            }
+
+            function getInfoEstablishment(idLink){
+
+                $.get('{{url('verify-open-called')}}', {id_link: idLink}, function(r){
+                    if(r.response){
+                        $.alert({
+                            title: "Aviso | Sisnoc",
+                            content: "Existe Chamado aberto para esse link!"
+                        })
+                    }else{
+                        //First insert information into popover
+                        var dataContent =
+                        `
+                        <div>
+                            <p>Endereço: ${popoverData.establishment.info.address}<p>
+                            <p>Cidade: ${popoverData.establishment.info.city}<p>
+                            <p>UF: ${popoverData.establishment.info.state}<p>
+                            <p>Gerente: ${popoverData.establishment.info.manager_name}<p>
+                            <p>Contato Gerente: ${popoverData.establishment.info.manager_contact}<p>
+                            <p>Gerente Regional: ${popoverData.establishment.regionalManager.name}<p>
+                            <p>Contato Gerente Regional: ${popoverData.establishment.regionalManager.contact}<p>
+                        </div>
+                        `;
+
+                        $("#btn-popover").attr('data-content', dataContent);
+                        $("#btn-popover").html('Informações do Estabelecimento');
+
+                        $(function () {
+                            $('[data-toggle="popover"]').popover({
+                                html: true
+                            })
+                        });
+
+                        $("#called").show(800);
+                        $("#btn-save").attr('disabled', false).removeClass('disabled');
+                    }
+                });
+            }
 
        });
     </script>

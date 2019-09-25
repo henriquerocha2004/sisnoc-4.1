@@ -38,9 +38,17 @@ class CalledRequest extends FormRequest
     {
         return [
             'establishment_code' => 'required',
+            'status' => 'required',
             'id_link' => 'required|numeric',
             'hr_down' => 'required',
-            'typeProblem' => 'required|min:1'
+            'typeProblem' => 'required|min:1',
+            'actionsTaken' => 'required|min:1',
+            'next_action' => 'required|numeric',
+            'otrs' => 'required_if:next_action, 3|numeric',
+            'semep' => 'required_if:next_action,4|numeric',
+            'hr_up' => 'required_if:next_action,1',
+            'call_telecommunications_company' => 'required_if:next_action,2',
+            'deadline' => 'required_if:next_action, 2',
         ];
     }
 }

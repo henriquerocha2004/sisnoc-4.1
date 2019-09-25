@@ -1,3 +1,3 @@
-<div class="{{$typeFeed}}-feedback">
+<div class="{{$typeFeed}}-feedback {{ (!empty($force) ? 'd-block' : '') }}">
     {{$slot}}
 </div>
