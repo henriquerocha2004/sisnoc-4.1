@@ -18,7 +18,7 @@
                                 <div class="col-md-12">
                                         <strong>Novo </strong> Chamado
                                         <small style="color:red" class="text-right"><i>*</i> Campos Obrigatórios</small>
-                                    <button type="button" id="btn-popover" class="btn btn-sm btn-primary" style="margin-left: 38%" data-toggle="popover" title="Informações do Estabelecimento" data-content="">Aguardando estabelecimento ...</button>
+                                        <button type="button" id="btn-popover" class="btn btn-sm btn-primary" style="margin-left: 45%" data-toggle="popover" title="Informações do Estabelecimento" data-content="">Aguardando estabelecimento ...</button>
                                 </div>
                             </div>
                         </div>
@@ -43,7 +43,7 @@
                                             <select  name="id_link" id="id_link" class="form-control {{ ($errors->has('id_link') ? 'is-invalid': '') }}">
 
                                             </select>
-                                            @if($errors->has('type_link'))
+                                            @if($errors->has('id_link'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('id_link')}}
                                                 @endcomponent
@@ -55,15 +55,15 @@
                             <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="id_link" class=" form-control-label">Status do Estabelecimento<i style="color:red">*</i></label>
-                                            <select  name="id_link" id="id_link" class="form-control {{ ($errors->has('id_link') ? 'is-invalid': '') }}">
+                                            <label for="status" class=" form-control-label">Status do Estabelecimento<i style="color:red">*</i></label>
+                                            <select  name="status" id="status" class="form-control {{ ($errors->has('status') ? 'is-invalid': '') }}">
                                                     <option value="">Selecione</option>
-                                                    <option value="1">Offline</option>
-                                                    <option value="2">Funcionando pela redundância</option>
+                                                    <option value="1" {{(old('status') == 1 ? 'selected': '')}}>Offline</option>
+                                                    <option value="2" {{(old('status') == 2 ? 'selected': '')}}>Funcionando pela redundância</option>
                                             </select>
-                                            @if($errors->has('type_link'))
+                                            @if($errors->has('status'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
-                                                    {{$errors->first('id_link')}}
+                                                    {{$errors->first('status')}}
                                                 @endcomponent
                                             @endif
                                         </div>
@@ -80,37 +80,44 @@
                                         </div>
                                     </div>
                                     <div class="col-md-5">
-                                        <div class="form-group ml-4">
+                                        <div class="form-group ml-4 {{ ($errors->has('typeProblem') ? 'is-invalid': '') }}">
                                            <label class="form-control-label"> Tipo de Problema</label>
+                                            @php $id = 0; @endphp
+
                                             @foreach ($typeProblems as $problem)
                                                 <div class="checkbox checkbox2button">
                                                     <label>
-                                                         <input type="checkbox" name="typeProblem[]" value="{{$problem->id}}"> - {{$problem->problem_description}}
+                                                         <input type="checkbox" name="typeProblem[]" value="{{$problem->id}}" {{old('typeProblem')[$id] == $problem->id ? 'checked' : ''}}> - {{$problem->problem_description}}
                                                     </label>
                                                 </div>
+                                             @php$id++@endphp
                                             @endforeach
 
-                                            @if($errors->has('hr_down'))
+                                            @if($errors->has('typeProblem'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
-                                                    {{$errors->first('hr_down')}}
+                                                    {{$errors->first('typeProblem')}}
                                                 @endcomponent
                                             @endif
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group">
+                                        <div class="form-group {{ ($errors->has('actionsTaken') ? 'is-invalid': '') }}">
                                            <label class="form-control-label"> Ação Tomada</label>
+
+                                            @php $id = 0; @endphp
                                             @foreach ($actionsTaken as $action)
                                                 <div class="checkbox checkbox2button">
                                                     <label>
-                                                         <input type="checkbox" name="actionsTaken[]" value="{{$action->id}}"> - {{$action->action_description}}
+                                                        <input type="checkbox" name="actionsTaken[]" value="{{$action->id}}" {{old('actionsTaken')[$id] == $action->id ? 'checked' : ''}}> - {{$action->action_description}}
                                                     </label>
                                                 </div>
+
+                                                @php $id++; @endphp
                                             @endforeach
 
-                                            @if($errors->has('hr_down'))
+                                            @if($errors->has('actionsTaken'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
-                                                    {{$errors->first('hr_down')}}
+                                                    {{$errors->first('actionsTaken')}}
                                                 @endcomponent
                                             @endif
                                         </div>
@@ -118,10 +125,10 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                            <label class="form-control-label"> Observações </label>
-                                           <textarea name="content" id="content" cols="30" rows="10"></textarea>
-                                            @if($errors->has('hr_down'))
+                                            <textarea name="content" id="content" cols="30" rows="10" class="form-control {{ ($errors->has('content') ? 'is-invalid': '') }}">{{old('content')}}</textarea>
+                                            @if($errors->has('content'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
-                                                    {{$errors->first('hr_down')}}
+                                                    {{$errors->first('content')}}
                                                 @endcomponent
                                             @endif
                                         </div>
@@ -131,11 +138,11 @@
                                            <label class="form-control-label"> Direcionar Chamado para: </label>
                                             <select  name="next_action" id="next_action" class="form-control {{ ($errors->has('next_action') ? 'is-invalid': '') }}">
                                                     <option value="">Selecione</option>
-                                                    <option value="1">Finalizar Atendimento</option>
-                                                    <option value="2">Abertura de Chamado na operadora</option>
-                                                    <option value="3">Técnico (Infra)</option>
-                                                    <option value="4">SEMEP (Infra)</option>
-                                                    <option value="5">Falta de Energia</option>
+                                                    <option value="1" {{old('next_action') == 1 ? 'selected' : ''}}>Finalizar Atendimento</option>
+                                                    <option value="2" {{old('next_action') == 2 ? 'selected' : ''}}>Abertura de Chamado na operadora</option>
+                                                    <option value="3" {{old('next_action') == 3 ? 'selected' : ''}}>Técnico (Infra)</option>
+                                                    <option value="4" {{old('next_action') == 4 ? 'selected' : ''}}>SEMEP (Infra)</option>
+                                                    <option value="5" {{old('next_action') == 5 ? 'selected' : ''}}>Falta de Energia</option>
                                             </select>
                                             @if($errors->has('next_action'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
@@ -144,7 +151,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div id="divOTRS" class="col-md-4" style="display: none">
+                                    <div id="divOTRS" class="col-md-4 extra-input" style="display: none">
                                         <div class="form-group">
                                            <label class="form-control-label"> OTRS: </label>
                                            <input  type="text" id="otrs" name="otrs" value="{{old('otrs')}}" class="form-control {{ ($errors->has('otrs') ? 'is-invalid': '') }}"">
@@ -155,10 +162,10 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div id="divSEMEP" class="col-md-4" style="display: none">
+                                    <div id="divSemep" class="col-md-4 extra-input" style="display: none">
                                         <div class="form-group">
                                            <label class="form-control-label"> SEMEP: </label>
-                                           <input  type="text" id="sisman" name="otrs" value="{{old('sisman')}}" class="form-control {{ ($errors->has('sisman') ? 'is-invalid': '') }}"">
+                                           <input  type="text" id="sisman" name="sisman" value="{{old('sisman')}}" class="form-control {{ ($errors->has('sisman') ? 'is-invalid': '') }}"">
                                             @if($errors->has('sisman'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('sisman')}}
@@ -166,7 +173,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div id="divHrUP" class="col-md-4" style="display: none">
+                                    <div id="divHrUP" class="col-md-4 extra-input" style="display: none">
                                         <div class="form-group">
                                            <label class="form-control-label"> Horário da Normalização: </label>
                                            <input  type="text" id="hr_up" name="hr_up" value="{{old('hr_up')}}" class="form-control {{ ($errors->has('hr_up') ? 'is-invalid': '') }}"">
@@ -177,7 +184,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div id="divCallTel" class="col-md-4" style="display: none">
+                                    <div id="divCallTel" class="col-md-4 extra-input" style="display: none">
                                         <div class="form-group">
                                            <label for="call_telecommunications_company" class="form-control-label"> Protocolo Operadora: </label>
                                            <input  type="text" id="call_telecommunications_company" name="call_telecommunications_company" value="{{old('call_telecommunications_company')}}" class="form-control {{ ($errors->has('hr_up') ? 'is-invalid': '') }}"">
@@ -188,7 +195,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div id="divDeadLine" class="col-md-4" style="display: none">
+                                    <div id="divDeadLine" class="col-md-4 extra-input" style="display: none">
                                         <div class="form-group">
                                            <label for="deadline" class="form-control-label"> Prazo de Normalização: </label>
                                            <input  type="text" id="deadline" name="deadline" value="{{old('deadline')}}" class="form-control {{ ($errors->has('deadline') ? 'is-invalid': '') }}"">
@@ -201,7 +208,7 @@
                                     </div>
                         </div>
                         <div class="card-footer">
-                            <button type="submit" disabled class="btn btn-primary btn-sm disabled">
+                            <button id="btn-save" type="submit" disabled class="btn btn-primary btn-sm disabled">
                                 <i class="fa fa-dot-circle-o"></i> Salvar
                             </button>
                         </div>
@@ -223,6 +230,14 @@
        $(function(){
         var popoverData = null;
 
+        //Verify if exists return of validation
+
+        if($('#establishment_code').val() !== ''){
+             getLinks($('#establishment_code').val());
+             $("#called").show(800);
+        }
+
+
         $("#hr_down, #hr_up, #deadline").flatpickr({
             enableTime:true,
             dateFormat: "d/m/Y H:i",
@@ -238,26 +253,7 @@
                  var establishmentCode = $(this).val();
 
                  if(establishmentCode !== ''){
-
-                    $.get('{{url('get-links-establishment')}}', {establishment_code: establishmentCode}, function(r){
-
-                        if(r.response){
-
-                            var options = '<option value="">Selecione</option>';
-                            popoverData = r;
-                            $.each(r.links, function(k, v){
-                                options += `<option value="${v.id}">${v.type_link} - ${v.link_identification}</option>`;
-                            });
-
-                            $("#id_link").html(options);
-                        }else{
-                            $.alert({
-                                title: "Aviso | Sisnoc",
-                                content: r.message
-                            });
-                        }
-                    }, 'json');
-
+                    getLinks(establishmentCode);
                  }else{
                     $("#called").hide(800);
                  }
@@ -300,6 +296,7 @@
                             });
 
                             $("#called").show(800);
+                            $("#btn-save").attr('disabled', false).removeClass('disabled');
                         }
                     });
                 }
@@ -309,19 +306,55 @@
                 var action = $(this).val();
 
                 if(action !== ''){
-                    switch(action){
-                        case 1:
-                            $("#divOTRS").hide();
-                            $("#divSEMEP").hide();
-                        break;
-                        case 2:
-                        break;
-                        case 3:
-                        break;
-                    }
-                }
+                    $(".extra-input").hide();
 
+                    switch(action){
+                        case '1':
+                            $("#divHrUP").show();
+                        break;
+                        case '2':
+                            $("#divCallTel").show();
+                            $("#divDeadLine").show();
+                        break;
+                        case '3':
+                            $("#divOTRS").show();
+                        break;
+                        case '4':
+                            $("#divSemep").show();
+                        break;
+                        default:
+                            $(".extra-input").hide();
+                        break
+                    }
+                }else{
+                    $(".extra-input").hide();
+                }
             });
+
+
+            function getLinks(establishmentCode){
+                $.get('{{url('get-links-establishment')}}', {establishment_code: establishmentCode}, function(r){
+
+                    if(r.response){
+
+                        var options = '<option value="">Selecione</option>';
+                        popoverData = r;
+                        var old = {{old('id_link') ?? 0 }};
+                        $.each(r.links, function(k, v){
+                            options += `<option value="${v.id}" ${(old == v.id ? 'selected' : '')}>${v.type_link} - ${v.link_identification}</option>`;
+                        });
+
+                        $("#id_link").html(options);
+                    }else{
+                        $.alert({
+                            title: "Aviso | Sisnoc",
+                            content: r.message
+                        });
+                    }
+                }, 'json');
+            }
+
+
        });
     </script>
 @endsection

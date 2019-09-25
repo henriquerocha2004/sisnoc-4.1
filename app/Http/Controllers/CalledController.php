@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CalledRequest;
 use App\Models\ActionTake;
 use App\Models\Called;
 use App\Models\Establishment;
@@ -118,8 +119,10 @@ class CalledController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    { }
+    public function store(CalledRequest $request)
+    {
+        var_dump($request->all());
+    }
 
     /**
      * Display the specified resource.
