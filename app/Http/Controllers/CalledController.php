@@ -9,6 +9,7 @@ use App\Models\Called;
 use App\Models\CategoryProblem;
 use App\Models\Establishment;
 use App\Models\Links;
+use App\Models\SubCaller;
 use App\Models\TypeProblem;
 use Exception;
 use Illuminate\Http\Request;
@@ -142,6 +143,8 @@ class CalledController extends Controller
                 if(!$called->save()){
                     throw new Exception("Houve uma falha ao salvar o chamado");
                 }
+
+                $subcaller = new SubCaller();
 
 
 
