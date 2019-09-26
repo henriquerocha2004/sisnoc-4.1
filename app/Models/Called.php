@@ -45,6 +45,10 @@ class Called extends Model
         return $this->belongsTo(User::class, 'id_user_close', 'id');
     }
 
+    public function attachments(){
+        return $this->hasMany(Attachment::class, 'id_caller', 'id');
+    }
+
     //Access e Mutators
 
     public function setHrDownAttribute($value){

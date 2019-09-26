@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\Http\Requests\CalledRequest;
 use App\Models\ActionTake;
 use App\Models\Called;
@@ -9,6 +10,7 @@ use App\Models\CategoryProblem;
 use App\Models\Establishment;
 use App\Models\Links;
 use App\Models\TypeProblem;
+use Exception;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -124,7 +126,31 @@ class CalledController extends Controller
      */
     public function store(CalledRequest $request)
     {
-        var_dump($request->all());
+        print_r($request->all());
+
+        DB::beginTransaction();
+
+            try {
+
+                $establishment = Establishment::select('id')->where(['establishment_code' => $request->establishment_code])->first();
+                $called = new Called();
+                $called->fill($request->all());
+                $called->caller_number = date('Ymd'). rand(50, 500);
+                $called->id_establishment = $establishment->id;
+                $called->id_user_open = auth()->user()->id;
+
+                if(!$called->save()){
+                    throw new Exception("Houve uma falha ao salvar o chamado");
+                }
+
+
+
+                dd($called->getAttributes());
+
+            } catch (Exception $e) {
+                DB::rollback();
+
+            }
     }
 
     /**

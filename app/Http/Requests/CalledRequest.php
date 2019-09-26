@@ -49,6 +49,7 @@ class CalledRequest extends FormRequest
             'hr_up' => 'required_if:next_action,1',
             'call_telecommunications_company' => 'required_if:next_action,2',
             'deadline' => 'required_if:next_action, 2',
+            'id_problem_cause' => 'required_if:next_action,1'
         ];
     }
 }

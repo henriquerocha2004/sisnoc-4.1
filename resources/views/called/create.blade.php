@@ -23,7 +23,7 @@
                             </div>
                         </div>
                         <div class="card-body card-block">
-                            <form action="{{route('called.store')}}" method="post" class="" autocomplete="off">
+                            <form action="{{route('called.store')}}" method="post" class="" enctype="multipart/form-data" autocomplete="off">
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-4">
@@ -149,6 +149,14 @@
                                                     {{$errors->first('next_action')}}
                                                 @endcomponent
                                             @endif
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col col-md-3">
+                                            <label for="file-multiple-input" class=" form-control-label">Anexos</label>
+                                        </div>
+                                        <div class="col-12 col-md-9">
+                                            <input type="file" id="attachment" name="attachment" multiple="" class="form-control-file">
                                         </div>
                                     </div>
                                     <div id="divOTRS" class="col-md-4 extra-input" style="display: none">
@@ -348,7 +356,6 @@
             }
 
             function getInfoEstablishment(idLink){
-
                 $.get('{{url('verify-open-called')}}', {id_link: idLink}, function(r){
                     if(r.response){
                         $.alert({
@@ -356,6 +363,7 @@
                             content: "Existe Chamado aberto para esse link!"
                         })
                     }else{
+
                         //First insert information into popover
                         var dataContent =
                         `

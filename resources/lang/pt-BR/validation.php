@@ -137,6 +137,13 @@ return [
             'single' => 'solteiro',
             'divorced' => 'divorciado',
             'widower' => 'viúvo'
+        ],
+        'next_action' => [
+            '1' => 'Finalizar Atendimento',
+            '2' => 'Abertura de Chamado na Operadora',
+            '3' => 'Técnico',
+            '4' => 'SEMEP',
+            '5' => 'Falta de energia'
         ]
     ],
 
@@ -249,7 +256,8 @@ return [
         'actionsTaken' => 'Ação Tomada',
         'hr_down' => 'Momento do Incidente',
         'hr_up' => 'Hora da Normalização',
-        'next_action' => 'Direcionar Chamado'
+        'next_action' => 'Direcionar Chamado',
+        'id_problem_cause' => 'Causa do Problema'
 
     ],
 
