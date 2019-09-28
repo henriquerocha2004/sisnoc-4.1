@@ -13,8 +13,8 @@ class AddForeignProblemTypeCalled extends Migration
      */
     public function up()
     {
-        Schema::table('problem_type_called', function(Blueprint $table){
-            $table->foreign('id_called')->references('id')->on('called');
+        Schema::table('problem_type_called', function (Blueprint $table) {
+            $table->foreign('id_called')->references('id')->on('sub_caller');
             $table->foreign('id_problem_type')->references('id')->on('problem_type_called');
         });
     }
@@ -26,7 +26,7 @@ class AddForeignProblemTypeCalled extends Migration
      */
     public function down()
     {
-        Schema::table('problem_type_called', function(Blueprint $table){
+        Schema::table('problem_type_called', function (Blueprint $table) {
             $table->dropForeign('problem_type_called_id_called_foreign');
             $table->dropForeign('problem_type_called_id_problem_type_foreign');
         });

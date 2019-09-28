@@ -143,20 +143,13 @@
                                                     <option value="3" {{old('next_action') == 3 ? 'selected' : ''}}>Técnico (Infra)</option>
                                                     <option value="4" {{old('next_action') == 4 ? 'selected' : ''}}>SEMEP (Infra)</option>
                                                     <option value="5" {{old('next_action') == 5 ? 'selected' : ''}}>Falta de Energia</option>
+                                                    <option value="8" {{old('next_action') == 8 ? 'selected' : ''}}>Inadiplência</option>
                                             </select>
                                             @if($errors->has('next_action'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('next_action')}}
                                                 @endcomponent
                                             @endif
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col col-md-3">
-                                            <label for="file-multiple-input" class=" form-control-label">Anexos</label>
-                                        </div>
-                                        <div class="col-12 col-md-9">
-                                            <input type="file" id="attachment" name="attachment" multiple="" class="form-control-file">
                                         </div>
                                     </div>
                                     <div id="divOTRS" class="col-md-4 extra-input" style="display: none">
@@ -356,14 +349,16 @@
             }
 
             function getInfoEstablishment(idLink){
+
                 $.get('{{url('verify-open-called')}}', {id_link: idLink}, function(r){
                     if(r.response){
+
+                        $("#called").hide(800);
                         $.alert({
                             title: "Aviso | Sisnoc",
                             content: "Existe Chamado aberto para esse link!"
-                        })
+                        });
                     }else{
-
                         //First insert information into popover
                         var dataContent =
                         `

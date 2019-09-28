@@ -18,11 +18,11 @@ class CreateSubCallerTable extends Migration
             $table->unsignedBigInteger('id_caller');
             $table->integer('status');
             $table->unsignedBigInteger('id_user');
-            $table->integer('sisman')->nullable();
-			$table->integer('otrs')->nullable();
-			$table->string('call_telecommunications_company_number', 30)->nullable();
-			$table->dateTime('deadline')->nullable();
-			$table->dateTime('hr_open_call_telecommunications_company')->nullable();
+            $table->string('sisman')->nullable();
+            $table->string('otrs')->nullable();
+            $table->string('call_telecommunications_company_number', 30)->nullable();
+            $table->dateTime('deadline')->nullable();
+            $table->dateTime('hr_open_call_telecommunications_company')->nullable();
             $table->timestamps();
         });
     }

@@ -15,7 +15,7 @@ class CreateCalledTable extends Migration
     {
         Schema::create('called', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('caller_number');
+            $table->string('caller_number');
             $table->unsignedBigInteger('id_establishment');
             $table->unsignedBigInteger('id_link');
             $table->integer('status'); // 1 - Fechado, 2 - Abertura Operadora, 3 - Técnico, 4 - InfraEstrutura, 5 - Falta de Energia, 6 - Retorno p.Fechamento, 7 - Cancelado

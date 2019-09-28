@@ -60,7 +60,33 @@
                         {data: 'caller_number', name: 'called.caller_number'},
                         {data: 'establishment_code', name: 'establishment.establishment_code'},
                         {data: 'type_link', name: 'links.type_link'},
-                        {data: 'next_action', name: 'called.next_action'},
+                        {data: 'next_action', render: function(data, type, row, meta){
+
+                            var status = '';
+
+                            switch(data){
+                                case '1':
+                                    status = 'Fechado';
+                                break;
+                                case '2':
+                                    status = 'Abertura Operadora';
+                                break;
+                                case '3':
+                                    status = 'OTRS (Técnico)';
+                                break;
+                                case '4':
+                                    status = 'SEMEP (Infra)';
+                                break;
+                                case '5':
+                                    status = 'Falta de energia';
+                                break;
+                                case '8':
+                                    status = 'Inadiplência';
+                                break;
+                            }
+
+                            return status;
+                        }},
                         {data: 'name', name: 'users.name'},
                         {data: 'id', render: function (data, type, row, meta) {
                             return `
