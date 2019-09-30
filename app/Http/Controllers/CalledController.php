@@ -153,6 +153,7 @@ class CalledController extends Controller
             $subcaller->id_user = auth()->user()->id;
             $subcaller->id_caller = $called->id;
             $subcaller->status = 'open';
+            $subcaller->status_establishment = $request->status;
 
             switch ($request->next_action) {
                 case '1':
@@ -273,13 +274,16 @@ class CalledController extends Controller
         $actionsTaken = ActionTake::select(['id', 'action_description'])->get();
         $categoryProblems = CategoryProblem::select(['id', 'description_category'])->get();
         $called = Called::find($id);
+        $lastSubCaller = $called->subCallers()->orderBy('id', 'desc')->first();
+
 
 
         return view('called.edit', [
             'typeProblems' => $typeProblems,
             'actionsTaken' => $actionsTaken,
             'categoryProblems' => $categoryProblems,
-            'called' => $called
+            'called' => $called,
+            'lastSubCaller' => $lastSubCaller
         ]);
     }
 

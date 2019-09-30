@@ -71,7 +71,7 @@ class SubCaller extends Model
         return DateUtils::convertDataToBR($value);
     }
 
-    public function getTypeAttribute($value){
+    public function getTypeShowAttribute($value){
         return ($value == 2 ? 'Operadora' : ($value == 3 ? 'Otrs (Técnico)' : ($value == 4 ? 'Semep' : ($value == 5 ? 'Energia' : ($value == 8 ? 'Inadiplência' : $value)))));
     }
 
@@ -80,8 +80,8 @@ class SubCaller extends Model
         return DateUtils::convertDataToBR($value, true);
     }
 
-    public function getStatusEstablishmentAttribute($value){
-        return ($value == 1 ? 'Offline' : 'Ativo pela redundância');
+    public function getStatusEstablishmentShowAttribute(){
+        return ($this->attributes['status_establishment'] == 1 ? 'Offline' : 'Ativo pela redundância');
     }
 
     public function getStatusAttribute($value){

@@ -54,6 +54,8 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                       <label class=" form-control-label mt-1">Ações Tomadas</label>
+                                      <button type="button" style="margin-left: 70%" class="btn btn-sm btn-primary" > + Nova Ação</button>
+
                                         <div class="table-responsive">
                                             <table class="table table-borderless table-data3">
                                                 <thead>
@@ -68,11 +70,11 @@
                                                 <tbody>
                                                     @foreach ($called->subCallers()->get() as $subcaller)
                                                         <tr>
-                                                            <td>{{$subcaller->type}}</td>
+                                                            <td>{{$subcaller->type_show}}</td>
                                                             <td>{{$subcaller->user()->first()->name}}</td>
                                                             <td>{{$subcaller->created_at}}</td>
-                                                            <td>{{$subcaller->status_establishment}}</td>
-                                                            <td data-subcaller="{{$subcaller->id}}" style="cursor: pointer" class="{{($subcaller->status == 'Aberto' ? 'process' : 'denied')}}">{{$subcaller->status}}</td>
+                                                            <td>{{$subcaller->status_establishment_show}}</td>
+                                                            <td id="status" data-subcaller="{{$subcaller->id}}" style="cursor: pointer" class="{{($subcaller->status == 'Aberto' ? 'process' : 'denied')}}">{{$subcaller->status}}</td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
@@ -80,15 +82,15 @@
                                         </div>
                                     </div>
                                 </div>
-                        <div id="called" style="display: none">
+                        <div id="called" class="mt-4">
                             <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="status" class=" form-control-label">Status do Estabelecimento<i style="color:red">*</i></label>
-                                            <select  name="status" id="status" class="form-control {{ ($errors->has('status') ? 'is-invalid': '') }}">
+                                            <select style="background: #eee; pointer-events: none; touch-action: none"  name="status" id="status" class="form-control {{ ($errors->has('status') ? 'is-invalid': '') }}">
                                                     <option value="">Selecione</option>
-                                                    <option value="1" {{(old('status') == 1 ? 'selected': '')}}>Offline</option>
-                                                    <option value="2" {{(old('status') == 2 ? 'selected': '')}}>Funcionando pela redundância</option>
+                                                    <option value="1" {{(old('status') == 1 ? 'selected': ($lastSubCaller->status_establishment == 1 ? 'selected' : ''))}}>Offline</option>
+                                                    <option value="2" {{(old('status') == 2 ? 'selected': ($lastSubCaller->status_establishment == 2 ? 'selected' : ''))}}>Funcionando pela redundância</option>
                                             </select>
                                             @if($errors->has('status'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
@@ -100,7 +102,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="hr_down" class=" form-control-label">Momento do Incidente<i style="color:red">*</i></label>
-                                            <input readonly  type="text" id="hr_down" name="hr_down" value="{{old('hr_down')}}" class="form-control {{ ($errors->has('hr_down') ? 'is-invalid': '') }}">
+                                            <input readonly  type="text" id="hr_down" name="hr_down" value="{{old('hr_down') ?? $called->hr_down }}" class="form-control {{ ($errors->has('hr_down') ? 'is-invalid': '') }}">
                                             @if($errors->has('hr_down'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('hr_down')}}
@@ -114,9 +116,18 @@
                                             @php $id = 0; @endphp
 
                                             @foreach ($typeProblems as $problem)
+
+                                                @foreach ($lastSubCaller->typeProblem() as $ProblemDB)
+                                                    @php
+                                                        $checked = ($ProblemDB->id_problem_type == $problem->id ? 'checked' : '');
+                                                        if($checked == 'checked')
+                                                            break;
+                                                    @endphp
+                                                @endforeach
+
                                                 <div class="checkbox checkbox2button">
                                                     <label class=" {{ ($errors->has('typeProblem') ? 'is-invalid': '') }}">
-                                                         <input type="checkbox" name="typeProblem[]" value="{{$problem->id}}" {{old('typeProblem')[$id] == $problem->id ? 'checked' : ''}}> - {{$problem->problem_description}}
+                                                         <input type="checkbox" name="typeProblem[]" value="{{$problem->id}}" {{old('typeProblem')[$id] == $problem->id ? 'checked' : $checked }}> - {{$problem->problem_description}}
                                                     </label>
                                                 </div>
                                              @php$id++@endphp
@@ -135,9 +146,17 @@
 
                                             @php $id = 0; @endphp
                                             @foreach ($actionsTaken as $action)
+                                                @foreach ($lastSubCaller->actionTake() as $actionDB)
+                                                    @php
+                                                        $checked = ($actionDB->id_action_taken == $action->id ? 'checked' : '');
+                                                        if($checked == 'checked')
+                                                            break;
+                                                    @endphp
+                                                @endforeach
+
                                                 <div class="checkbox checkbox2button">
                                                     <label>
-                                                        <input type="checkbox" name="actionsTaken[]" value="{{$action->id}}" {{old('actionsTaken')[$id] == $action->id ? 'checked' : ''}}> - {{$action->action_description}}
+                                                        <input type="checkbox" name="actionsTaken[]" value="{{$action->id}}" {{old('actionsTaken')[$id] == $action->id ? 'checked': $checked }}> - {{$action->action_description}}
                                                     </label>
                                                 </div>
 
@@ -153,8 +172,17 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                           <label class="form-control-label"> Observações </label>
-                                            <textarea name="content" id="content" cols="30" rows="10" class="form-control {{ ($errors->has('content') ? 'is-invalid': '') }}">{{old('content')}}</textarea>
+                                            <label class="form-control-label"> Observações </label><br>
+                                            @if (!empty($lastSubCaller->notes))
+                                                @foreach ($lastSubCaller->notes as $note)
+                                                    <button type="button" class="btn btn-sm btn-success"><i class="fa fa-sticky-note"></i> Nota de {{ $note->subCaller()->first()->user()->first()->name }}</button>
+                                                @endforeach
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <textarea name="content" id="content" cols="30" rows="10" class="form-control {{ ($errors->has('content') ? 'is-invalid': '') }}">{{old('content') ?? $lastSubCaller->notes()->first()->content}}</textarea>
                                             @if($errors->has('content'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('content')}}
@@ -165,14 +193,16 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                            <label class="form-control-label"> Direcionar Chamado para: </label>
+                                           {{ $lastSubCaller->status }} {{ $lastSubCaller->type }}
                                             <select  name="next_action" id="next_action" class="form-control {{ ($errors->has('next_action') ? 'is-invalid': '') }}">
                                                     <option value="">Selecione</option>
-                                                    <option value="1" {{old('next_action') == 1 ? 'selected' : ''}}>Finalizar Atendimento</option>
-                                                    <option value="2" {{old('next_action') == 2 ? 'selected' : ''}}>Abertura de Chamado na operadora</option>
-                                                    <option value="3" {{old('next_action') == 3 ? 'selected' : ''}}>Técnico (Infra)</option>
-                                                    <option value="4" {{old('next_action') == 4 ? 'selected' : ''}}>SEMEP (Infra)</option>
-                                                    <option value="5" {{old('next_action') == 5 ? 'selected' : ''}}>Falta de Energia</option>
-                                                    <option value="8" {{old('next_action') == 8 ? 'selected' : ''}}>Inadiplência</option>
+                                                    <option value="1" {{old('next_action') == 1 ? 'selected' : ''}}>Finalizar Chamado</option>
+                                                    <option value="9" {{old('next_action') == 9 ? 'selected' : ''}}>Finalizar Ação</option>
+                                                    <option value="2" {{ ($lastSubCaller->status == 'open' && $lastSubCaller->type == 2 ? 'disabled': '') }} {{old('next_action') == 2 ? 'selected' : ''}}>Abertura de Chamado na operadora</option>
+                                                    <option value="3" {{ ($lastSubCaller->status == 'open' && $lastSubCaller->type == 3 ? 'disabled': '') }} {{old('next_action') == 3 ? 'selected' : ''}}>Técnico (Infra)</option>
+                                                    <option value="4" {{ ($lastSubCaller->status == 'open' && $lastSubCaller->type == 4 ? 'disabled': '') }} {{old('next_action') == 4 ? 'selected' : ''}}>SEMEP (Infra)</option>
+                                                    <option value="5" {{ ($lastSubCaller->status == 'open' && $lastSubCaller->type == 5 ? 'disabled': '') }} {{old('next_action') == 5 ? 'selected' : ''}}>Falta de Energia</option>
+                                                    <option value="8" {{ ($lastSubCaller->status == 'open' && $lastSubCaller->type == 8 ? 'disabled': '') }} {{old('next_action') == 8 ? 'selected' : ''}}>Inadiplência</option>
                                             </select>
                                             @if($errors->has('next_action'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
@@ -279,6 +309,15 @@
     <script>
        $(function(){
         var popoverData = null;
+        var statusSubcaller = null;
+
+        $("#status").hover(function(){
+            statusSubcaller = $(this).html();
+            $(this).html("Ver");
+        },function(){
+            $(this).html(statusSubcaller);
+        });
+
 
         // //Verify if exists return of validation
         // if($('#establishment_code').val() !== ''){
@@ -289,7 +328,7 @@
         //      getInfoEstablishment({{ old('id_link') }});
         // }
 
-        $("#hr_down, #hr_up, #deadline").flatpickr({
+        $("#hr_up, #deadline").flatpickr({
             enableTime:true,
             dateFormat: "d/m/Y H:i",
             locale: "pt",

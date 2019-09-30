@@ -62,6 +62,6 @@ class Called extends Model
     }
 
     public function getHrDownAttribute($value){
-        return DateUtils::convertDataToBR($value);
+        return DateUtils::convertDataToBR($value, true);
     }
 }
