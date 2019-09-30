@@ -70,4 +70,22 @@ class SubCaller extends Model
     {
         return DateUtils::convertDataToBR($value);
     }
+
+    public function getTypeAttribute($value){
+        return ($value == 2 ? 'Operadora' : ($value == 3 ? 'Otrs (Técnico)' : ($value == 4 ? 'Semep' : ($value == 5 ? 'Energia' : ($value == 8 ? 'Inadiplência' : $value)))));
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return DateUtils::convertDataToBR($value, true);
+    }
+
+    public function getStatusEstablishmentAttribute($value){
+        return ($value == 1 ? 'Offline' : 'Ativo pela redundância');
+    }
+
+    public function getStatusAttribute($value){
+        return ($value == 'open' ? 'Aberto' : 'Fechado');
+    }
+
 }

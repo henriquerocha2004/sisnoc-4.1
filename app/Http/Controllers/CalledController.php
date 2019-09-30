@@ -262,22 +262,26 @@ class CalledController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    { }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    { }
+    {
+        $typeProblems = TypeProblem::select(['id', 'problem_description'])->get();
+        $actionsTaken = ActionTake::select(['id', 'action_description'])->get();
+        $categoryProblems = CategoryProblem::select(['id', 'description_category'])->get();
+        $called = Called::find($id);
+
+
+        return view('called.edit', [
+            'typeProblems' => $typeProblems,
+            'actionsTaken' => $actionsTaken,
+            'categoryProblems' => $categoryProblems,
+            'called' => $called
+        ]);
+    }
 
     /**
      * Update the specified resource in storage.

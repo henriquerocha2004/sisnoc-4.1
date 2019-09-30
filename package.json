@@ -27,6 +27,7 @@
         "inputmask": "^4.0.8",
         "jquery-confirm": "^3.3.4",
         "jquery-mask-plugin": "^1.14.16",
+        "multi.js": "^0.5.1",
         "select2": "^4.0.10"
     }
 }
