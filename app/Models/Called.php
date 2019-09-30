@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Utils\DateUtils;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Links;
+
 
 class Called extends Model
 {
@@ -47,6 +49,10 @@ class Called extends Model
 
     public function attachments(){
         return $this->hasMany(Attachment::class, 'id_caller', 'id');
+    }
+
+    public function link(){
+        return $this->belongsTo(Links::class, 'id_link', 'id');
     }
 
     //Access e Mutators

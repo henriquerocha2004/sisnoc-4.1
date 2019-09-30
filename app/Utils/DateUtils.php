@@ -20,9 +20,11 @@ class DateUtils
         return (new DateTime($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minutes))->format('Y-m-d H:i');
     }
 
-    public static function convertDataToBR($data)
+    public static function convertDataToBR($data, $time = false)
     {
-        return date('d/m/Y', strtotime($data));
+        $format = ($time == false ? 'd/m/Y' : 'd/m/Y H:i');
+
+        return date($format, strtotime($data));
     }
 
     public static function calcDowntime($hrDown, $hrUp)
