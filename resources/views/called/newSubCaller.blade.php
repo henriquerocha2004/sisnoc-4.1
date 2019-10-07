@@ -12,10 +12,9 @@
                             {{session('alert')['message']}}
                         @endcomponent
                     @endif
-
                     <div class="card">
-                        <div class="card-header" style="background-color: {{($called->status == 1 || $called->status == 7 ? 'lightsalmon' : 'darkseagreen')}}">
-                                <strong>Chamado </strong> {{$called->caller_number}} - Situação: <strong>{{$called->status_show}}</strong>
+                        <div class="card-header" style="background-color: skyblue">
+                                <strong>Nova Ação do Chamado: </strong> {{$called->caller_number}}
 
                                 <div class="pull-right">
                                     <small style="color:red" class="text-right"><i>*</i> Campos Obrigatórios</small>
@@ -23,10 +22,9 @@
                                 </div>
                         </div>
                         <div class="card-body card-block">
-                            <form action="{{route('called.update', $called->id)}}" method="post" class="" enctype="multipart/form-data" autocomplete="off">
+                            <form action="{{route('called.storeSubcalled')}}" method="post" class="" enctype="multipart/form-data" autocomplete="off">
                                 @csrf
-                                @method('PUT')
-                                <input type="hidden" name="lastSubcallerId" id="lastSubcallerId" value="{{$lastSubCaller->id}}">
+                                <input type="hidden" name="callerId" value="{{$called->id}}">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -56,10 +54,6 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                       <label class=" form-control-label mt-1">Ações Tomadas</label>
-                                        @if ($called->status != 1 && $called->status != 7)
-                                            <a href="{{url('new-sub-caller', [$called->id])}}" class="btn btn-sm btn-primary pull-right" > + Nova Ação</a>
-                                        @endif
-
                                         <div class="table-responsive">
                                             <table class="table table-borderless table-data3">
                                                 <thead>
@@ -88,18 +82,13 @@
                                 </div>
                         <div id="called" class="mt-4">
                             <div class="row">
-
-                                <div class="col-md-12 mt-3 mb-5 text-left">
-                                    <h3>Ação: {{$lastSubCaller->type_show}}</h3>
-                                </div>
-
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="status" class=" form-control-label">Status do Estabelecimento<i style="color:red">*</i></label>
-                                            <select style="background: #eee; pointer-events: none; touch-action: none"  name="status" id="status" class="form-control {{ ($errors->has('status') ? 'is-invalid': '') }}">
+                                            <select  name="status" id="status" class="form-control {{ ($errors->has('status') ? 'is-invalid': '') }}">
                                                     <option value="">Selecione</option>
-                                                    <option value="1" {{(old('status') == 1 ? 'selected': ($lastSubCaller->status_establishment == 1 ? 'selected' : ''))}}>Offline</option>
-                                                    <option value="2" {{(old('status') == 2 ? 'selected': ($lastSubCaller->status_establishment == 2 ? 'selected' : ''))}}>Funcionando pela redundância</option>
+                                                    <option value="1" {{(old('status') == 1 ? 'selected': '')}}>Offline</option>
+                                                    <option value="2" {{(old('status') == 2 ? 'selected': '')}}>Funcionando pela redundância</option>
                                             </select>
                                             @if($errors->has('status'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
@@ -125,18 +114,9 @@
                                             @php $id = 0; @endphp
 
                                             @foreach ($typeProblems as $problem)
-
-                                                @foreach ($lastSubCaller->typeProblem() as $ProblemDB)
-                                                    @php
-                                                        $checked = ($ProblemDB->id_problem_type == $problem->id ? 'checked' : '');
-                                                        if($checked == 'checked')
-                                                            break;
-                                                    @endphp
-                                                @endforeach
-
                                                 <div class="checkbox checkbox2button">
                                                     <label class=" {{ ($errors->has('typeProblem') ? 'is-invalid': '') }}">
-                                                         <input type="checkbox" name="typeProblem[]" value="{{$problem->id}}" {{old('typeProblem')[$id] == $problem->id ? 'checked' : $checked }}> - {{$problem->problem_description}}
+                                                         <input type="checkbox" name="typeProblem[]" value="{{$problem->id}}" {{old('typeProblem')[$id] == $problem->id ? 'checked' : ''}}> - {{$problem->problem_description}}
                                                     </label>
                                                 </div>
                                              @php$id++@endphp
@@ -155,17 +135,9 @@
 
                                             @php $id = 0; @endphp
                                             @foreach ($actionsTaken as $action)
-                                                @foreach ($lastSubCaller->actionTake() as $actionDB)
-                                                    @php
-                                                        $checked = ($actionDB->id_action_taken == $action->id ? 'checked' : '');
-                                                        if($checked == 'checked')
-                                                            break;
-                                                    @endphp
-                                                @endforeach
-
                                                 <div class="checkbox checkbox2button">
                                                     <label>
-                                                        <input type="checkbox" name="actionsTaken[]" value="{{$action->id}}" {{old('actionsTaken')[$id] == $action->id ? 'checked': $checked }}> - {{$action->action_description}}
+                                                        <input type="checkbox" name="actionsTaken[]" value="{{$action->id}}" {{old('actionsTaken')[$id] == $action->id ? 'checked' : ''}}> - {{$action->action_description}}
                                                     </label>
                                                 </div>
 
@@ -182,17 +154,12 @@
                                     <div class="col-md-12">
                                         <div id="btn-notes" class="form-group">
                                             <label class="form-control-label"> Observações </label><br>
-                                            @if (!empty($lastSubCaller->notes))
-                                                @foreach ($lastSubCaller->notes as $note)
-                                                    <button type="button" data-id-note="{{$note->id}}" class="btn btn-sm btn-success btn-notes mb-2"><i class="fa fa-sticky-note"></i> Nota de {{ $note->subCaller()->first()->user()->first()->name }}<br><small>{{$note->created_at}}</small></button>
-                                                @endforeach
-                                            @endif
                                         </div>
 
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <textarea name="content" id="content" cols="30" rows="10" class="form-control {{ ($errors->has('content') ? 'is-invalid': '') }}">{{old('content') ?? $lastSubCaller->notes()->first()->content}}</textarea>
+                                            <textarea name="content" id="content" cols="30" rows="10" class="form-control {{ ($errors->has('content') ? 'is-invalid': '') }}">{{old('content')}}</textarea>
                                             @if($errors->has('content'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('content')}}
@@ -200,15 +167,6 @@
                                             @endif
                                         </div>
                                     </div>
-                                    @if ($called->status != 1 && $called->status != 7)
-                                        <div class="col-md-12 mb-2">
-                                            <div class="btn-group pull-right">
-                                                <button type="button" id="new-note" class="btn btn-sm btn-success">Nova Nota</button>
-                                                <button type="button" id="save-note" disabled class="btn btn-sm btn-success"><i class="fa fa-save"></i> Salvar Nota</button>
-                                            </div>
-                                        </div>
-                                    @endif
-
                                     <div class="col-md-12 mb-4 ">
                                         <div id="images" class="mb-3">
                                             @if (count($called->attachments()->get()) > 0)
@@ -220,8 +178,7 @@
                                                 </div>
                                             @endif
                                         </div>
-                                        @if ($called->status != 1 && $called->status != 7)
-                                            <label class=form-control-label"> Novo Anexo</label>
+                                        <label class=form-control-label"> Novo Anexo</label>
                                             <input type="file" id="attachment" name="attachment[]" multiple="" class="form-control-file {{ ($errors->has('attachment.*') ? 'is-invalid': ($errors->has('attachment') ? 'is-invalid' : '')) }}">
                                             @if($errors->has('attachment.*') || $errors->has('attachment'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid','force' => true])
@@ -229,31 +186,30 @@
                                                     {{$errors->first('attachment') }}
                                                 @endcomponent
                                             @endif
-                                        @endif
-
                                     </div>
-                                    @if($called->status != 1 && $called->status != 7)
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                            <label class=form-control-label"> Direcionar Chamado para: </label>
-                                                <select data-is-subcaller="true" name="next_action" id="next_action" class="form-control {{ ($errors->has('next_action') ? 'is-invalid': '') }}">
-                                                        <option value="">Selecione</option>
-                                                        <option value="1" {{old('next_action') == 1 ? 'selected' : ''}}>Finalizar Chamado</option>
-                                                        <option value="9" {{old('next_action') == 9 ? 'selected' : ''}}>Finalizar Ação</option>
-                                                </select>
-                                                @if($errors->has('next_action'))
-                                                    @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
-                                                        {{$errors->first('next_action')}}
-                                                    @endcomponent
-                                                @endif
-                                            </div>
-                                        </div>
-                                    @endif
 
-                                    <div id="divOTRS" class="col-md-4  {{(empty($lastSubCaller->otrs) ? 'd-none' : '')}} ">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                           <label class=form-control-label"> Direcionar Chamado para: </label>
+                                            <select data-is-subcaller="true"  name="next_action" id="next_action" class="form-control {{ ($errors->has('next_action') ? 'is-invalid': '') }}">
+                                                    <option value="">Selecione</option>
+                                                    <option {{(in_array(2, $idsOpenSubCalled) ? 'disabled' : '')}} value="2" {{old('next_action') == 2 ? 'selected' : ''}}>Abertura de Chamado na operadora</option>
+                                                    <option {{(in_array(3, $idsOpenSubCalled) ? 'disabled' : '')}} value="3" {{old('next_action') == 3 ? 'selected' : ''}}>Técnico (Infra)</option>
+                                                    <option {{(in_array(4, $idsOpenSubCalled) ? 'disabled' : '')}} value="4" {{old('next_action') == 4 ? 'selected' : ''}}>SEMEP (Infra)</option>
+                                                    <option {{(in_array(5, $idsOpenSubCalled) ? 'disabled' : '')}} value="5" {{old('next_action') == 5 ? 'selected' : ''}}>Falta de Energia</option>
+                                                    <option {{(in_array(8, $idsOpenSubCalled) ? 'disabled' : '')}} value="8" {{old('next_action') == 8 ? 'selected' : ''}}>Inadiplência</option>
+                                            </select>
+                                            @if($errors->has('next_action'))
+                                                @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
+                                                    {{$errors->first('next_action')}}
+                                                @endcomponent
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div id="divOTRS" class="col-md-4 extra-input" style="display: none">
                                         <div class="form-group">
                                            <label class="form-control-label"> OTRS: </label>
-                                           <input readonly type="text" id="otrs" name="otrs" value="{{old('otrs') ?? $lastSubCaller->otrs}}" class="form-control {{ ($errors->has('otrs') ? 'is-invalid': '') }}"">
+                                           <input  type="text" id="otrs" name="otrs" value="{{old('otrs')}}" class="form-control {{ ($errors->has('otrs') ? 'is-invalid': '') }}"">
                                             @if($errors->has('otrs'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('otrs')}}
@@ -261,10 +217,10 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div id="divSemep" class="col-md-4  {{(empty($lastSubCaller->sisman) ? "d-none" : '')}}" >
+                                    <div id="divSemep" class="col-md-4 extra-input" style="display: none">
                                         <div class="form-group">
                                            <label class="form-control-label"> SEMEP: </label>
-                                           <input readonly type="text" id="sisman" name="sisman" value="{{old('sisman') ?? $lastSubCaller->sisman}}" class="form-control {{ ($errors->has('sisman') ? 'is-invalid': '') }}"">
+                                           <input  type="text" id="sisman" name="sisman" value="{{old('sisman')}}" class="form-control {{ ($errors->has('sisman') ? 'is-invalid': '') }}"">
                                             @if($errors->has('sisman'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('sisman')}}
@@ -272,10 +228,10 @@
                                             @endif
                                         </div>
                                     </div>
-                                <div id="divHrUP" class="col-md-4 extra-input" style="display: {{(empty($called->hr_up) ? 'none' : 'block')}}" >
+                                    <div id="divHrUP" class="col-md-4 extra-input" style="display: none">
                                         <div class="form-group">
                                            <label class="form-control-label"> Horário da Normalização: </label>
-                                            <input {{(empty($called->hr_up) ? '' : 'readonly')}}  type="text" id="{{(empty($called->hr_up) ? 'hr_up' : '')}}" name="hr_up" value="{{old('hr_up', $called->hr_up)}}" class="form-control {{ ($errors->has('hr_up') ? 'is-invalid': '') }}"">
+                                           <input  type="text" id="hr_up" name="hr_up" value="{{old('hr_up')}}" class="form-control {{ ($errors->has('hr_up') ? 'is-invalid': '') }}"">
                                             @if($errors->has('hr_up'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('hr_up')}}
@@ -283,17 +239,15 @@
                                             @endif
                                         </div>
                                     </div>
-
-                                    <div id="divCauseProb" class="col-md-4 extra-input">
+                                    <div id="divCauseProb" class="col-md-4 extra-input" style="display: none">
                                         <div class="form-group">
                                            <label class="form-control-label"> Causa do Problema: </label>
-                                           <select style="{{($called->status == 1 || $called->status == 7 ? 'background: #eee; pointer-events: none; touch-action: none' : ''  )}}"  name="id_problem_cause"
-                                            id="id_problem_cause" class="form-control {{ ($errors->has('id_problem_cause') ? 'is-invalid': '') }}">
+                                           <select  name="id_problem_cause" id="id_problem_cause" class="form-control {{ ($errors->has('id_problem_cause') ? 'is-invalid': '') }}">
                                                 <option value="">Selecione</option>
                                                 @foreach ($categoryProblems as $category)
                                                     <optgroup label="{{ $category->description_category }}">
                                                         @foreach ($category->problems()->get() as $problem)
-                                                            <option {{($called->id_problem_cause == $problem->id ? 'selected' : '')}} value="{{ $problem->id }}">{{ $problem->description_cause}}</option>
+                                                            <option value="{{ $problem->id }}">{{ $problem->description_cause}}</option>
                                                         @endforeach
                                                     </optgroup>
                                                 @endforeach
@@ -305,10 +259,10 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div id="divCallTel" class="col-md-4 {{(empty($lastSubCaller->call_telecommunications_company_number) ? 'd-none' : '')}}" >
+                                    <div id="divCallTel" class="col-md-4 extra-input" style="display: none">
                                         <div class="form-group">
                                            <label for="call_telecommunications_company" class="form-control-label"> Protocolo Operadora: </label>
-                                           <input readonly type="text" id="call_telecommunications_company" name="call_telecommunications_company" value="{{old('call_telecommunications_company') ?? $lastSubCaller->call_telecommunications_company_number}}" class="form-control {{ ($errors->has('hr_up') ? 'is-invalid': '') }}"">
+                                           <input  type="text" id="call_telecommunications_company" name="call_telecommunications_company" value="{{old('call_telecommunications_company')}}" class="form-control {{ ($errors->has('hr_up') ? 'is-invalid': '') }}"">
                                             @if($errors->has('call_telecommunications_company'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('call_telecommunications_company')}}
@@ -316,10 +270,10 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div id="divDeadLine" class="col-md-4" style="display: {{(empty($lastSubCaller->deadline) ? 'none' : 'block')}}">
+                                    <div id="divDeadLine" class="col-md-4 extra-input" style="display: none">
                                         <div class="form-group">
                                            <label for="deadline" class="form-control-label"> Prazo de Normalização: </label>
-                                           <input readonly type="text" id="{{(empty($lastSubCaller->deadline) ? 'deadline' : '')}}" name="deadline" value="{{old('deadline') ?? $lastSubCaller->deadline}}" class="form-control {{ ($errors->has('deadline') ? 'is-invalid': '') }}"">
+                                           <input  type="text" id="deadline" name="deadline" value="{{old('deadline')}}" class="form-control {{ ($errors->has('deadline') ? 'is-invalid': '') }}"">
                                             @if($errors->has('deadline'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('deadline')}}
@@ -329,11 +283,9 @@
                                     </div>
                         </div>
                         <div class="card-footer">
-                            @if($called->status != 1 && $called->status != 7)
-                                <button id="btn-save" type="submit" disabled class="btn btn-primary btn-sm disabled">
-                                    <i class="fa fa-dot-circle-o"></i> Salvar
-                                </button>
-                            @endif
+                            <button id="btn-save" type="submit" disabled class="btn btn-primary btn-sm disabled">
+                                <i class="fa fa-dot-circle-o"></i> Salvar
+                            </button>
                         </div>
                     </form>
                     </div>

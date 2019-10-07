@@ -39,4 +39,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('table-called', 'CalledController@table');
     Route::get('get-links-establishment', 'CalledController@getLinks');
     Route::get('verify-open-called', 'CalledController@verifyOpenCalled');
+    Route::get('insert-notes', 'CalledController@storeNote');
+    Route::get('get-notes', 'CalledController@getNote');
+    Route::get('new-sub-caller/{id}', 'CalledController@newSubCaller');
+    Route::get('called/{called}/{subcalled?}/edit', 'CalledController@edit')->name('called.edit');
+    Route::post('subCaller', 'CalledController@storeSubcalled')->name('called.storeSubcalled');
 });

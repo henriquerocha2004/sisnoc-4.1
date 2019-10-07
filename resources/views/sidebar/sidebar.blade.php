@@ -30,13 +30,13 @@
                                     <a href="{{route('estabilishment.index')}}"> <i class="fas fa-search"></i> Consultar</a>
                                 </li>
                                 <li>
-                                    <a href="{{route('estabilishment.create')}}"><i class="fas fa-building"></i> Novo estabelecimento</a>
+                                    <a href="{{route('estabilishment.create')}}"><i class="fas fa-building"></i> Novo </a>
                                 </li>
                                 <li>
-                                    <a href="{{route('regionalManager.index')}}"><i class="fas fa-map"></i> Gerentes Regionais</a>
+                                    <a href="{{route('regionalManager.index')}}"><i class="fas fa-map"></i> Ger. Regionais</a>
                                 </li>
                                 <li>
-                                    <a href="{{route('technicalManager.index')}}"><i class="fas fa-user"></i> Responsáveis Técnicos</a>
+                                    <a href="{{route('technicalManager.index')}}"><i class="fas fa-user"></i> Resp. Técnicos</a>
                                 </li>
                             </ul>
                     </li>
@@ -48,7 +48,7 @@
                                     <a href="#"><i class="fas fa-search"></i> Consultar</a>
                                 </li>
                                 <li>
-                                    <a href="#"><i class="fas fa-file-signature"></i> Abrir novo chamado</a>
+                                    <a href="#"><i class="fas fa-file-signature"></i> Novo </a>
                                 </li>
                             </ul>
                     </li>
@@ -60,7 +60,7 @@
                                 <a href="#"><i class="fas fa-search"></i> Consultar</a>
                             </li>
                             <li>
-                                <a href="#"><i class="fas fa-file"></i> Cadastrar novo link</a>
+                                <a href="#"><i class="fas fa-file"></i> Novo </a>
                             </li>
                         </ul>
 
@@ -100,7 +100,7 @@
                                     <a href="{{route('estabilishment.create')}}"><i class="fas fa-building"></i> Cadastrar </a>
                                 </li>
                                 <li>
-                                    <a href="{{route('regionalManager.index')}}"><i class="fas fa-map"></i> Gerentes Regionais</a>
+                                    <a href="{{route('regionalManager.index')}}"><i class="fas fa-map"></i> Ger. Regionais</a>
                                 </li>
                                 <li>
                                     <a href="{{route('technicalManager.index')}}"><i class="fas fa-user"></i>Resp. Técnicos</a>
@@ -115,7 +115,7 @@
                                     <a href="{{route('called.index')}}"><i class="fas fa-search"></i> Consultar</a>
                                 </li>
                                 <li>
-                                    <a href="{{route('called.create')}}"><i class="fas fa-file"></i> Abrir novo chamado</a>
+                                    <a href="{{route('called.create')}}"><i class="fas fa-file"></i> Novo </a>
                                 </li>
                             </ul>
                     </li>
@@ -127,7 +127,7 @@
                                 <a href="{{route('links.index')}}"><i class="fas fa-search"></i> Consultar</a>
                             </li>
                             <li>
-                                <a href="{{route('links.create')}}"><i class="fas fa-file"></i> Cadastrar novo link</a>
+                                <a href="{{route('links.create')}}"><i class="fas fa-file"></i> Novo </a>
                             </li>
                         </ul>
 

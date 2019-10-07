@@ -63,14 +63,15 @@ mix
         'node_modules/select2/dist/js/select2.js',
         'node_modules/jquery-confirm/dist/jquery-confirm.min.js',
         'node_modules/flatpickr/dist/flatpickr.min.js',
-        'resources/CoolAdmin-master/vendor/Checkbox2Button/js/checkbox2button.min.js',
+        'resources/CoolAdmin-master/vendor/Checkbox2Button/js/checkbox2button.min.js'
     ], 'public/js/vendors.js')
     .scripts([
         'node_modules/datatables.net/js/jquery.dataTables.min.js',
         'node_modules/datatables.net-dt/js/dataTables.dataTables.min.js'
     ], 'public/js/datatables.js')
-
     .scripts(['resources/CoolAdmin-master/js/main.js'], 'public/js/main.js')
+    .scripts(['resources/js/callerEdit.js'], 'public/js/caller/callerEdit.js')
+
 
     .copyDirectory('resources/CoolAdmin-master/vendor/font-awesome-4.7/fonts', 'public/fonts')
     .copyDirectory('resources/CoolAdmin-master/vendor/font-awesome-5/webfonts', 'public/webfonts')

@@ -48,7 +48,7 @@ class Called extends Model
     }
 
     public function attachments(){
-        return $this->hasMany(Attachment::class, 'id_caller', 'id');
+        return $this->hasMany(Attachment::class, 'id_called', 'id');
     }
 
     public function link(){
@@ -57,11 +57,22 @@ class Called extends Model
 
     //Access e Mutators
 
-    public function setHrDownAttribute($value){
-        $this->attributes['hr_down'] = DateUtils::convertDataDataBase($value);
-    }
-
     public function getHrDownAttribute($value){
         return DateUtils::convertDataToBR($value, true);
+    }
+
+    public function getHrUpAttribute($value){
+        return DateUtils::convertDataToBR($value, true);
+    }
+
+
+    public function getStatusShowAttribute(){
+        if($this->attributes['status'] == 1){
+            return "Fechado";
+        }else if($this->attributes['status'] == 7){
+            return "Cancelado";
+        }else{
+            return "Aberto";
+        }
     }
 }

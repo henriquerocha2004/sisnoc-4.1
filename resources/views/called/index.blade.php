@@ -25,10 +25,11 @@
                                 <table class="table table-data2">
                                     <thead>
                                         <tr>
-                                            <th>Num. Chamado</th>
+                                            <th>Chamado</th>
                                             <th>Estabelecimento</th>
                                             <th>Link</th>
-                                            <th>Direcionado</th>
+                                            <th>Ultima Ação</th>
+                                            <th>Situação</th>
                                             <th>Aberto Por</th>
                                         </tr>
                                     </thead>
@@ -63,7 +64,6 @@
                         {data: 'next_action', render: function(data, type, row, meta){
 
                             var status = '';
-
                             switch(data){
                                 case '1':
                                     status = 'Fechado';
@@ -87,12 +87,25 @@
 
                             return status;
                         }},
+                        {data: 'status', render: function(data, type, row, meta){
+                            var status = '';
+
+                            if(data == 1){
+                                status = "Fechado";
+                            }else if(data == 7){
+                                status = "Cancelado";
+                            }else{
+                                status = "Aberto";
+                            }
+
+                            return status;
+                        }},
                         {data: 'name', name: 'users.name'},
                         {data: 'id', render: function (data, type, row, meta) {
                             return `
                                 <div class="table-data-feature">
-                                    <a class="item" href="{!! url('called') !!}/${data}/edit" data-toggle="tooltip" data-placement="top" title="Editar">
-                                        <i class="zmdi zmdi-edit"></i>
+                                    <a class="item" href="{!! url('called') !!}/${data}/edit" data-toggle="tooltip" data-placement="top" title="Visualizar">
+                                        <i class="zmdi zmdi-search"></i>
                                     </a>
                                 </div>
                             `;

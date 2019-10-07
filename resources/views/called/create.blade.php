@@ -26,6 +26,7 @@
                             <form action="{{route('called.store')}}" method="post" class="" enctype="multipart/form-data" autocomplete="off">
                                 @csrf
                                 <div class="row">
+
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="establishment_code" class=" form-control-label">Cód. Estabelecimento<i style="color:red">*</i></label>
@@ -152,6 +153,18 @@
                                             @endif
                                         </div>
                                     </div>
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label for="attachment" class="form-control-label">Anexos </label>
+                                            <input type="file" id="attachment" name="attachment[]" multiple="" class="form-control-file {{ ($errors->has('attachment.*') ? 'is-invalid': ($errors->has('attachment') ? 'is-invalid' : '')) }}">
+                                            @if($errors->has('attachment.*') || $errors->has('attachment'))
+                                                @component('compoments.feedbackInputs', ['typeFeed' => 'invalid','force' => true])
+                                                    {{$errors->first('attachment.*') }}
+                                                    {{$errors->first('attachment') }}
+                                                @endcomponent
+                                            @endif
+                                        </div>
+                                    </div>
                                     <div id="divOTRS" class="col-md-4 extra-input" style="display: none">
                                         <div class="form-group">
                                            <label class="form-control-label"> OTRS: </label>
@@ -166,10 +179,10 @@
                                     <div id="divSemep" class="col-md-4 extra-input" style="display: none">
                                         <div class="form-group">
                                            <label class="form-control-label"> SEMEP: </label>
-                                           <input  type="text" id="sisman" name="sisman" value="{{old('sisman')}}" class="form-control {{ ($errors->has('sisman') ? 'is-invalid': '') }}"">
-                                            @if($errors->has('sisman'))
+                                           <input  type="text" id="semep" name="semep" value="{{old('semep')}}" class="form-control {{ ($errors->has('semep') ? 'is-invalid': '') }}"">
+                                            @if($errors->has('semep'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
-                                                    {{$errors->first('sisman')}}
+                                                    {{$errors->first('semep')}}
                                                 @endcomponent
                                             @endif
                                         </div>
@@ -246,7 +259,6 @@
 
 @section('js')
     <script src="{{url('/l10n/pt.js')}}"></script>
-    <script src="{{url('/js/ckeditor/ckeditor.js')}}"></script>
     <script>
        $(function(){
         var popoverData = null;
@@ -266,9 +278,6 @@
             locale: "pt",
             {{--  minDate: "today"  --}}
         });
-
-        // ativated editor
-        CKEDITOR.replace('content');
 
         // action when the user enters the establishment code
             $("#establishment_code").focusout(function(){

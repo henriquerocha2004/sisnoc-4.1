@@ -18,6 +18,7 @@ use App\Models\TypeProblemCalled;
 use App\Utils\DateUtils;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Yajra\DataTables\Facades\DataTables;
 
 class CalledController extends Controller
@@ -48,6 +49,7 @@ class CalledController extends Controller
                     'establishment.establishment_code',
                     'links.type_link',
                     'called.next_action',
+                    'called.status',
                     'users.name'
                 ]
             );
@@ -262,21 +264,130 @@ class CalledController extends Controller
         }
     }
 
+    public function storeSubcalled(CalledRequest $request){
+
+        DB::beginTransaction();
+
+        try {
+
+          $called = Called::find($request->callerId);
+          $called->next_action = $request->next_action;
+          $called->save();
+
+          $subCaller = new SubCaller();
+          $subCaller->id_user = auth()->user()->id;
+          $subCaller->id_caller = $request->callerId;
+          $subCaller->status = 'open';
+          $subCaller->status_establishment = $request->status;
+
+
+
+          switch($request->next_action){
+
+            case '2':
+                $insertSubCaller = $this->setTelecomunicationsCompany($subCaller, $request, $request->callerId);
+
+                if(!$insertSubCaller){
+                    new Exception("Houve uma falha ao salvar o subchamado para operadora!");
+                }
+            break;
+            case '3':
+                $insertSubCaller = $this->setOtrs($subCaller, $request, $request->callerId);
+
+                if(!$insertSubCaller){
+                    new Exception("Houve uma falha ao salvar o subchamado para otrs!");
+                }
+            break;
+            case '4':
+                $insertSubCaller = $this->setSemep($subCaller, $request, $request->callerId);
+
+                if(!$insertSubCaller){
+                    new Exception("Houve uma falha ao salvar o subchamado para Semep!");
+                }
+            break;
+            case '5':
+                $insertSubCaller = $this->setEnergyFault($subCaller, $request, $request->callerId);
+
+                if(!$insertSubCaller){
+                    new Exception("Houve uma falha ao salvar o subchamado para Falta de energia!");
+                }
+            break;
+            case '6' :
+                $insertSubCaller = $this->setDebtor($subCaller, $request, $request->callerId);
+            break;
+            default:
+                new Exception("Essa solicitação não é válida!");
+            break;
+          }
+
+          //Save the type problem
+          $typeProblem = $this->setTypeProblem($request, $subCaller);
+
+          if (!$typeProblem) {
+              new Exception("Houve uma falha ao salvar os tipos de problemas!");
+          }
+
+          //Save a action taken
+          $actionTaken = $this->setActionTaken($request, $subCaller);
+
+          if (!$actionTaken) {
+              new Exception("Houve uma falha ao salvar as ações tomadas!");
+          }
+
+          //Save notes
+          if (!empty($request->content)) {
+              $notes = $this->setNotes($request, $subCaller);
+
+              if (!$notes) {
+                  new Exception("Houve uma falha ao salvar a nota!");
+              }
+          }
+
+          //Save attachment
+          if (!empty($request->file('attachment'))) {
+              $upload = $this->uploads($request, $request->callerId);
+
+              if (!$upload) {
+                  new Exception("Houve uma falha ao fazer o upload das imagens!");
+              }
+          }
+
+          DB::commit();
+          return redirect("called/{$request->callerId}/{$subCaller->id}/edit")->with('alert', ['messageType' => 'success', 'message' => 'Nova ação gerada com sucesso!']);
+
+
+        } catch (Exception $e) {
+            DB::rollback();
+            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, $subCallerId = null)
     {
         $typeProblems = TypeProblem::select(['id', 'problem_description'])->get();
         $actionsTaken = ActionTake::select(['id', 'action_description'])->get();
         $categoryProblems = CategoryProblem::select(['id', 'description_category'])->get();
         $called = Called::find($id);
+
+        if($called == null){
+            return redirect()->route('called.index')->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Requisição inválida']);
+        }
+
         $lastSubCaller = $called->subCallers()->orderBy('id', 'desc')->first();
 
+        if($subCallerId != null){
+            $lastSubCaller = $called->subCallers()->where(['id' => $subCallerId])->first();
 
+            if($lastSubCaller == null){
+                return redirect()->route('called.index')->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Requisição inválida']);
+            }
+        }
 
         return view('called.edit', [
             'typeProblems' => $typeProblems,
@@ -288,14 +399,141 @@ class CalledController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function newSubCaller($id){
+
+        $typeProblems = TypeProblem::select(['id', 'problem_description'])->get();
+        $actionsTaken = ActionTake::select(['id', 'action_description'])->get();
+        $categoryProblems = CategoryProblem::select(['id', 'description_category'])->get();
+        $called = Called::find($id);
+        $idsOpenSubCalled = collect($called->subCallers()
+            ->where(['status' => 'open', 'id_caller' => $called->id])
+            ->select(['type'])->get()->toArray())
+            ->pluck('type')->all();
+
+        return view('called.newSubCaller', [
+            'typeProblems' => $typeProblems,
+            'actionsTaken' => $actionsTaken,
+            'categoryProblems' => $categoryProblems,
+            'called' => $called,
+            'idsOpenSubCalled' => $idsOpenSubCalled
+        ]);
+
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    { }
+    public function update(CalledRequest $request, $id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $called = Called::find($id);
+
+            switch($request->next_action){
+                case '1':
+                    $subCallers = $called->subCallers()->get();
+                    $closeSubCallers = $this->closeAllSubCallers($subCallers, $request);
+
+                    if(!$closeSubCallers){
+                        new Exception("Houve uma falha ao fechar o sub-chamado!");
+                    }
+
+                    $closeCalled = $this->setCloseCalled($called, $request);
+
+                    if(!$closeCalled){
+                         new Exception("Houve uma falha ao fechar o chamado!");
+                    }
+                break;
+                case '9':
+                    $subCaller = SubCaller::find($request->lastSubcallerId);
+                    $closeSubCaller = $this->setCloseSubCaller($subCaller, $request, $id);
+
+                    if(!$closeSubCaller){
+                        new Exception("Houve uma falha ao fechar o sub-chamado!");
+                    }
+                break;
+                default:
+                    new Exception("Essa solicitação não é válida!");
+                break;
+            }
+
+           //Save attachment
+          if (!empty($request->file('attachment'))) {
+                $upload = $this->uploads($request, $request->callerId);
+
+                if (!$upload) {
+                    new Exception("Houve uma falha ao fazer o upload das imagens!");
+                }
+            }
+
+            DB::commit();
+            return redirect("called/{$id}/edit")->with('alert', ['messageType' => 'success', 'message' => 'Chamado atualizado com sucesso!']);
+
+        } catch (Exception $e) {
+            DB::rollback();
+            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
+        }
+
+    }
+
+
+    /**
+     * Function that save new note at subcaller
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeNote(Request $request){
+
+        $subcaller = SubCaller::find($request->subcallerId);
+
+        $note = $this->setNotes($request, $subcaller);
+        $note['user'] = $note->subCaller()->first()->user()->first()->name;
+
+        if(!$note){
+            return response()->json(['result' => false, 'message' => 'Houve uma falha ao salvar a nota!']);
+        }else{
+            return response()->json(['result' => true, 'note' => $note]);
+        }
+
+    }
+
+    /**
+     * Function that get note at subcaller
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getNote(Request $request){
+
+        $result['response'] = false;
+
+        if($request->idnote){
+            $note = Notes::select(['content'])->where(['id' => $request->idnote])->first();
+
+            if($note){
+                $result['response'] = true;
+                $result['content'] = $note->content;
+            }else{
+                $result['message'] = 'Nota não foi encontrada';
+            }
+
+        }else{
+          $result['message'] = 'Falha na requisição!';
+        }
+
+        return response()->json($result);
+    }
 
     private function setTelecomunicationsCompany(SubCaller $subcaller, $request, $idCalled)
     {
@@ -344,6 +582,20 @@ class CalledController extends Controller
         }
 
         return $subcaller->save();
+    }
+
+    private function closeAllSubCallers(Collection $subcallers, $request){
+
+        foreach($subcallers as $subCaller){
+            $subCaller->status = 'closed';
+            $subCaller->id_user_close = (!empty($subCaller->id_user_close) ? $subCaller->id_user_close : auth()->user()->id);
+
+            if(!$subCaller->save()){
+                throw new Exception("Houve uma falha ao fechar os sub-chamados!");
+            }
+        }
+
+        return true;
     }
 
 
@@ -402,14 +654,25 @@ class CalledController extends Controller
         $notes->id_sub_caller = $subcaller->id;
         $notes->content = $request->content;
 
-        return $notes->save();
+        if($notes->save()){
+            return $notes;
+        }else{
+            return false;
+        }
     }
 
     private function uploads($request, $idCalled)
     {
-        $attachment = new Attachment();
-        $attachment->id_called = $idCalled;
-        $attachment->url_attachment = $request->file('attachment')->store('called/' . $idCalled);
-        return $attachment->save();
+        foreach($request->file('attachment') as $file){
+            $attachment = new Attachment();
+            $attachment->id_called = $idCalled;
+            $attachment->url_attachment = $file->store('public/called/' . $idCalled);
+
+            if(!$attachment->save()){
+                throw new Exception("Falha ao fazer o Upload dos anexos");
+            }
+        }
+
+        return true;
     }
 }

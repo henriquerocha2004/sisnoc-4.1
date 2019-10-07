@@ -1,13 +1,15 @@
 {
     "sqltools.connections": [
         {
-            "askForPassword": true,
             "database": "sisnoc",
             "dialect": "MySQL",
+            "isActive": false,
+            "isConnected": false,
             "name": "Local",
+            "password": "Casa1803",
             "port": 3306,
             "server": "localhost",
-            "username": "root"
+            "username": "admin"
         }
     ]
 }

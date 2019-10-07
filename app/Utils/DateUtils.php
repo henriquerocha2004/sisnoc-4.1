@@ -22,6 +22,10 @@ class DateUtils
 
     public static function convertDataToBR($data, $time = false)
     {
+        if (empty($data)) {
+            return null;
+        }
+
         $format = ($time == false ? 'd/m/Y' : 'd/m/Y H:i');
 
         return date($format, strtotime($data));

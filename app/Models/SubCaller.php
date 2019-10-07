@@ -56,9 +56,10 @@ class SubCaller extends Model
         $this->attributes['deadline'] = DateUtils::convertDataDataBase($value);
     }
 
-    public function getDeadlineAttributte($value)
+
+    public function getDeadlineAttribute($value)
     {
-        return DateUtils::convertDataToBR($value);
+        return DateUtils::convertDataToBR($value, true);
     }
 
     public function setHrOpenCallTelecommunicationsCompanyAttribute($value)
@@ -72,7 +73,7 @@ class SubCaller extends Model
     }
 
     public function getTypeShowAttribute($value){
-        return ($value == 2 ? 'Operadora' : ($value == 3 ? 'Otrs (Técnico)' : ($value == 4 ? 'Semep' : ($value == 5 ? 'Energia' : ($value == 8 ? 'Inadiplência' : $value)))));
+        return ($this->attributes['type'] == 2 ? 'Operadora' : ($this->attributes['type'] == 3 ? 'Otrs (Técnico)' : ($this->attributes['type'] == 4 ? 'Semep' : ($this->attributes['type'] == 5 ? 'Energia' : ($this->attributes['type'] == 8 ? 'Inadiplência' : $this->attributes['type'])))));
     }
 
     public function getCreatedAtAttribute($value)
@@ -84,8 +85,8 @@ class SubCaller extends Model
         return ($this->attributes['status_establishment'] == 1 ? 'Offline' : 'Ativo pela redundância');
     }
 
-    public function getStatusAttribute($value){
-        return ($value == 'open' ? 'Aberto' : 'Fechado');
+    public function getStatusShowAttribute($value){
+        return ($this->attributes['status'] == 'open' ? 'Aberto' : 'Fechado');
     }
 
 }
