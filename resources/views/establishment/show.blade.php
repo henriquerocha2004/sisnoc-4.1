@@ -16,13 +16,21 @@
             <div class="row">
                 <div class="col-md-12">
                     @if (session('alert'))
-                    @component('compoments.message', ['type' => session('alert')['messageType']])
-                        {{session('alert')['message']}}
-                    @endcomponent
+                        @component('compoments.message', ['type' => session('alert')['messageType']])
+                            {{session('alert')['message']}}
+                        @endcomponent
                     @endif
                     <div class="card">
-                        <div class="card-header" style="background-color: {{($establishment->establishment_status == 'open' ? 'darkseagreen' : 'lightsalmon')}}">
-                            Informações da <strong> {{$establishment->establishment_code}}  {{$establishment->holiday == date('Y-m-d') ? '<b>Feriado Local</b>' : ''}}</strong>
+                        <div class="card-header" style="background-color: {{($establishment->establishment_status == 'open' ? ($establishment->holyday == date('Y-m-d') ? 'lightsalmon' : 'darkseagreen') : 'lightsalmon')}}">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    Informações da <strong> <a style="color: #666; text-decoration: underline" href="{{route('estabilishment.edit', [$establishment->id])}}">{{$establishment->establishment_code}}</a>
+                                        {{$establishment->holyday == date('Y-m-d') ? " - Feriado Local" : ''}}</strong>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" id="btn-holiday" class="btn btn-sm btn-danger pull-right">Informar Feriado</button>
+                                </div>
+                            </div>
                         </div>
                         <input type="hidden"  id="idEstabilishment" value="{{$establishment->id}}">
                         <div class="card-body card-block">
@@ -143,19 +151,19 @@
                                             <tbody>
                                                 @foreach ($establishment->links()->get() as $link)
                                                 <tr data-id-link="{{$link->id}}">
-                                                        <td>{{$link->type_link}}</td>
-                                                        <td>{{$link->link_identification}}</td>
-                                                        <td>{{$link->bandwidth}}</td>
-                                                        <td>{{$link->telecommunications_company}}</td>
-                                                        <td>{{$link->installed_router_model}}</td>
-                                                        <td>{{$link->serial_router}}</td>
-                                                        <td>{{$link->monitoring_ip}}</td>
-                                                        <td>{{$link->local_ip_router}}</td>
-                                                        <td>{{$link->status}}</td>
-                                                        <td class="refresh" id="{{$link->id}}">
-                                                            <i class="fa fa-refresh fa-spin"></i>
-                                                        </td>
-                                                    </tr>
+                                                    <td><a style="color: #666; text-decoration: underline" href="{{route('links.edit', [$link->id])}}">{{$link->type_link}}</a></td>
+                                                    <td>{{$link->link_identification}}</td>
+                                                    <td>{{$link->bandwidth}}</td>
+                                                    <td>{{$link->telecommunications_company}}</td>
+                                                    <td>{{$link->installed_router_model}}</td>
+                                                    <td>{{$link->serial_router}}</td>
+                                                    <td>{{$link->monitoring_ip}}</td>
+                                                    <td>{{$link->local_ip_router}}</td>
+                                                    <td>{{$link->status}}</td>
+                                                    <td class="refresh" id="{{$link->id}}">
+                                                        <i class="fa fa-refresh fa-spin"></i>
+                                                    </td>
+                                                </tr>
                                                 @endforeach
                                             </tbody>
                                         </table>
@@ -344,6 +352,33 @@
 
                     ]
             });
+
+            //Evento que informa feriado local
+            $("#btn-holiday").click(function(){
+                $.confirm({
+                    title: 'Aviso | Sisnoc',
+                    content: 'Ao informar feriado para esse estabelecimento, não será possível abrir novos chamados no dia atual. Confirma?',
+                    type: 'red',
+                    buttons: {
+                        SIM: function () {
+
+                          var idEstabilishment = $("#idEstabilishment").val();
+
+                          $.post('{{url('holyday')}}/'+idEstabilishment, function(rs){
+                              $.alert({
+                                  title: 'Aviso | Sisnoc',
+                                  type: (rs.result == true ? 'blue' : 'red'),
+                                  content: rs.message
+                              })
+                          });
+
+                        },
+                        Não: function () {
+                           return false;
+                        },
+                    }
+                });
+            })
 
           function mountUrlTerminal(ip, lg){
             return `http://localhost:8000/terminal?ip=${ip}&lg=${lg}`;

@@ -156,6 +156,21 @@ class EstabilishmentController extends Controller
         }
     }
 
+    public function holyday(int $id){
+
+        try {
+            $establishment = Establishment::find($id);
+            $establishment->holyday = date('Y-m-d');
+            $establishment->save();
+
+          return response()->json(['result' => true, 'message' => 'Ação Realizada com sucesso!']);
+
+        } catch (Exception $e) {
+
+           return resposne()->json(['result' => false, 'Houve uma falha ao realizar a ação!']);
+        }
+
+    }
 
     public function restartTerminal(){
         exec("cd /var/www/html/terminal_web/ && nohup /home/henrique/.nvm/versions/node/v10.16.3/bin/node terminalWeb.js& ", $o);

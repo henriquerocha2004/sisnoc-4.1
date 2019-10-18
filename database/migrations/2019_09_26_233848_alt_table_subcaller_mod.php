@@ -14,7 +14,7 @@ class AltTableSubcallerMod extends Migration
     public function up()
     {
         Schema::table('sub_caller', function (Blueprint $table) {
-            $table->bigInteger('id_user_close')->nullable();
+            $table->bigInteger('id_user_close')->nullable()->change();
         });
     }
 

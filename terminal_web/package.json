@@ -1,0 +1,19 @@
+{
+  "name": "terminal_web",
+  "version": "1.0.0",
+  "description": "teste de conexao ssh via js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Henrique Rocha",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "fit-cli": "^0.1.5",
+    "fit.js": "^1.0.0",
+    "socket.io": "^2.3.0",
+    "ssh2": "^0.8.5",
+    "xterm": "^4.1.0"
+  }
+}
