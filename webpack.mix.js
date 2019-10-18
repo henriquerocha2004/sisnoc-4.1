@@ -35,6 +35,7 @@ mix
         'node_modules/flatpickr/dist/flatpickr.min.css',
         'resources/CoolAdmin-master/vendor/Checkbox2Button/css/checkbox2button.css',
         'node_modules/ckeditor/contents.css',
+        'node_modules/xterm/css/xterm.css',
     ], 'public/css/vendor.css')
 
     .styles([

@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\EstablishmentRequest;
+use App\Models\Called;
 use App\Models\Establishment;
+use App\Models\Links;
 use App\Models\RegionalManager;
 use App\Models\TechnicalManager;
+use App\Utils\NetWork;
 use Exception;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -29,6 +32,24 @@ class EstabilishmentController extends Controller
     {
         $establishment = Establishment::select(['id', 'establishment_code', 'city', 'state', 'neighborhood']);
         return DataTables::of($establishment)->make(true);
+    }
+
+    public function tableEstablilishmentCalled(Request $request){
+
+        $calleds = Called::join('establishment', 'called.id_establishment', '=', 'establishment.id')
+            ->join('links', 'called.id_link', '=', 'links.id')
+            ->join('users', 'called.id_user_open', '=', 'users.id')
+            ->select(
+                [
+                    'called.id',
+                    'called.caller_number',
+                    'links.type_link',
+                    'called.next_action',
+                    'called.status',
+                    'users.name'
+                ]
+            )->where(['establishment.id' => $request->id]);
+        return DataTables::of($calleds)->make(true);
     }
 
 
@@ -83,7 +104,11 @@ class EstabilishmentController extends Controller
      */
     public function show($id)
     {
-        //
+        $establishment = Establishment::find($id);
+
+        return view('establishment.show', [
+            'establishment' => $establishment
+        ]);
     }
 
     /**
@@ -129,5 +154,35 @@ class EstabilishmentController extends Controller
         } catch (Exception $e) {
             return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
         }
+    }
+
+
+    public function restartTerminal(){
+        exec("cd /var/www/html/terminal_web/ && nohup /home/henrique/.nvm/versions/node/v10.16.3/bin/node terminalWeb.js& ", $o);
+    }
+
+    public function checkActiveProcessTerminal(){
+
+        $r = ['result' => false];
+        exec("ps -ef| grep -c terminalWeb.js", $out);
+        $qtdProcess = (int) implode("", $out) - 2;
+
+        if($qtdProcess == 1){
+            $r['result'] = true;
+        }
+
+        return  response()->json($r);
+    }
+
+    public function pingTest(Request $request){
+        $link = Links::find($request->idLink);
+        $testPing = NetWork::testePing($link->monitoring_ip, $link->type_link);
+
+        $r = [
+           'testResults' => json_decode($testPing),
+           'link' => $link
+        ];
+
+       return response()->json($r);
     }
 }

@@ -20,6 +20,10 @@
     <!-- Main CSS-->
     <link href="{{asset('/css/theme.css')}}" rel="stylesheet" media="all">
 
+    @hasSection ('css')
+         @yield('css')
+    @endif
+
 </head>
 
 <body class="animsition">

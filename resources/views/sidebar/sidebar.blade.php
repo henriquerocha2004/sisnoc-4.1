@@ -137,8 +137,22 @@
                             <i class="fas  fa-files-o"></i>Relatórios</a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a class="js-arrow" href="#">
                             <i class="fas fa-gears"></i>Configurações</a>
+                            <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
+                                <li>
+                                    <a href="#"><i class="fas fa-search"></i> Categorias de Problemas</a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fas fa-file"></i>  Causa de Problemas </a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fas fa-file"></i> Tipo problemas </a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fas fa-file"></i> Ações tomadas </a>
+                                </li>
+                            </ul>
                     </li>
 
                 </ul>

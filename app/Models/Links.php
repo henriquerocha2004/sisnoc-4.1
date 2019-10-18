@@ -31,4 +31,10 @@ class Links extends Model
     {
         return $this->hasMany(Called::class, 'id_link', 'id');
     }
+
+    //Metodos acessores e mutantes
+
+    public function getStatusAttribute(){
+        return $this->attributes['status'] = ($this->attributes['status'] == 'active' ? 'Ativo' : 'Inativo');
+    }
 }

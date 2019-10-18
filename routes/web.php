@@ -21,6 +21,10 @@ Route::group(['middleware' => 'auth'], function () {
     //Rotas de estabelecimentos
     Route::resource('estabilishment', 'EstabilishmentController');
     Route::get('table', 'EstabilishmentController@table');
+    Route::get('table-estabilishment-called', 'EstabilishmentController@tableEstablilishmentCalled');
+    Route::get('terminal', 'EstabilishmentController@restartTerminal');
+    Route::get('check-service-terminal', 'EstabilishmentController@checkActiveProcessTerminal');
+    Route::get('ping-test', 'EstabilishmentController@pingTest');
 
     //Rotas de Gerente Regional
     Route::resource('regionalManager', 'RegionalManagerController');
