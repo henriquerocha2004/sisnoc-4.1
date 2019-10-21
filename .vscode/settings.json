@@ -9,7 +9,7 @@
             "password": "Casa1803",
             "port": 3306,
             "server": "localhost",
-            "username": "admin"
+            "username": "root"
         }
     ]
 }

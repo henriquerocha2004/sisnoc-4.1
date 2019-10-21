@@ -66,7 +66,7 @@
 
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{{ route('config.index') }}">
                             <i class="fas fa-cogs"></i>Configurações</a>
                     </li>
                 </ul>
@@ -137,22 +137,8 @@
                             <i class="fas  fa-files-o"></i>Relatórios</a>
                     </li>
                     <li>
-                        <a class="js-arrow" href="#">
+                        <a class="js-arrow" href="{{ route('config.index') }}">
                             <i class="fas fa-gears"></i>Configurações</a>
-                            <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
-                                <li>
-                                    <a href="#"><i class="fas fa-search"></i> Categorias de Problemas</a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fas fa-file"></i>  Causa de Problemas </a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fas fa-file"></i> Tipo problemas </a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fas fa-file"></i> Ações tomadas </a>
-                                </li>
-                            </ul>
                     </li>
 
                 </ul>

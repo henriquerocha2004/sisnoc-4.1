@@ -210,12 +210,9 @@
 @section('js')
     <script>
        $(function(){
-
-            $("#document_establishment").mask("99.999.999/9999-99");
-            $("#phone_establishment").mask("(99) 9999-9999");
-            $("#manager_contact").mask("(99) 99999-9999");
-
-
+        $("#document_establishment").mask("99.999.999/9999-99");
+        $("#phone_establishment").mask("(99) 9999-9999");
+        $("#manager_contact").mask("(99) 99999-9999");
        });
     </script>
 @endsection

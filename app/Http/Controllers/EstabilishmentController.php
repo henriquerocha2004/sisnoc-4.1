@@ -173,7 +173,7 @@ class EstabilishmentController extends Controller
     }
 
     public function restartTerminal(){
-        exec("cd /var/www/html/terminal_web/ && nohup /home/henrique/.nvm/versions/node/v10.16.3/bin/node terminalWeb.js& ", $o);
+        exec("cd /srv/http/terminal_web/ && nohup node terminalWeb.js& ", $o);
     }
 
     public function checkActiveProcessTerminal(){

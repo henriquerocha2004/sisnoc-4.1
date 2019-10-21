@@ -49,4 +49,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('new-sub-caller/{id}', 'CalledController@newSubCaller');
     Route::get('called/{called}/{subcalled?}/edit', 'CalledController@edit')->name('called.edit');
     Route::post('subCaller', 'CalledController@storeSubcalled')->name('called.storeSubcalled');
+
+    //Rotas para Configurações
+    Route::get('config', 'ConfigController@index')->name('config.index');
+    Route::post('config/update', 'ConfigController@update')->name('config.update');
+    Route::resource('category-problem', 'CategoryController');
+    Route::get('category-table', 'CategoryController@table');
+    Route::resource('cause-problem', 'CauseProblemController');
+    Route::get('cause-problem-table', 'CauseProblemController@table');
+    Route::resource('type-problem', 'TypeProblemController');
+    Route::get('type-problem-table', 'TypeProblemController@table');
+    Route::resource('action-take', 'ActionTakeController');
+    Route::get('action-take-table', 'ActionTakeController@table');
 });
