@@ -54,7 +54,7 @@
                     serverSide: true,
                     ajax: "{!! url('action-take-table')!!}",
                     columns: [
-                        {data: 'action_description', name: 'problem_description'},
+                        {data: 'action_description', name: 'action_description'},
                         {data: 'id', render: function (data, type, row, meta) {
                             return `
                                 <div class="table-data-feature">

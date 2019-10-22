@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterTableConfigPathTerminal extends Migration
+class AlterTableRemoveNotNullCauseProblem extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AlterTableConfigPathTerminal extends Migration
      */
     public function up()
     {
-        Schema::table('config', function(Blueprint $table){
-            $table->string('path_web_terminal')->nullable();
+        Schema::table('called', function(Blueprint $table){
+            DB::statement('ALTER TABLE sisnoc.called CHANGE COLUMN id_problem_cause id_problem_cause BIGINT(20) UNSIGNED NULL');
         });
     }
 
@@ -25,8 +25,6 @@ class AlterTableConfigPathTerminal extends Migration
      */
     public function down()
     {
-        Schema::table('config', function(Blueprint $table){
-            $table->dropColumn('path_web_terminal');
-        });
+        //
     }
 }

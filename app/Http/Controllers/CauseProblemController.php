@@ -19,7 +19,7 @@ class CauseProblemController extends Controller
      */
     public function index()
     {
-        return view('config.categoryProblem.index');
+        return view('config.problemCause.index');
     }
 
     public function table()
@@ -36,7 +36,7 @@ class CauseProblemController extends Controller
     public function create()
     {
         $categories = CategoryProblem::all();
-        return view('problemCause.create', [
+        return view('config.problemCause.create', [
             'categories' => $categories
         ]);
     }

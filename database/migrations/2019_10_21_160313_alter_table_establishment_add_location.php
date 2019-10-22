@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterTableConfigPathTerminal extends Migration
+class AlterTableEstablishmentAddLocation extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AlterTableConfigPathTerminal extends Migration
      */
     public function up()
     {
-        Schema::table('config', function(Blueprint $table){
-            $table->string('path_web_terminal')->nullable();
+        Schema::table('establishment', function(Blueprint $table){
+            $table->string('location')->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ class AlterTableConfigPathTerminal extends Migration
      */
     public function down()
     {
-        Schema::table('config', function(Blueprint $table){
-            $table->dropColumn('path_web_terminal');
+        Schema::table('establishment', function(Blueprint $table){
+            $table->dropColumn('location');
         });
     }
 }

@@ -61,4 +61,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('type-problem-table', 'TypeProblemController@table');
     Route::resource('action-take', 'ActionTakeController');
     Route::get('action-take-table', 'ActionTakeController@table');
+
+    //ROtas de migração
+    Route::get('migration-lojas', 'MigrationController@lojas');
+
 });

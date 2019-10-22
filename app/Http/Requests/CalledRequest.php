@@ -32,9 +32,9 @@ class CalledRequest extends FormRequest
     {
         $this->inputs['typeProblem'] = array_filter($this->inputs['typeProblem']);
         $this->inputs['actionsTaken'] = array_filter($this->inputs['actionsTaken']);
+        $this->inputs['hr_down'] = DateUtils::convertDataDataBase($this->inputs['hr_down']);
 
-        if(!empty($this->inputs['hr_up']) && !empty($this->inputs['hr_down'])){
-            $this->inputs['hr_down'] = DateUtils::convertDataDataBase($this->inputs['hr_down']);
+        if(!empty($this->inputs['hr_up'])){
             $this->inputs['hr_up'] = DateUtils::convertDataDataBase($this->inputs['hr_up']);
         }
 
