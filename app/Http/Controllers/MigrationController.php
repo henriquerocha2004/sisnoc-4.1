@@ -150,7 +150,7 @@ class MigrationController extends Controller
 
                   $loja = Establishment::where(['establishment_code' => $ocorrencia->o_loja])->first();
                   $causeProblem  = ProblemCause::where('description_cause', 'like', "%".$ocorrencia->o_causa_prob."%")->first();
-                  $link = Links::where(['type_link' => $ocorrencia->o_link])->first();
+                  $link = Links::where(['type_link' => $ocorrencia->o_link, 'establishment_id' => (!empty($loja->id) ? $loja->id : 1)])->first();
 
                   if(!empty($loja->id) && !empty($link))
                   {

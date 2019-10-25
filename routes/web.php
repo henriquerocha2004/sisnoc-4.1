@@ -62,7 +62,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('action-take', 'ActionTakeController');
     Route::get('action-take-table', 'ActionTakeController@table');
 
-    //ROtas de migração
-    Route::get('migration-lojas', 'MigrationController@lojas');
+    //Rotas para Busca
+    Route::post('search', 'SearchController@search')->name('search');
 
+
+    Route::get('migration', 'MigrationController@lojas');
 });
