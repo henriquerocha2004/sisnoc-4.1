@@ -66,6 +66,10 @@
 
                     </li>
                     <li>
+                        <a href="{{route('reports')}}">
+                            <i class="fas  fa-files-o"></i>Relatórios</a>
+                    </li>
+                    <li>
                         <a href="{{ route('config.index') }}">
                             <i class="fas fa-cogs"></i>Configurações</a>
                     </li>
@@ -133,7 +137,7 @@
 
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{{route('reports')}}">
                             <i class="fas  fa-files-o"></i>Relatórios</a>
                     </li>
                     <li>

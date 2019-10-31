@@ -31,6 +31,28 @@ class DateUtils
         return date($format, strtotime($data));
     }
 
+    public static function diffTime($data1, $data2, $type = 'default'){
+
+        $dt1 = new DateTime($data1);
+        $dt2 = new DateTime($data2);
+        $diff = $dt1->diff($dt2);
+
+        switch($type){
+            case 'hour':
+               $result = $diff->h + ($diff->d * 24);
+               return $result;
+            break;
+            case 'minutes':
+                $result = $diff->i + ($diff->h * 60);
+                return $result;
+            break;
+            default:
+                return $diff;
+            break;
+        }
+
+    }
+
     public static function calcDowntime($hrDown, $hrUp)
     {
         $date = new DateTime($hrUp);
@@ -42,6 +64,7 @@ class DateUtils
 
     public static function calcWorkDowntime($horaup, $horadown, $tempInds)
     {
+
         //tempo  do expediente em minutos
         $ini_exp = 510; // inicio
         $fim_exp = 1050; // fim

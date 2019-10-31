@@ -10,6 +10,7 @@ use App\Models\ProblemCause;
 use App\Models\RegionalManager;
 use App\Models\SubCaller;
 use App\Models\TechnicalManager;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -117,7 +118,7 @@ class MigrationController extends Controller
                     $link->monitoring_ip = $circuito->cir_ip_link;
                     $link->installed_router_model = $circuito->cir_model_router;
                     $link->serial_router = $circuito->cir_serial_chassi;
-                    $link->local_ip_router = $circuito->cir_ip_lan_router;
+                    $link->local_ip_router = $circuito->cir_ip_lan_router ?? '0.0.0.0';
                     $link->status = ($esta->establishment_status == 'open' ? 'active' : 'inactive');
 
                     $link->save();
@@ -147,7 +148,6 @@ class MigrationController extends Controller
 
           foreach ($ocorrencias as $ocorrencia)
           {
-
                   $loja = Establishment::where(['establishment_code' => $ocorrencia->o_loja])->first();
                   $causeProblem  = ProblemCause::where('description_cause', 'like', "%".$ocorrencia->o_causa_prob."%")->first();
                   $link = Links::where(['type_link' => $ocorrencia->o_link, 'establishment_id' => (!empty($loja->id) ? $loja->id : 1)])->first();
@@ -164,20 +164,25 @@ class MigrationController extends Controller
                    $called->status = $ocorrencia->o_sit_ch;
                    $called->next_action = $ocorrencia->o_nece ?? $ocorrencia->o_sit_ch;
                    $called->id_user_open = 1;
-                   $called->hr_down = $ocorrencia->o_hr_dw;
+                   $called->hr_down = ($ocorrencia->o_hr_dw == '0000-00-00 00:00:00' ? date('Y-m-d H:i:s') : $ocorrencia->o_hr_dw);
+                   $called->created_at = ($ocorrencia->o_hr_ch == '0000-00-00 00:00:00' ? date('Y-m-d H:i:s') : $ocorrencia->o_hr_ch);
+
+                   $subcalledCheck = false;
 
                    if($ocorrencia->o_sit_ch == 1){
 
                         $called->id_problem_cause = (!empty($causeProblem->id) ? $causeProblem->id : 16);
                         $called->id_user_close = 1;
-                        $called->hr_up = $ocorrencia->o_hr_up;
+                        $called->hr_up = $ocorrencia->o_hr_up == '0000-00-00 00:00:00' ? date('Y-m-d H:i') : $ocorrencia->o_hr_up;
                         $called->downtime = $ocorrencia->o_time_ind;
                         $called->work_downtime = $ocorrencia->o_time_work;
                    }
 
+                   if(empty($ocorrencia->o_prot_op) && empty($ocorrencia->o_sisman) && empty($ocorrencia->o_otrs)){
+                       continue;
+                   }
+
                    $called->save();
-
-
                       //Migrando para a tabela subocorrencias
 
                       if(!empty($ocorrencia->o_prot_op))
@@ -187,8 +192,8 @@ class MigrationController extends Controller
                         $subCaller->status = 'close';
                         $subCaller->id_user = 1;
                         $subCaller->call_telecommunications_company_number = $ocorrencia->o_prot_op;
-                        $subCaller->deadline = $ocorrencia->o_prazo;
-                        $subCaller->hr_open_call_telecommunications_company = $ocorrencia->o_hr_ch_op;
+                        $subCaller->deadline = $ocorrencia->o_prazo == '0000-00-00 00:00:00' ? date('Y-m-d H:i:s') : $ocorrencia->o_prazo;
+                        $subCaller->hr_open_call_telecommunications_company = ($ocorrencia->o_hr_ch_op === '0000-00-00 00:00:00' ? date('Y-m-d H:i'): $ocorrencia->o_hr_ch_op);
                         $subCaller->type = 2;
                         $subCaller->status_establishment = ($ocorrencia->o_status == 'Loja Offline' ? 1 : 2);
 
@@ -217,6 +222,8 @@ class MigrationController extends Controller
                                 $note->save();
                               }
                           }
+
+                          $subcalledCheck = true;
                       }
                       if(!empty($ocorrencia->o_sisman))
                       {
@@ -250,6 +257,8 @@ class MigrationController extends Controller
                                 $note->save();
                               }
                           }
+
+                          $subcalledCheck = true;
                       }
                       if(!empty($ocorrencia->o_otrs))
                       {
@@ -286,6 +295,8 @@ class MigrationController extends Controller
                                 $note->save();
                               }
                           }
+
+                          $subcalledCheck = true;
                       }
                       if($ocorrencia->o_nece == 5)
                       {
@@ -293,9 +304,6 @@ class MigrationController extends Controller
                         $subCaller->id_caller = $called->id;
                         $subCaller->status = 'close';
                         $subCaller->id_user = 1;
-                        $subCaller->call_telecommunications_company_number = $ocorrencia->o_prot_op;
-                        $subCaller->deadline = $ocorrencia->o_prazo;
-                        $subCaller->hr_open_call_telecommunications_company = $ocorrencia->o_hr_ch_op;
                         $subCaller->type = 5;
                         $subCaller->status_establishment = 1;
 
@@ -322,6 +330,12 @@ class MigrationController extends Controller
                                 $note->save();
                               }
                           }
+
+                          $subcalledCheck = true;
+                      }
+
+                      if($subcalledCheck == false){
+                          throw new Exception("Não Foi Possível Salvar Subocorrencia para o Chamado:  ". $ocorrencia->o_cod);
                       }
                   }
 
@@ -330,6 +344,8 @@ class MigrationController extends Controller
           DB::commit();
 
         }catch (\Exception $e) {
+            var_dump($called);
+            var_dump($subCaller);
             DB::rollback();
             dd($e->getMessage(), $e->getLine(), $e->getFile(), $e->getTrace());;
             //throw $th;

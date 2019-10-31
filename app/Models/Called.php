@@ -55,9 +55,15 @@ class Called extends Model
         return $this->belongsTo(Links::class, 'id_link', 'id');
     }
 
+    public function causeProblem(){
+        return $this->belongsTo(ProblemCause::class, 'id_problem_cause', 'id');
+    }
+
+
+
     //Access e Mutators
 
-    public function getHrDownAttribute($value){
+    public function getHrDownShowAttribute($value){
         return DateUtils::convertDataToBR($value, true);
     }
 

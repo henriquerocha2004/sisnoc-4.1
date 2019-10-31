@@ -41,7 +41,7 @@ class SubCaller extends Model
 
     public function typeProblem()
     {
-        return TypeProblemCalled::where(['id_called' => $this->attributes['id']])->get();
+        return TypeProblemCalled::where(['id_called' => $this->attributes['id']]);
     }
 
     public function notes()

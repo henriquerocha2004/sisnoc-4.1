@@ -62,9 +62,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('action-take', 'ActionTakeController');
     Route::get('action-take-table', 'ActionTakeController@table');
 
+    //Rota para migração
+    //Route::get('migracao', 'MigrationController@lojas')->name('migracao');
+
     //Rotas para Busca
     Route::post('search', 'SearchController@search')->name('search');
 
-
-    Route::get('migration', 'MigrationController@lojas');
+    Route::get('reports', 'ReportsController@index')->name('reports');
+    Route::post('reports/disponibility', 'ReportsController@disponibility')->name('reports.disponibility');
+    Route::post('reports/links', 'ReportsController@links')->name('reports.links');
 });

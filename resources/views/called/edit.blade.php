@@ -126,7 +126,7 @@
 
                                             @foreach ($typeProblems as $problem)
 
-                                                @foreach ($lastSubCaller->typeProblem() as $ProblemDB)
+                                                @foreach ($lastSubCaller->typeProblem()->get() as $ProblemDB)
                                                     @php
                                                         $checked = ($ProblemDB->id_problem_type == $problem->id ? 'checked' : '');
                                                         if($checked == 'checked')
