@@ -58,11 +58,14 @@ class MigrationController extends Controller
         DB::beginTransaction();
         try {
 
-            $lojas = DB::connection('sisnoc_prod')->table('tb_lojas')->
-        whereIn('gr_cod', [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,27,28,29,30,31,32,47,48])
-        ->whereIn('tr_cod', [1,2,3,4,5,6,7,8,9])->get();
+        $lojas = DB::connection('sisnoc_prod')->table('tb_lojas')->get();
+
+        $idsRegionalManager = [2,3,4,5,8,10,11,13,15,16,20,21,22,24,25,26,28,29,30,31,32,33,48,49,50,51,52,53,54];
+        $idsTecnicalManager = [2,3,4,5,6,8,9,10,12];
 
         foreach($lojas as $loja){
+
+
 
            $estabelecimento = new Establishment();
            $estabelecimento->establishment_code = $loja->lj_num;
@@ -77,11 +80,18 @@ class MigrationController extends Controller
            $estabelecimento->location = $loja->lj_tipo;
            $estabelecimento->manager_name = $loja->lj_ger;
            $estabelecimento->manager_contact = $loja->lj_tel_ger;
-           $estabelecimento->regional_manager_code = $loja->gr_cod + 1;
-           $estabelecimento->technician_code = $loja->tr_cod;
+
+           $estabelecimento->regional_manager_code = (in_array($loja->gr_cod, $idsRegionalManager) ? $loja->gr_cod + 1 : 1);
+           $estabelecimento->technician_code = (in_array($loja->tr_cod, $idsTecnicalManager) ? $loja->tr_cod + 1 : 1);
            $estabelecimento->phone_establishment = $loja->lj_tel_fix;
            $estabelecimento->branch_establishment = $loja->lj_tel_ram;
            $estabelecimento->id_user = 1;
+
+           if($loja->gr_cod == '34'){
+                dd(in_array($loja->gr_cod, $idsRegionalManager));
+            }
+
+
            $estabelecimento->save();
 
         }
