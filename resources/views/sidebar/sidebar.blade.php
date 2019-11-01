@@ -19,7 +19,7 @@
             <div class="container-fluid">
                 <ul class="navbar-mobile__list list-unstyled">
                     <li class="has-sub">
-                        <a class="js-arrow" href="#">
+                        <a class="js-arrow" href="{{ route('home') }}">
                             <i class="fas fa-home"></i>Home</a>
                     </li>
                     <li>
@@ -90,7 +90,7 @@
             <nav class="navbar-sidebar">
                 <ul class="list-unstyled navbar__list">
                     <li class="has-sub">
-                        <a class="js-arrow" href="#">
+                        <a class="js-arrow" href="{{ route('home') }}">
                             <i class="fas fa-home"></i>Home</a>
                     </li>
                     <li>

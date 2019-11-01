@@ -144,7 +144,7 @@
                                                     <option value="3" {{old('next_action') == 3 ? 'selected' : ''}}>Técnico (Infra)</option>
                                                     <option value="4" {{old('next_action') == 4 ? 'selected' : ''}}>SEMEP (Infra)</option>
                                                     <option value="5" {{old('next_action') == 5 ? 'selected' : ''}}>Falta de Energia</option>
-                                                    <option value="8" {{old('next_action') == 8 ? 'selected' : ''}}>Inadiplência</option>
+                                                    <option value="8" {{old('next_action') == 6 ? 'selected' : ''}}>Inadiplência</option>
                                             </select>
                                             @if($errors->has('next_action'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])

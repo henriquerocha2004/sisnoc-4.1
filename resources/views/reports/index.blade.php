@@ -34,7 +34,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                {{--  <div class="col-md-4">
                                     <div class="card">
                                         <div class="card-header">
                                             <strong class="card-title">Relação de Links
@@ -45,10 +45,10 @@
                                             </strong>
                                         </div>
                                         <div class="card-body">
-                                            <a class="btn btn-primary btn-sm pull-right" href="#">Gerar</a>
+                                            <a class="btn btn-primary btn-sm pull-right" href="{{ route('reports.links') }}">Gerar</a>
                                         </div>
                                     </div>
-                                </div>
+                                </div>  --}}
                             </div>
                         </div>
                     </div>

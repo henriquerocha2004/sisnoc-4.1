@@ -272,6 +272,7 @@ class CalledController extends Controller
 
           $called = Called::find($request->callerId);
           $called->next_action = $request->next_action;
+          $called->status = $request->next_action;
           $called->save();
 
           $subCaller = new SubCaller();

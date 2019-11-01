@@ -60,12 +60,10 @@ class MigrationController extends Controller
 
         $lojas = DB::connection('sisnoc_prod')->table('tb_lojas')->get();
 
-        $idsRegionalManager = [2,3,4,5,8,10,11,13,15,16,20,21,22,24,25,26,28,29,30,31,32,33,48,49,50,51,52,53,54];
-        $idsTecnicalManager = [2,3,4,5,6,8,9,10,12];
+        $idsRegionalManager = [1,2,3,4,7,9,10,12,14,15,19,20,21,23,24,25,27,28,29,30,31,32,47,48,49,50,51,52,53];
+        $idsTecnicalManager = [1,2,3,4,5,7,8,9,11];
 
         foreach($lojas as $loja){
-
-
 
            $estabelecimento = new Establishment();
            $estabelecimento->establishment_code = $loja->lj_num;
@@ -80,26 +78,19 @@ class MigrationController extends Controller
            $estabelecimento->location = $loja->lj_tipo;
            $estabelecimento->manager_name = $loja->lj_ger;
            $estabelecimento->manager_contact = $loja->lj_tel_ger;
-
            $estabelecimento->regional_manager_code = (in_array($loja->gr_cod, $idsRegionalManager) ? $loja->gr_cod + 1 : 1);
-           $estabelecimento->technician_code = (in_array($loja->tr_cod, $idsTecnicalManager) ? $loja->tr_cod + 1 : 1);
+           $estabelecimento->technician_code = (in_array($loja->tr_cod, $idsTecnicalManager)  ? $loja->tr_cod + 1 : 1);
            $estabelecimento->phone_establishment = $loja->lj_tel_fix;
            $estabelecimento->branch_establishment = $loja->lj_tel_ram;
            $estabelecimento->id_user = 1;
 
-           if($loja->gr_cod == '34'){
-                dd(in_array($loja->gr_cod, $idsRegionalManager));
-            }
-
-
            $estabelecimento->save();
-
         }
 
         DB::commit();
 
         } catch (\Exception $e) {
-          DB::rollback();
+            DB::rollback();
           dd($e->getMessage());
         }
 
@@ -159,7 +150,7 @@ class MigrationController extends Controller
           foreach ($ocorrencias as $ocorrencia)
           {
                   $loja = Establishment::where(['establishment_code' => $ocorrencia->o_loja])->first();
-                  $causeProblem  = ProblemCause::where('description_cause', 'like', "%".$ocorrencia->o_causa_prob."%")->first();
+                  $causeProblem  = ProblemCause::where('description_cause', '=', $ocorrencia->o_causa_prob)->first();
                   $link = Links::where(['type_link' => $ocorrencia->o_link, 'establishment_id' => (!empty($loja->id) ? $loja->id : 1)])->first();
 
                   if(!empty($loja->id) && !empty($link))
@@ -180,7 +171,6 @@ class MigrationController extends Controller
                    $subcalledCheck = false;
 
                    if($ocorrencia->o_sit_ch == 1){
-
                         $called->id_problem_cause = (!empty($causeProblem->id) ? $causeProblem->id : 16);
                         $called->id_user_close = 1;
                         $called->hr_up = $ocorrencia->o_hr_up == '0000-00-00 00:00:00' ? date('Y-m-d H:i') : $ocorrencia->o_hr_up;
@@ -199,7 +189,7 @@ class MigrationController extends Controller
                       {
                         $subCaller = new SubCaller();
                         $subCaller->id_caller = $called->id;
-                        $subCaller->status = 'close';
+                        $subCaller->status = ($ocorrencia->o_sit_ch == 1 || $ocorrencia->o_sit_ch == 8 ? 'close' : 'open');
                         $subCaller->id_user = 1;
                         $subCaller->call_telecommunications_company_number = $ocorrencia->o_prot_op;
                         $subCaller->deadline = $ocorrencia->o_prazo == '0000-00-00 00:00:00' ? date('Y-m-d H:i:s') : $ocorrencia->o_prazo;
@@ -239,7 +229,7 @@ class MigrationController extends Controller
                       {
                         $subCaller = new SubCaller();
                         $subCaller->id_caller = $called->id;
-                        $subCaller->status = 'close';
+                        $subCaller->status = ($ocorrencia->o_sit_ch == 1 || $ocorrencia->o_sit_ch == 8 ? 'close' : 'open');
                         $subCaller->id_user = 1;
                         $subCaller->sisman = $ocorrencia->o_sisman;
                         $subCaller->type = 4;
@@ -274,7 +264,7 @@ class MigrationController extends Controller
                       {
                         $subCaller = new SubCaller();
                         $subCaller->id_caller = $called->id;
-                        $subCaller->status = 'close';
+                        $subCaller->status = ($ocorrencia->o_sit_ch == 1 || $ocorrencia->o_sit_ch == 8 ? 'close' : 'open');
                         $subCaller->id_user = 1;
                         $subCaller->otrs = $ocorrencia->o_otrs;
                         $subCaller->type = 3;
@@ -312,7 +302,7 @@ class MigrationController extends Controller
                       {
                         $subCaller = new SubCaller();
                         $subCaller->id_caller = $called->id;
-                        $subCaller->status = 'close';
+                        $subCaller->status = ($ocorrencia->o_sit_ch == 1 || $ocorrencia->o_sit_ch == 8 ? 'close' : 'open');
                         $subCaller->id_user = 1;
                         $subCaller->type = 5;
                         $subCaller->status_establishment = 1;
@@ -352,6 +342,7 @@ class MigrationController extends Controller
               }
 
           DB::commit();
+          echo "FIM DA EXECUÇÂO";
 
         }catch (\Exception $e) {
             var_dump($called);

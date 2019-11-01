@@ -38,11 +38,17 @@ class Disponibility implements FromCollection, WithHeadings, ShouldAutoSize, Wit
     {
         return [
             AfterSheet::class => function (AfterSheet $event){
+                $event->sheet->getStyle('C')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
                 $event->sheet->mergeCells('A1:M1');
                 $event->sheet->getStyle('A1:M1')->getFont()->setSize(15);
                 $event->sheet->getRowDimension(1)->setRowHeight(30);
                 $event->sheet->getStyle('A1:M1')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
                 $event->sheet->mergeCells('A2:M2');
+
+                $callIntervalTitle = 'A3:O3';
+                $event->sheet->getStyle($callIntervalTitle)->getFont()->setBold(true);
+                $event->sheet->getStyle($callIntervalTitle)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('a6a5a2');
             },
         ];
     }

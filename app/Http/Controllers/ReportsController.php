@@ -56,7 +56,7 @@ class ReportsController extends Controller
 
 
        $header = [
-        ['Levantamento de Interrupções'],
+        ['Disponiblildade e Interrupções'],
         ["Período: {$request->start} a {$request->end}"],
         [ 'Data', 'Hora', 'Filial']
        ];
@@ -70,9 +70,8 @@ class ReportsController extends Controller
     }
 
     public function links(){
-
+        ini_set('max_execution_time', 300);
     }
-
 
     private function checkOnOff($currentLink, $called){
 

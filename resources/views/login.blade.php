@@ -40,8 +40,6 @@
                                     {{session('alert')['message']}}
                                 @endcomponent
                             @endif
-
-
                             <form action="{{route('auth')}}" method="post" autocomplete="off">
                                 @csrf
                                 <div class="form-group">
@@ -52,14 +50,6 @@
                                     <label>Informe a senha</label>
                                     <input class="au-input au-input--full" type="password" name="password" placeholder="Senha">
                                 </div>
-                                {{-- <div class="login-checkbox">
-                                    <label>
-                                        <input type="checkbox" name="remember">Remember Me
-                                    </label>
-                                    <label>
-                                        <a href="#">Forgotten Password?</a>
-                                    </label>
-                                </div> --}}
                                 <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">Entrar</button>
                             </form>
                         </div>
