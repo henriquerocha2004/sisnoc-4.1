@@ -174,7 +174,7 @@ class EstabilishmentController extends Controller
 
     public function restartTerminal(){
         // exec("cd /srv/http/terminal_web/ && nohup node terminalWeb.js& ", $o);
-        exec("cd /srv/http/terminal_web/ && nohup node terminalWeb.js& ", $o);
+        exec("cd {session('config')['path_web_terminal']} && nohup node terminalWeb.js& ", $o);
     }
 
     public function checkActiveProcessTerminal(){

@@ -43,8 +43,8 @@
                             <form action="{{route('auth')}}" method="post" autocomplete="off">
                                 @csrf
                                 <div class="form-group">
-                                    <label>Informe o e-mail</label>
-                                    <input class="au-input au-input--full" type="email" name="email" placeholder="Email">
+                                    <label>Informe o Usuário</label>
+                                    <input class="au-input au-input--full" type="text" name="email" placeholder="Email">
                                 </div>
                                 <div class="form-group">
                                     <label>Informe a senha</label>
