@@ -11,6 +11,11 @@
 |
 */
 
+use App\Events\StatusLiked;
+use App\Events\VerLoja;
+use App\Models\Config;
+use App\Models\User;
+
 Route::get('/', 'AuthenticateController@index')->name('login');
 Route::post('/auth', 'AuthenticateController@authenticate')->name('auth');
 Route::get('/logout', 'AuthenticateController@logout')->name('logout');

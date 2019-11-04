@@ -13,7 +13,7 @@
         "doctrine/dbal": "^2.9",
         "elasticsearch/elasticsearch": "^7.3",
         "fideloper/proxy": "^4.0",
-        "laravel/framework": "^6.0",
+        "laravel/framework": "^6.4",
         "laravel/tinker": "^1.0",
         "maatwebsite/excel": "^3.1",
         "yajra/laravel-datatables-oracle": "~9.0"

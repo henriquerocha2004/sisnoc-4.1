@@ -111,7 +111,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="hr_down" class=" form-control-label">Momento do Incidente<i style="color:red">*</i></label>
-                                            <input readonly  type="text" id="hr_down" name="hr_down" value="{{old('hr_down') ?? $called->hr_down }}" class="form-control {{ ($errors->has('hr_down') ? 'is-invalid': '') }}">
+                                            <input readonly  type="text" id="hr_down" name="hr_down" value="{{old('hr_down') ?? $called->hr_down_show }}" class="form-control {{ ($errors->has('hr_down') ? 'is-invalid': '') }}">
                                             @if($errors->has('hr_down'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('hr_down')}}

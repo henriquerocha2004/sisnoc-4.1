@@ -47,22 +47,22 @@ class AuthenticateController extends Controller
         $dashBoard = null;
 
         //Verifica quantos estabelecimentos estão ativos
-        $dashBoard['qtd_active_establishment'] = count(Establishment::where('establishment_status', 'open')->get());
+        $dashBoard['qtd_active_establishment'] = Establishment::where('establishment_status', 'open')->get()->count();
 
         //Verifica a quantidade de chamados abertos
-        $dashBoard['qtd_open_called'] = count(Called::whereBetween('status', [2,6])->get());
+        $dashBoard['qtd_open_called'] = Called::whereBetween('status', [2,6])->get()->count();
 
         //Links Ativos
         $links = Links::where('status', '=', 'active')->groupBy('type_link')->get();
 
         foreach($links as $link){
-            $dashBoard['qtd_links_active'][$link->type_link] = count(Links::where(['status' => 'active', 'type_link' => $link->type_link])->get());
+            $dashBoard['qtd_links_active'][$link->type_link] = Links::where(['status' => 'active', 'type_link' => $link->type_link])->get()->count();
         }
 
         //Quantidade de chamados abertos por link
         foreach($links as $link){
             $idsLinkType = Links::where('type_link', $link->type_link)->select('id')->get()->pluck('id')->all();
-            $dashBoard['qtd_open_called_by_link'][$link->type_link] = count(Called::whereIn('id_link', $idsLinkType)->whereBetween('status', [2,6])->get());
+            $dashBoard['qtd_open_called_by_link'][$link->type_link] = Called::whereIn('id_link', $idsLinkType)->whereBetween('status', [2,6])->get()->count();
         }
 
         //Chamados Abertos no dia Atual
@@ -71,20 +71,16 @@ class AuthenticateController extends Controller
         $dashBoard['called_closed_current_date'] = Called::whereBetween('updated_at', [date('Y-m-d') . '00:00:00', date('Y-m-d') . '23:59:59'])->where('status', 1)->get();
 
         //Chamados Abertos por responsabilidade
-        $responsable = ['telecomunications_company' => 2 , 'technical' => 3 , 'semep' => 4, 'financial_default' => 6, 'energy_fault' => 5];
+        $responsable = ['Operadora' => 2 , 'Técnico Local' => 3 , 'SEMEP' => 4, 'Inadiplência' => 6, 'Falta de Energia' => 5];
 
         foreach($responsable as $key => $resp){
-            $dashBoard['called_open_by_responsability'][$key] = SubCaller::where(['type' => $resp, 'status' => 'open'])->orderBy('id', 'DESC')->first()->called();
+            $dashBoard['called_open_by_responsability'][$key]['callers'] = SubCaller::where(['status' => 'open', 'type' => $resp])->get()   ;
+            $dashBoard['called_open_by_responsability'][$key]['total'] = $dashBoard['called_open_by_responsability'][$key]['callers']->count();
         }
 
 
-
-
-
-        dd($dashBoard);
-
-
-
-        return view('home');
+        return view('home', [
+            'dashboard' => $dashBoard
+        ]);
     }
 }

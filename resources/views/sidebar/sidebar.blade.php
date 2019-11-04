@@ -5,7 +5,7 @@
             <div class="container-fluid">
                 <div class="header-mobile-inner">
                     <a class="logo" href="index.html">
-                        <img src="{{url(Storage::url('images/logoSisnoc-horizontal.png'))}}" alt="Sisnoc" />
+                        <img src="{{url(Storage::url('images/logosisnocmini.png'))}}" alt="Sisnoc" />
                     </a>
                     <button class="hamburger hamburger--slider" type="button">
                         <span class="hamburger-box">
@@ -21,6 +21,7 @@
                     <li class="has-sub">
                         <a class="js-arrow" href="{{ route('home') }}">
                             <i class="fas fa-home"></i>Home</a>
+
                     </li>
                     <li>
                         <a class="js-arrow" href="#">

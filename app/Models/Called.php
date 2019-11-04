@@ -64,7 +64,7 @@ class Called extends Model
     //Access e Mutators
 
     public function getHrDownShowAttribute($value){
-        return DateUtils::convertDataToBR($value, true);
+        return DateUtils::convertDataToBR($this->attributes['hr_down'], true);
     }
 
     public function getHrUpAttribute($value){
