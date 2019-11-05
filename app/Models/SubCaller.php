@@ -51,11 +51,10 @@ class SubCaller extends Model
 
     // Access e Mutators
 
-    public function setDeadlineSAttribute($value)
+    public function setDeadlineAttribute($value)
     {
         $this->attributes['deadline'] = DateUtils::convertDataDataBase($value);
     }
-
 
     public function getDeadlineAttribute($value)
     {

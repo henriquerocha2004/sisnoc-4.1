@@ -4,7 +4,7 @@
         <div class="header-mobile__bar">
             <div class="container-fluid">
                 <div class="header-mobile-inner">
-                    <a class="logo" href="index.html">
+                    <a class="logo" href="{{ route('home') }}">
                         <img src="{{url(Storage::url('images/logosisnocmini.png'))}}" alt="Sisnoc" />
                     </a>
                     <button class="hamburger hamburger--slider" type="button">
@@ -83,7 +83,7 @@
     <!-- MENU SIDEBAR-->
     <aside class="menu-sidebar d-none d-lg-block">
         <div class="logo">
-            <a href="#">
+            <a href="{{ route('home') }}">
                 <img src="{{url(Storage::url('images/logoSisnoc-horizontal.png'))}}" alt="sisnoc"/>
             </a>
         </div>

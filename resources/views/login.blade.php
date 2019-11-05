@@ -31,7 +31,7 @@
                     <div class="login-content">
                         <div class="login-logo">
                             <a href="#">
-                            <img src="{{url(Storage::url('images/LogoSisnoc.png'))}}" alt="CoolAdmin">
+                            <img src="{{url(Storage::url('images/LogoSisnoc.png'))}}" alt="logoSisnoc" style="width: 85%">
                             </a>
                         </div>
                         <div class="login-form">
@@ -49,6 +49,16 @@
                                 <div class="form-group">
                                     <label>Informe a senha</label>
                                     <input class="au-input au-input--full" type="password" name="password" placeholder="Senha">
+                                </div>
+                                <div class="col-md-8 mt-3 mb-3">
+                                    <div>
+                                        <label class="switch switch-text switch-primary switch-pill">
+                                            <input type="checkbox" id="ad_integration" checked="" name="ad_integration" class="switch-input">
+                                            <span data-on="On" data-off="Off" class="switch-label"></span>
+                                            <span class="switch-handle"></span>
+                                        </label>
+                                        <small>Logar no sistema pelo AD</small>
+                                    </div>
                                 </div>
                                 <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">Entrar</button>
                             </form>

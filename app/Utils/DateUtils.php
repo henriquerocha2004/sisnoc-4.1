@@ -22,6 +22,7 @@ class DateUtils
 
     public static function convertDataToBR($data, $time = false)
     {
+
         if (empty($data)) {
             return null;
         }

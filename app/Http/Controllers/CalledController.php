@@ -67,19 +67,26 @@ class CalledController extends Controller
 
         if ($establishment != null) {
 
-            $idEstablishment = $establishment->id;
-            $links = Links::select(['id', 'link_identification', 'type_link'])
-                ->where(['establishment_id' => $idEstablishment])->get();
+            //Verifica se a loja está marcada como feriado
+            
+            if($establishment->holyday != date('Y-m-d')){
+                $idEstablishment = $establishment->id;
+                $links = Links::select(['id', 'link_identification', 'type_link'])
+                    ->where(['establishment_id' => $idEstablishment])->get();
 
-            if (count($links) > 0) {
-                $result['response'] = true;
-                $result['links'] = $links;
-                $result['establishment']['info'] = $establishment;
-                $result['establishment']['regionalManager'] = $establishment->regionalManager()->first();
-                $result['establishment']['technicalManager'] = $establishment->technicalManager()->first();
-            } else {
-                $result['message'] = "Esse estabelecimento não possui links cadastrados!";
+                if (count($links) > 0) {
+                    $result['response'] = true;
+                    $result['links'] = $links;
+                    $result['establishment']['info'] = $establishment;
+                    $result['establishment']['regionalManager'] = $establishment->regionalManager()->first();
+                    $result['establishment']['technicalManager'] = $establishment->technicalManager()->first();
+                } else {
+                    $result['message'] = "Esse estabelecimento não possui links cadastrados!";
+                }
+            }else{
+              $result['message'] = "Foi informado Feriado local para esse estabelecimento e não será possível abrir chamado hoje!";
             }
+
         } else {
             $result['message'] = "Estabelecimento não encontrado!";
         }
@@ -463,6 +470,15 @@ class CalledController extends Controller
                         new Exception("Houve uma falha ao fechar o sub-chamado!");
                     }
                 break;
+                case '10':
+                    $subCaller = SubCaller::find($request->lastSubcallerId);
+                    $updateSubCaller = $this->setTelecomunicationsCompany($subCaller, $request, $id);
+
+                    if(!$updateSubCaller){
+                        throw new Exception("Houve uma falha ao atualizar o sub-chamado");
+                    }
+
+                break;
                 default:
                     new Exception("Essa solicitação não é válida!");
                 break;
@@ -470,7 +486,7 @@ class CalledController extends Controller
 
            //Save attachment
           if (!empty($request->file('attachment'))) {
-                $upload = $this->uploads($request, $request->callerId);
+                $upload = $this->uploads($request, $id);
 
                 if (!$upload) {
                     new Exception("Houve uma falha ao fazer o upload das imagens!");
@@ -538,7 +554,6 @@ class CalledController extends Controller
 
     private function setTelecomunicationsCompany(SubCaller $subcaller, $request, $idCalled)
     {
-
         $subcaller->type = 2;
         $subcaller->call_telecommunications_company_number = $request->call_telecommunications_company;
         $subcaller->deadline = $request->deadline;
@@ -664,6 +679,7 @@ class CalledController extends Controller
 
     private function uploads($request, $idCalled)
     {
+
         foreach($request->file('attachment') as $file){
             $attachment = new Attachment();
             $attachment->id_called = $idCalled;

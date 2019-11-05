@@ -25,7 +25,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     Informações da <strong> <a style="color: #666; text-decoration: underline" href="{{route('estabilishment.edit', [$establishment->id])}}">{{$establishment->establishment_code}}</a>
-                                        {{$establishment->holyday == date('Y-m-d') ? " - Feriado Local" : ''}}</strong>
+                                        {{$establishment->holyday == date('Y-m-d') ? " - Feriado Local" : ($establishment->establishment_status == 'close' ? ' - Estabelecimento Fechado' : '')}}</strong>
                                 </div>
                                 <div class="col-md-6">
                                     <button type="button" id="btn-holiday" class="btn btn-sm btn-danger pull-right">Informar Feriado</button>
@@ -369,12 +369,14 @@
                                   title: 'Aviso | Sisnoc',
                                   type: (rs.result == true ? 'blue' : 'red'),
                                   content: rs.message
-                              })
+                              });
+
+                              window.location.reload();
                           });
 
                         },
                         Não: function () {
-                           return false;
+                           
                         },
                     }
                 });

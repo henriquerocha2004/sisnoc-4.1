@@ -7,6 +7,11 @@
     <div class="section__content section__content--p30">
         <div class="container-fluid">
             <div class="row">
+                @if (session('alert'))
+                    @component('compoments.message', ['type' => session('alert')['messageType']])
+                        {{session('alert')['message']}}
+                    @endcomponent
+                @endif
                 <div id="totais-gerais" class="col-md-12">
                     <div class="overview-wrap">
                         <h2 class="title-1">Dashboard - Totais Gerais</h2>
@@ -114,6 +119,43 @@
                         </div>
                     </div>
                 @endif
+            </div>
+
+            <div class="row">   
+                @if(count($dashboard['my_callers']) >= 1)
+                    <div class="col-md-12">
+                        <h2 class="title-1 m-b-25">Meus Chamados</h2>    
+                    </div>
+                    <div class="col-md-3 col-lg-3">
+                        <div class="statistic__item">
+                            <h2 class="number">{{ count($dashboard['my_callers']) }}</h2>
+                            <span class="desc">Chamado(s) Abertos por mim</span>
+                            <div class="icon">
+                                <i class="zmdi zmdi-file"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9" >
+                        <div class="table-responsive table--no-card m-b-40" style="overflow: scroll; height: 40vh ">
+                            <table class="table table-borderless table-striped table-earning">
+                                <thead>
+                                    <tr>
+                                        <th>Número</th>
+                                        <th>Link</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($dashboard['my_callers'] as $called)
+                                        <tr>
+                                            <td><a href="{{ route('called.edit', [$called->id, $called->subCallers()->first()->id]) }}">{{$called->caller_number }}</a></td>
+                                            <td>{{ $called->link()->first()->type_link }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                @endif    
             </div>
 
             <div class="row">

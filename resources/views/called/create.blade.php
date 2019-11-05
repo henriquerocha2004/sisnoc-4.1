@@ -341,10 +341,10 @@
                             $("#divHrUP").show();
                             $("#divCauseProb").show();
                         break;
-                        case '2':
+                        {{--  case '2':
                             $("#divCallTel").show();
                             $("#divDeadLine").show();
-                        break;
+                        break;  --}}
                         case '3':
                             $("#divOTRS").show();
                         break;

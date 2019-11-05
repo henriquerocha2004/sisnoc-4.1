@@ -14,7 +14,7 @@
                     @endif
 
                     <div class="card">
-                        <div class="card-header" style="background-color: {{($called->status == 1 || $called->status == 7 ? 'lightsalmon' : 'darkseagreen')}}">
+                        <div class="card-header" style="background-color: {{($called->status == 1 || $called->status == 7 ? 'lightsalmon' : 'gold')}}">
                                 <strong>Chamado </strong> {{$called->caller_number}} - Situação: <strong>{{$called->status_show}}</strong>
 
                                 <div class="pull-right">
@@ -31,7 +31,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="establishment_code" class=" form-control-label">Cód. Estabelecimento<i style="color:red">*</i></label>
-                                            <input  type="text" id="establishment_code" readonly name="establishment_code" value="{{old('establishment_code') ?? $called->establishment()->first()->establishment_code}}" class="form-control {{ ($errors->has('establishment_code') ? 'is-invalid': '') }}"">
+                                            <input  type="text" id="establishment_code" readonly name="establishment_code" value="{{old('establishment_code') ?? $called->establishment()->first()->establishment_code}}" class="form-control {{ ($errors->has('establishment_code') ? 'is-invalid': '') }}">
                                             @if($errors->has('establishment_code'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('establishment_code')}}
@@ -43,7 +43,7 @@
                                         <div class="form-group">
                                             <label for="id_link" class=" form-control-label">Tipo de link<i style="color:red">*</i></label>
                                             <select  name="id_link" id="id_link" class="form-control {{ ($errors->has('id_link') ? 'is-invalid': '') }}">
-                                                <option selected value="{{$called->id_link}}">{{$called->link()->first()->type_link}}</option>
+                                                <option selected value="{{$called->id_link}}">{{$called->link()->first()->type_link}} - {{$called->link()->first()->link_identification}}</option>
                                             </select>
                                             @if($errors->has('id_link'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
@@ -192,7 +192,7 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <textarea name="content" id="content" cols="30" rows="10" class="form-control {{ ($errors->has('content') ? 'is-invalid': '') }}">{{old('content') ?? $lastSubCaller->notes()->first()->content}}</textarea>
+                                            <textarea name="content" id="content" cols="30" rows="10" class="form-control {{ ($errors->has('content') ? 'is-invalid': '') }}">{{old('content') ?? ($lastSubCaller->notes()->first()->content ?? '') }}</textarea>
                                             @if($errors->has('content'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('content')}}
@@ -235,11 +235,15 @@
                                     @if($called->status != 1 && $called->status != 7)
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                            <label class=form-control-label"> Direcionar Chamado para: </label>
+                                            <label class="form-control-label"> Próxima Ação: </label>
                                                 <select data-is-subcaller="true" name="next_action" id="next_action" class="form-control {{ ($errors->has('next_action') ? 'is-invalid': '') }}">
-                                                        <option value="">Selecione</option>
+                                                    <option value="">Selecione</option>
+                                                    @if($called->status == 2 && empty($lastSubCaller->call_telecommunications_company_number))
+                                                        <option value="10" {{old('next_action') == 10 ? 'selected' : ''}}>Atualizar chamado com dados da Operadora</option>
+                                                    @else
                                                         <option value="1" {{old('next_action') == 1 ? 'selected' : ''}}>Finalizar Chamado</option>
                                                         <option value="9" {{old('next_action') == 9 ? 'selected' : ''}}>Finalizar Ação</option>
+                                                    @endif
                                                 </select>
                                                 @if($errors->has('next_action'))
                                                     @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
@@ -253,7 +257,7 @@
                                     <div id="divOTRS" class="col-md-4  {{(empty($lastSubCaller->otrs) ? 'd-none' : '')}} ">
                                         <div class="form-group">
                                            <label class="form-control-label"> OTRS: </label>
-                                           <input readonly type="text" id="otrs" name="otrs" value="{{old('otrs') ?? $lastSubCaller->otrs}}" class="form-control {{ ($errors->has('otrs') ? 'is-invalid': '') }}"">
+                                           <input readonly type="text" id="otrs" name="otrs" value="{{old('otrs') ?? $lastSubCaller->otrs}}" class="form-control {{ ($errors->has('otrs') ? 'is-invalid': '') }}">
                                             @if($errors->has('otrs'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('otrs')}}
@@ -264,7 +268,7 @@
                                     <div id="divSemep" class="col-md-4  {{(empty($lastSubCaller->sisman) ? "d-none" : '')}}" >
                                         <div class="form-group">
                                            <label class="form-control-label"> SEMEP: </label>
-                                           <input readonly type="text" id="sisman" name="sisman" value="{{old('sisman') ?? $lastSubCaller->sisman}}" class="form-control {{ ($errors->has('sisman') ? 'is-invalid': '') }}"">
+                                           <input readonly type="text" id="sisman" name="sisman" value="{{old('sisman') ?? $lastSubCaller->sisman}}" class="form-control {{ ($errors->has('sisman') ? 'is-invalid': '') }}">
                                             @if($errors->has('sisman'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('sisman')}}
@@ -275,7 +279,7 @@
                                 <div id="divHrUP" class="col-md-4 extra-input" style="display: {{(empty($called->hr_up) ? 'none' : 'block')}}" >
                                         <div class="form-group">
                                            <label class="form-control-label"> Horário da Normalização: </label>
-                                            <input {{(empty($called->hr_up) ? '' : 'readonly')}}  type="text" id="{{(empty($called->hr_up) ? 'hr_up' : '')}}" name="hr_up" value="{{old('hr_up', $called->hr_up)}}" class="form-control {{ ($errors->has('hr_up') ? 'is-invalid': '') }}"">
+                                            <input {{(empty($called->hr_up) ? '' : 'readonly')}}  type="text" id="{{(empty($called->hr_up) ? 'hr_up' : '')}}" name="hr_up" value="{{old('hr_up', $called->hr_up)}}" class="form-control {{ ($errors->has('hr_up') ? 'is-invalid': '') }}">
                                             @if($errors->has('hr_up'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('hr_up')}}
@@ -305,10 +309,10 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div id="divCallTel" class="col-md-4 {{(empty($lastSubCaller->call_telecommunications_company_number) ? 'd-none' : '')}}" >
+                                    <div id="divCallTel" class="col-md-4 {{(empty($lastSubCaller->call_telecommunications_company_number) && $called->status != 2 ? 'd-none' : '')}}" >
                                         <div class="form-group">
                                            <label for="call_telecommunications_company" class="form-control-label"> Protocolo Operadora: </label>
-                                           <input readonly type="text" id="call_telecommunications_company" name="call_telecommunications_company" value="{{old('call_telecommunications_company') ?? $lastSubCaller->call_telecommunications_company_number}}" class="form-control {{ ($errors->has('hr_up') ? 'is-invalid': '') }}"">
+                                           <input {{ (!empty($lastSubCaller->call_telecommunications_company_number) ? 'readonly' : '') }} type="text" id="call_telecommunications_company" name="call_telecommunications_company" value="{{old('call_telecommunications_company') ?? $lastSubCaller->call_telecommunications_company_number}}" class="form-control {{ ($errors->has('hr_up') ? 'is-invalid': '') }}">
                                             @if($errors->has('call_telecommunications_company'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('call_telecommunications_company')}}
@@ -316,10 +320,10 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div id="divDeadLine" class="col-md-4" style="display: {{(empty($lastSubCaller->deadline) ? 'none' : 'block')}}">
+                                    <div id="divDeadLine" class="col-md-4" style="display: {{(empty($lastSubCaller->deadline) && $called->status != 2 ? 'none' : 'block')}}">
                                         <div class="form-group">
                                            <label for="deadline" class="form-control-label"> Prazo de Normalização: </label>
-                                           <input readonly type="text" id="{{(empty($lastSubCaller->deadline) ? 'deadline' : '')}}" name="deadline" value="{{old('deadline') ?? $lastSubCaller->deadline}}" class="form-control {{ ($errors->has('deadline') ? 'is-invalid': '') }}"">
+                                           <input {{ (!empty($lastSubCaller->deadline) ? 'readonly' : '') }} type="text" id="{{(empty($lastSubCaller->deadline) ? 'deadline' : '')}}" name="deadline" value="{{old('deadline') ?? $lastSubCaller->deadline}}" class="form-control {{ ($errors->has('deadline') ? 'is-invalid': '') }}">
                                             @if($errors->has('deadline'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('deadline')}}

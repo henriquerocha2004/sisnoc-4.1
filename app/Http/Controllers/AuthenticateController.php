@@ -26,7 +26,7 @@ class AuthenticateController extends Controller
         $user = $request->only(['email', 'password']);
         if (!empty($user['email']) && !empty($user['password'])) {
 
-            if(session('config')['ad_integration'] == 1){
+            if($request->ad_integration == 'on'){
                return  $this->ldapAuthenticate($user);
             }
 
@@ -70,9 +70,10 @@ class AuthenticateController extends Controller
         }
 
         //Chamados Abertos no dia Atual
-        $dashBoard['called_open_current_date'] = Called::whereBetween('created_at', [date('Y-m-d') . '00:00:00', date('Y-m-d') . '23:59:59'])->get();
+        $dashBoard['called_open_current_date'] = Called::whereBetween('created_at', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->whereBetween('status', [2,6])->get();
+
         //Chamados Fechados no dia atual
-        $dashBoard['called_closed_current_date'] = Called::whereBetween('updated_at', [date('Y-m-d') . '00:00:00', date('Y-m-d') . '23:59:59'])->where('status', 1)->get();
+        $dashBoard['called_closed_current_date'] = Called::whereBetween('updated_at', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->where('status', 1)->get();
 
         //Chamados Abertos por responsabilidade
         $responsable = ['Operadora' => 2 , 'Técnico Local' => 3 , 'SEMEP' => 4, 'Inadiplência' => 6, 'Falta de Energia' => 5];
@@ -81,6 +82,9 @@ class AuthenticateController extends Controller
             $dashBoard['called_open_by_responsability'][$key]['callers'] = SubCaller::where(['status' => 'open', 'type' => $resp])->get()   ;
             $dashBoard['called_open_by_responsability'][$key]['total'] = $dashBoard['called_open_by_responsability'][$key]['callers']->count();
         }
+
+        //Chamados Abertos pelo usuário logado
+        $dashBoard['my_callers'] = Called::where(['id_user_open' => Auth::user()->id])->whereBetween('status', [2,6])->get();
 
 
         return view('home', [
@@ -134,13 +138,12 @@ class AuthenticateController extends Controller
                        redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Falha ao autenticar o usuário!']);
                     }
                 }else{
-
-                    if($userDB->password != bcrypt($user['password'])){
+                    if(!password_verify($user['password'], $userDB->password)){
                         $userDB->password = $user['password'];
                         $userDB->save();
                     }
-                    $auth = Auth::attempt($user);
 
+                    $auth = Auth::attempt($user);
                     if($auth){
                         return redirect()->route('home');
                     }else{

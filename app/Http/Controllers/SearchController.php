@@ -20,7 +20,7 @@ class SearchController extends Controller
        $this->searchByEstablishment();
 
         if((empty($this->establishment) || count($this->establishment) == 0 ) && (empty($this->called) || count($this->called) == 0)){
-            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Não Encontramos resultados com o termo ultilizado']);
+            return redirect()->route('home')->with('alert', ['messageType' => 'danger', 'message' => 'Não Encontramos resultados com o termo ultilizado']);
         }else{
 
             return view('search.search', [

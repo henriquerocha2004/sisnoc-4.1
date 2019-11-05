@@ -28,7 +28,7 @@
                                                 <div class="card-header">
                                                     <strong class="card-title">{{ $called->caller_number }}
                                                         <small>
-                                                            <span class="badge badge-{{ $called->status == 1 ? 'danger' : 'success' }} float-right mt-1">
+                                                            <span class="badge badge-{{ $called->status == 1 ? 'danger' : 'warning' }} float-right mt-1">
                                                                 {{ $called->status == 1 ? 'Fechado' : 'Aberto' }} </span>
                                                         </small>
                                                     </strong>

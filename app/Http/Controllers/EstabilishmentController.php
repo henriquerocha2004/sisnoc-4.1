@@ -150,7 +150,6 @@ class EstabilishmentController extends Controller
 
             return redirect()->route('estabilishment.index')->with('alert', ['messageType' => 'success', 'message' => 'Estabelecimento Atualizado com sucesso!']);
 
-
         } catch (Exception $e) {
             return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
         }
@@ -166,10 +165,8 @@ class EstabilishmentController extends Controller
           return response()->json(['result' => true, 'message' => 'Ação Realizada com sucesso!']);
 
         } catch (Exception $e) {
-
            return resposne()->json(['result' => false, 'Houve uma falha ao realizar a ação!']);
         }
-
     }
 
     public function restartTerminal(){
