@@ -145,6 +145,7 @@
                                                     <option value="4" {{old('next_action') == 4 ? 'selected' : ''}}>SEMEP (Infra)</option>
                                                     <option value="5" {{old('next_action') == 5 ? 'selected' : ''}}>Falta de Energia</option>
                                                     <option value="8" {{old('next_action') == 6 ? 'selected' : ''}}>Inadiplência</option>
+                                                    <option value="7" {{old('next_action') == 7 ? 'selected' : ''}}>Cancelar</option>
                                             </select>
                                             @if($errors->has('next_action'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
@@ -341,10 +342,6 @@
                             $("#divHrUP").show();
                             $("#divCauseProb").show();
                         break;
-                        {{--  case '2':
-                            $("#divCallTel").show();
-                            $("#divDeadLine").show();
-                        break;  --}}
                         case '3':
                             $("#divOTRS").show();
                         break;

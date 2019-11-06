@@ -85,7 +85,7 @@ class SubCaller extends Model
     }
 
     public function getStatusShowAttribute($value){
-        return ($this->attributes['status'] == 'open' ? 'Aberto' : 'Fechado');
+        return ($this->attributes['status'] == 'open' ? 'Aberto' : ($this->attributes['status'] == 'cancel' ? 'Cancelado' : 'Fechado'));
     }
 
 }

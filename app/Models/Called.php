@@ -71,6 +71,10 @@ class Called extends Model
         return DateUtils::convertDataToBR($value, true);
     }
 
+    public function getCreatedAtAttribute($value){
+        return DateUtils::convertDataToBR($value);
+    }
+
     public function getStatusShowAttribute(){
         if($this->attributes['status'] == 1){
             return "Fechado";

@@ -14,7 +14,7 @@
                     @endif
 
                     <div class="card">
-                        <div class="card-header" style="background-color: {{($called->status == 1 || $called->status == 7 ? 'lightsalmon' : 'gold')}}">
+                        <div class="card-header" style="background-color: {{($called->status == 1 || $called->status == 7 ? 'lightsalmon' : 'darkseagreen')}}">
                                 <strong>Chamado </strong> {{$called->caller_number}} - Situação: <strong>{{$called->status_show}}</strong>
 
                                 <div class="pull-right">
@@ -26,7 +26,7 @@
                             <form action="{{route('called.update', $called->id)}}" method="post" class="" enctype="multipart/form-data" autocomplete="off">
                                 @csrf
                                 @method('PUT')
-                                <input type="hidden" name="lastSubcallerId" id="lastSubcallerId" value="{{$lastSubCaller->id}}">
+                                <input type="hidden" name="lastSubcallerId" id="lastSubcallerId" value="{{ $lastSubCaller->id }}">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -43,7 +43,7 @@
                                         <div class="form-group">
                                             <label for="id_link" class=" form-control-label">Tipo de link<i style="color:red">*</i></label>
                                             <select  name="id_link" id="id_link" class="form-control {{ ($errors->has('id_link') ? 'is-invalid': '') }}">
-                                                <option selected value="{{$called->id_link}}">{{$called->link()->first()->type_link}} - {{$called->link()->first()->link_identification}}</option>
+                                                <option selected value="{{$called->id_link}}">{{$called->link()->first()->type_link}}</option>
                                             </select>
                                             @if($errors->has('id_link'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
@@ -240,9 +240,11 @@
                                                     <option value="">Selecione</option>
                                                     @if($called->status == 2 && empty($lastSubCaller->call_telecommunications_company_number))
                                                         <option value="10" {{old('next_action') == 10 ? 'selected' : ''}}>Atualizar chamado com dados da Operadora</option>
+                                                        <option value="7" {{old('next_action') == 7 ? 'selected' : ''}}>Cancelar Chamado</option>
                                                     @else
                                                         <option value="1" {{old('next_action') == 1 ? 'selected' : ''}}>Finalizar Chamado</option>
                                                         <option value="9" {{old('next_action') == 9 ? 'selected' : ''}}>Finalizar Ação</option>
+                                                        <option value="7" {{old('next_action') == 7 ? 'selected' : ''}}>Cancelar Chamado</option>
                                                     @endif
                                                 </select>
                                                 @if($errors->has('next_action'))

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\Disponibility;
 use App\Models\Called;
 use App\Models\Links;
+use App\Models\SubCaller;
 use App\Utils\DateUtils;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -69,8 +70,30 @@ class ReportsController extends Controller
        return Excel::download(new Disponibility($dataSource, $header), 'Disponibilidade e Interrupções.xlsx');
     }
 
-    public function links(){
-        ini_set('max_execution_time', 300);
+    public function callersTeleCompany(Request $request){
+
+         $callers = Links::join('called', 'called.id_link', '=','links.id')
+                           ->join('sub_caller', 'sub_caller.id_caller', '=', 'called.id')
+                           ->where('links.type_link', '=', $request->link)
+                           ->where('sub_caller.type', '=', 2)
+                           ->select('called.caller_number', 'links.type_link',
+                            'sub_caller.call_telecommunications_company_number', 'sub_caller.deadline')->get();
+
+          dd($callers);
+
+         $dataSource = null;
+
+        $i = 0;
+         foreach($callers as $called){
+            $data[$i]['numero'] = $called->called()->first()->caller_number;
+            $data[$i]['link'] = $called->called()->first()->link()->first()->type_link;
+            $data[$i]['chamado'] = $called->call_telecommunications_company_number;
+            $data[$i]['prazo'] = DateUtils::convertDataToBR($called->deadline);
+            $i++;
+         }
+
+         dd($data);
+
     }
 
     private function checkOnOff($currentLink, $called){

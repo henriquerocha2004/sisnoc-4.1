@@ -56,6 +56,10 @@ class AuthenticateController extends Controller
         //Verifica a quantidade de chamados abertos
         $dashBoard['qtd_open_called'] = Called::whereBetween('status', [2,6])->get()->count();
 
+        //Typos de links
+
+        $dashBoard['typeLinks'] = Links::distinct()->get(['type_link'])->pluck('type_link')->all();
+
         //Links Ativos
         $links = Links::where('status', '=', 'active')->groupBy('type_link')->get();
 

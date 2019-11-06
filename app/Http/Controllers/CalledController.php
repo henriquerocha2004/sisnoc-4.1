@@ -68,7 +68,7 @@ class CalledController extends Controller
         if ($establishment != null) {
 
             //Verifica se a loja está marcada como feriado
-            
+
             if($establishment->holyday != date('Y-m-d')){
                 $idEstablishment = $establishment->id;
                 $links = Links::select(['id', 'link_identification', 'type_link'])
@@ -215,7 +215,7 @@ class CalledController extends Controller
                     }
 
                     break;
-                case '8':
+                case '6':
 
                     $insertSubcaller = $this->setDebtor($subcaller, $request, $called->id);
 
@@ -224,6 +224,9 @@ class CalledController extends Controller
                     }
 
                     break;
+                case '7':
+                    return redirect()->route('called.index')->with('alert', ['messageType' => 'success', 'message' => 'Chamado cancelado com sucesso!']);
+                break;
                 default:
                     new Exception("Essa solicitação não é válida!");
                     break;
@@ -261,8 +264,6 @@ class CalledController extends Controller
                     new Exception("Houve uma falha ao fazer o upload das imagens!");
                 }
             }
-
-
             DB::commit();
             return redirect()->route('called.index')->with('alert', ['messageType' => 'success', 'message' => 'Chamado nº ' . $called->caller_number . ' gerado com sucesso!']);
         } catch (Exception $e) {
@@ -477,8 +478,18 @@ class CalledController extends Controller
                     if(!$updateSubCaller){
                         throw new Exception("Houve uma falha ao atualizar o sub-chamado");
                     }
-
                 break;
+                case '7':
+                    $cancel = $this->setCancel($id);
+                   
+                    if(!$cancel){
+                        throw new Exception("Houve uma falha ao cancelar o chamado");
+                    }else{
+                        DB::commit();
+                        return redirect()->route('called.index')->with('alert', ['messageType' => 'success', 'message' => 'Chamado cancelado com sucesso!']);
+                    }
+                break;
+
                 default:
                     new Exception("Essa solicitação não é válida!");
                 break;
@@ -586,6 +597,15 @@ class CalledController extends Controller
     {
         $subcaller->type = 8;
         return $subcaller->save();
+    }
+
+    private function setCancel($idCalled){
+        $called = Called::find($idCalled);
+        $called->subCallers()->update(['status' => 'cancel']);
+        $called->status = 7;
+        $called->save();
+
+        return true;
     }
 
     private function setCloseSubCaller(SubCaller $subcaller, $request, $idCalled = null, $newRegister = false)

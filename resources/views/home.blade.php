@@ -121,10 +121,10 @@
                 @endif
             </div>
 
-            <div class="row">   
+            <div class="row">
                 @if(count($dashboard['my_callers']) >= 1)
                     <div class="col-md-12">
-                        <h2 class="title-1 m-b-25">Meus Chamados</h2>    
+                        <h2 class="title-1 m-b-25">Meus Chamados</h2>
                     </div>
                     <div class="col-md-3 col-lg-3">
                         <div class="statistic__item">
@@ -142,6 +142,7 @@
                                     <tr>
                                         <th>Número</th>
                                         <th>Link</th>
+                                        <th>Aberto Em</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -149,13 +150,14 @@
                                         <tr>
                                             <td><a href="{{ route('called.edit', [$called->id, $called->subCallers()->first()->id]) }}">{{$called->caller_number }}</a></td>
                                             <td>{{ $called->link()->first()->type_link }}</td>
+                                            <td>{{ $called->created_at }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                @endif    
+                @endif
             </div>
 
             <div class="row">
@@ -163,13 +165,29 @@
 
                   <div id="{{ $key }}"></div>
 
-                  <div  class="col-md-12">
+                  <div  class="col-md-10">
                         @if($key == 'Operadora' || $key == 'Técnico Local' || $key == 'SEMEP')
                            <h2 class="title-1 m-b-25">Solicitações feitas a(o) {{ $key }} </h2>
                         @elseif($key == 'Inadiplência' || $key == 'Falta de Energia')
                            <h2 class="title-1 m-b-25"> Chamados Por {{ $key }} </h2>
                         @endif
                   </div>
+                  @if($key == 'Operadora')
+                        <div class="row">
+                            <div class="col-md-3">
+                                <button class="btn btn-success" data-toggle="modal" data-target="#modal-sheet" >Gerar Planilha</button>
+                            </div>
+                        </div>
+                  @elseif($key == 'Técnico Local' || $key == 'SEMEP')
+                    <div class="row">
+                        <div class="col-md-3">
+                            <form action="" method="POST">
+                                <button class="btn btn-success" >Gerar Planilha</button>
+                            </form>
+                        </div>
+                    </div>
+                  @endif
+
                   <div class="col-md-3 col-lg-3">
                         <div class="statistic__item">
                             <h2 class="number">{{ $item['total'] }}</h2>
@@ -221,5 +239,44 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modal-sheet" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mediumModalLabel">O que deseja Gerar ?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ route('reports.callersTeleCompany') }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="start" class=" form-control-label">Informe o link: <i style="color:red">*</i></label>
+                                <select name="link" class="form-control">
+                                    <option value="">Selecione</option>
+                                    @foreach ( $dashboard['typeLinks'] as $type)
+                                        <option value="{{ $type }}">{{ $type }}</option>
+                                    @endforeach
+                                    <option value="ALL">Todos</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary">Confirmar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
 <!-- END MAIN CONTENT-->
 @endsection

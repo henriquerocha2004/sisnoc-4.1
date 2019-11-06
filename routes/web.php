@@ -75,5 +75,5 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('reports', 'ReportsController@index')->name('reports');
     Route::post('reports/disponibility', 'ReportsController@disponibility')->name('reports.disponibility');
-    // Route::post('reports/links', 'ReportsController@links')->name('reports.links');
+    Route::post('reports/callers-teleCompany', 'ReportsController@callersTeleCompany')->name('reports.callersTeleCompany');
 });
