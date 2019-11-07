@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\Exports\Disponibility;
+use App\Exports\SpreadSheetExport;
 use App\Models\Called;
 use App\Models\Links;
 use App\Models\SubCaller;
@@ -72,28 +74,53 @@ class ReportsController extends Controller
 
     public function callersTeleCompany(Request $request){
 
-         $callers = Links::join('called', 'called.id_link', '=','links.id')
-                           ->join('sub_caller', 'sub_caller.id_caller', '=', 'called.id')
-                           ->where('links.type_link', '=', $request->link)
-                           ->where('sub_caller.type', '=', 2)
-                           ->select('called.caller_number', 'links.type_link',
-                            'sub_caller.call_telecommunications_company_number', 'sub_caller.deadline')->get();
+            $dataSource = Links::join('called', 'called.id_link', '=','links.id')
+                    ->join('sub_caller', 'sub_caller.id_caller', '=', 'called.id')
+                    ->where('links.type_link', '=', $request->link)
+                    ->where('sub_caller.type', '=', 2)
+                    ->where('sub_caller.status', '=', 'open')
+                    ->select(DB::raw("distinct(sub_caller.id_caller)"), 'called.caller_number', 'links.type_link',
+                    'sub_caller.call_telecommunications_company_number', 'sub_caller.deadline')->get();
 
-          dd($callers);
+            $header = [
+                ['Chamados Abertos para a Operadora'],
+                [ 'Loja', 'Chamado', 'Link', 'Chamado Operadora', 'Prazo de Normalização']];
 
-         $dataSource = null;
+        return Excel::download(new SpreadSheetExport($dataSource, $header), 'Chamados Abertos Operadora.xlsx');
+    }
 
-        $i = 0;
-         foreach($callers as $called){
-            $data[$i]['numero'] = $called->called()->first()->caller_number;
-            $data[$i]['link'] = $called->called()->first()->link()->first()->type_link;
-            $data[$i]['chamado'] = $called->call_telecommunications_company_number;
-            $data[$i]['prazo'] = DateUtils::convertDataToBR($called->deadline);
-            $i++;
-         }
+    public function callersOtrs(Request $request){
 
-         dd($data);
+        $dataSource = Links::join('called', 'called.id_link', '=','links.id')
+            ->join('sub_caller', 'sub_caller.id_caller', '=', 'called.id')
+            ->where('sub_caller.type', '=', 3)
+            ->where('sub_caller.status', '=', 'open')
+            ->select('called.caller_number', 'links.type_link',
+            'sub_caller.otrs')->get();
 
+            $header = [
+                ['Chamados Abertos para os Técnicos'],
+                [ 'Chamado', 'Link', 'OTRS']];
+
+         return Excel::download(new SpreadSheetExport($dataSource, $header), 'Chamados Abertos Técnicos.xlsx');
+
+    }
+
+
+    public function semep(Request $request){
+
+        $dataSource = Links::join('called', 'called.id_link', '=','links.id')
+        ->join('sub_caller', 'sub_caller.id_caller', '=', 'called.id')
+        ->where('sub_caller.type', '=', 4)
+        ->where('sub_caller.status', '=', 'open')
+        ->select('called.caller_number', 'links.type_link',
+        'sub_caller.sisman')->get();
+
+        $header = [
+            ['Chamados Abertos para os Técnicos'],
+            [ 'Chamado', 'Link', 'SEMEP']];
+
+       return Excel::download(new SpreadSheetExport($dataSource, $header), 'Chamados Abertos SEMEP.xlsx');
     }
 
     private function checkOnOff($currentLink, $called){

@@ -18,39 +18,28 @@
                 @csrf
                 <div class="card-body card-block">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="btn-group">
                                     <a href="{{ route('category-problem.index') }}" class="btn btn-primary">Ger. Categ. Problemas</a>
                                     <a href="{{ route('cause-problem.index') }}" class="btn btn-primary">Ger. Causa de Problemas</a>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="btn-group">
                                     <a href="{{ route('type-problem.index') }}" class="btn btn-primary">Ger. Tipo de Problema</a>
                                     <a href="{{ route('action-take.index') }}" class="btn btn-primary">Ger. Ação Tomada</a>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-5 mt-3 mb-3">
-                                <div>
-                                    <label class="switch switch-text switch-primary switch-pill">
-                                        <input type="checkbox" id="ad_integration" name="ad_integration" class="switch-input" {{ $config->ad_integration == 1 ? "checked='true'" : ''}}">
-                                        <span data-on="On" data-off="Off" class="switch-label"></span>
-                                        <span class="switch-handle"></span>
-                                    </label>
-                                    <small>Logar no sistema pelo AD</small>
-                                </div>
-                            </div>
-                            <div class="col-md-5 mt-3 mb-3">
-                                <div>
-                                    <label class="switch switch-text switch-primary switch-pill">
-                                        <input type="checkbox" id="send_email" name="send_email" class="switch-input" {{ $config->send_email == 1 ? "checked='true'" : ''}}>
-                                        <span data-on="On" data-off="Off" class="switch-label"></span>
-                                        <span class="switch-handle"></span>
-                                    </label>
-                                    <small>Envio de Email</small>
+                            <div class="col-md-6 mt-3">
+                                <div class="btn-group">
+                                    <a href="{{ route('users.index') }}" class="btn btn-primary">Ger. de Usuários</a>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-7">
+                            <div class="col-md-7 mt-3">
                                 <div class="form-group">
                                     <label for="opening_hours" class=" form-control-label">Path do Terminal Web</label>
                                     <input type="text" id="path_web_terminal" value="{{ $config->path_web_terminal }}" name="path_web_terminal"  class="form-control">

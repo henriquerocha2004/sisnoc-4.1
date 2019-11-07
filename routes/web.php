@@ -67,6 +67,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('action-take', 'ActionTakeController');
     Route::get('action-take-table', 'ActionTakeController@table');
 
+    //Rotas para usuários
+    Route::get('users', 'UsersController@index')->name('users.index');
+    Route::get('users/create', 'UsersController@create')->name('users.create');
+    Route::post('users', 'UsersController@store')->name('users.store');
+    Route::get('table-users', 'UsersController@table');
+
     //Rota para migração
     Route::get('migracao', 'MigrationController@lojas')->name('migracao');
 
@@ -76,4 +82,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('reports', 'ReportsController@index')->name('reports');
     Route::post('reports/disponibility', 'ReportsController@disponibility')->name('reports.disponibility');
     Route::post('reports/callers-teleCompany', 'ReportsController@callersTeleCompany')->name('reports.callersTeleCompany');
+    Route::post('reports/callers-otrs', 'ReportsController@callersOtrs')->name('reports.callersOtrs');
+    Route::post('reports/callers-semep', 'ReportsController@semep')->name('reports.semep');
 });

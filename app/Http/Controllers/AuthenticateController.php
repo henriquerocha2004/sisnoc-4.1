@@ -128,6 +128,7 @@ class AuthenticateController extends Controller
                     $newUser->name = $info[0]['cn'][0];
                     $newUser->email = $user['email'];
                     $newUser->password = $user['password'];
+                    $newUser->ad_user = 1;
                     try {
                         $newUser->save();
                         $auth = Auth::attempt($user);

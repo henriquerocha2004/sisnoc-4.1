@@ -181,7 +181,8 @@
                   @elseif($key == 'Técnico Local' || $key == 'SEMEP')
                     <div class="row">
                         <div class="col-md-3">
-                            <form action="" method="POST">
+                            <form action="{{ ($key == 'Técnico Local' ? route('reports.callersOtrs') : route('reports.semep') ) }}" method="POST">
+                                @csrf
                                 <button class="btn btn-success" >Gerar Planilha</button>
                             </form>
                         </div>

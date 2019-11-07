@@ -257,7 +257,10 @@ return [
         'hr_down' => 'Momento do Incidente',
         'hr_up' => 'Hora da Normalização',
         'next_action' => 'Direcionar Chamado',
-        'id_problem_cause' => 'Causa do Problema'
+        'id_problem_cause' => 'Causa do Problema',
+
+        //Usuários
+        'password_rep' => 'Repita Senha'
 
     ],
 
