@@ -200,7 +200,7 @@
                             <div class="row">
                                 <div class="col-md-12" >
                                     <div id="terminal-container" style="width: 87%">
-                                    <iframe name="interno" style="width: 100%; background-color: black; height: 71vh" id="terminal" src="http://localhost:8000/terminal?ip={{$establishment->links()->first()->monitoring_ip}}&lg=d"></iframe>
+                                    <iframe name="interno" style="width: 100%; background-color: black; height: 71vh" id="terminal" src="http://10.25.235.146:8000/terminal?ip={{$establishment->links()->first()->monitoring_ip}}&lg=d"></iframe>
                                     </div>
                                 </div>
                             </div>
