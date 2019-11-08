@@ -179,7 +179,6 @@ class EstabilishmentController extends Controller
     }
 
     public function restartTerminal(){
-        // exec("cd /srv/http/terminal_web/ && nohup node terminalWeb.js& ", $o);
         exec("cd {session('config')['path_web_terminal']} && nohup node terminalWeb.js& ", $o);
     }
 
@@ -187,7 +186,7 @@ class EstabilishmentController extends Controller
 
         $r = ['result' => false];
         exec("ps -ef| grep -c terminalWeb.js", $out);
-        $qtdProcess = (int) implode("", $out) - 2;
+        $qtdProcess = (int) implode("", $out);
 
         if($qtdProcess == 1){
             $r['result'] = true;
