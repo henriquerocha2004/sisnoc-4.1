@@ -4,10 +4,10 @@ var server = require('http').createServer(onRequest);
 var io = require('socket.io')(server);
 var SSHClient = require('ssh2').Client;
 var host = null;
-var mainUserName = "henrique";
-var mainPassword = "Casa1803";
-var altenateUserName = "teste";
-var alternatePass = "teste";
+var mainUserName = "henrique.souza";
+var mainPassword = "P@ram0004";
+var altenateUserName = "reletro";
+var alternatePass = "X4i8m2z5";
 
 // Load static files into memory
 var staticFiles = {};
@@ -38,13 +38,10 @@ function onRequest(req, res) {
       var regIp = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
       if(param[0] == 'ip' && regIp.test(ip[0])){
          host = ip[0];
-         console.log(param[2]);
+         console.log(host);
          if(param[2] == 'a'){
            mainUserName = altenateUserName;
            mainPassword = alternatePass;
-         }else{
-           mainUserName = 'henrique';
-           mainPassword = 'Casa1803';
          } 
 
       }else{
@@ -93,7 +90,19 @@ io.on('connection', function(socket) {
   }).connect({
     host: host,
     username: mainUserName,
-    password: mainPassword
+    password: mainPassword,
+    algorithms: {
+      cipher: [
+        'aes128-ctr',
+        'aes192-ctr',
+        'aes256-ctr',
+        'aes128-gcm',
+        'aes128-gcm@openssh.com',
+        'aes256-gcm',
+        'aes256-gcm@openssh.com',
+        'aes256-cbc'
+      ]
+    }
   });
 });
 
