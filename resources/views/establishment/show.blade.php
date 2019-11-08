@@ -383,7 +383,7 @@
             })
 
           function mountUrlTerminal(ip, lg){
-            return `http://localhost:8000/terminal?ip=${ip}&lg=${lg}`;
+            return `http://10.25.235.146:8000/terminal?ip=${ip}&lg=${lg}`;
           }
 
           function checkStatusLink(idLink){
