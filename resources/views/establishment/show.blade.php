@@ -171,8 +171,8 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div clss="col-md-6">
-                                    <h4 class="text-center m-4">Área de Testes</h4>
+                                <div class="col-md-12 mt-3 mb-3 pt-3">
+                                    <h4 class="text-center">Área de Testes</h4>
                                 </div>
                             </div>
                             <div class="row">
@@ -198,9 +198,9 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
-                                    <div id="terminal-container" class="ml-5">
-                                    <iframe name="interno" id="terminal" width="800" height="450" src="http://localhost:8000/terminal?ip={{$establishment->links()->first()->monitoring_ip}}&lg=d"></iframe>
+                                <div class="col-md-12" >
+                                    <div id="terminal-container" style="width: 87%">
+                                    <iframe name="interno" style="width: 100%; background-color: black; height: 71vh" id="terminal" src="http://localhost:8000/terminal?ip={{$establishment->links()->first()->monitoring_ip}}&lg=d"></iframe>
                                     </div>
                                 </div>
                             </div>
@@ -376,7 +376,7 @@
 
                         },
                         Não: function () {
-                           
+
                         },
                     }
                 });

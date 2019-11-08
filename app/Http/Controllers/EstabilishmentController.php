@@ -11,6 +11,7 @@ use App\Models\TechnicalManager;
 use App\Utils\NetWork;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class EstabilishmentController extends Controller
@@ -139,6 +140,8 @@ class EstabilishmentController extends Controller
      */
     public function update(EstablishmentRequest $request, $id)
     {
+      DB::beginTransaction();
+
         try {
 
             $establishment = Establishment::find($id);
@@ -148,9 +151,15 @@ class EstabilishmentController extends Controller
                throw new Exception("Houve uma Falha ao atualizar os dados");
             }
 
+            if($establishment->establishment_status = 'close'){
+                $this->closeEstablishmentRoutine($establishment);
+            }
+
+            DB::commit();
             return redirect()->route('estabilishment.index')->with('alert', ['messageType' => 'success', 'message' => 'Estabelecimento Atualizado com sucesso!']);
 
         } catch (Exception $e) {
+            DB::rollback();
             return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
         }
     }
@@ -198,4 +207,26 @@ class EstabilishmentController extends Controller
 
        return response()->json($r);
     }
+
+    private function closeEstablishmentRoutine(Establishment $establishment){
+
+        try {
+            //Fechar os chamados Abertos
+            $establishment->calls()->update(['status' => 1, 'id_user_close' => auth()->user()->id]);
+
+            //Fechar Subchamados
+            foreach($establishment->calls()->get() as $call){
+                $call->subCallers()->update(['status' => 'close']);
+            }
+            //Inativar links
+            $establishment->links()->update(['status' => 'inactive', 'local_ip_router' => '0.0.0.0', 'monitoring_ip' => '0.0.0.0']);
+
+        } catch (Exception $e) {
+           throw new Exception("Houve uma falha na rotina de fechamento do estabelecimento!");
+        }
+
+    }
+
+
+
 }

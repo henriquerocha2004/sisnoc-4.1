@@ -69,7 +69,7 @@ class LinksController extends Controller
             $link = new Links();
             $link->fill($request->all());
             $link->status = 'active';
-    
+
             if(!$link->save()){
                 throw new Exception("Houve uma Falha ao cadastrar o link");
             }

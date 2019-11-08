@@ -213,6 +213,28 @@
         $("#document_establishment").mask("99.999.999/9999-99");
         $("#phone_establishment").mask("(99) 9999-9999");
         $("#manager_contact").mask("(99) 99999-9999");
+        var statusStart =  $('#status').val();
+
+        $('#status').change(function(){
+
+            var status = $(this).val();
+
+            if(status == 'close'){
+                $.confirm({
+                    title: 'Aviso Sisnoc',
+                    content : 'Atenção! Ao selecionar fechado e salvar, além de alterar o cadastro deste estabelecimento, você irá fechar todos os chamados abertos e irá desativar os links associados. Confirma?',
+                    buttons:{
+                        SIM: function(){
+
+                        },
+                        Não: function() {
+                            $('#status').val(statusStart);
+                        }
+                    }
+                })
+            }
+        });
+
        });
     </script>
 @endsection
