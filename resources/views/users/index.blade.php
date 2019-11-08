@@ -60,7 +60,7 @@
                         {data: 'id', render: function (data, type, row, meta) {
                             return `
                                 <div class="table-data-feature">
-                                    <a class="item" href="{!! url('regionalManager') !!}/${data}/edit" data-toggle="tooltip" data-placement="top" title="Editar">
+                                    <a class="item" href="{!! url('users') !!}/${data}/edit" data-toggle="tooltip" data-placement="top" title="Editar">
                                         <i class="zmdi zmdi-edit"></i>
                                     </a>
                                 </div>

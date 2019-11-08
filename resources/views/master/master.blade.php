@@ -46,19 +46,12 @@
                             <div class="header-button">
                                 <div class="account-wrap">
                                     <div class="account-item clearfix js-item-menu">
-                                        <div class="image">
-                                            <img src="{{url(Storage::url('images/icon/avatar-01.jpg'))}}" alt="{{auth()->user()->name}}" />
-                                        </div>
+
                                         <div class="content">
                                             <a class="js-acc-btn" href="#">{{auth()->user()->name}}</a>
                                         </div>
                                         <div class="account-dropdown js-dropdown">
                                             <div class="info clearfix">
-                                                <div class="image">
-                                                    <a href="#">
-                                                        <img src="{{url(Storage::url('images/icon/avatar-01.jpg'))}}" alt="{{auth()->user()->name}}" />
-                                                    </a>
-                                                </div>
                                                 <div class="content">
                                                     <h5 class="name">
                                                         <a href="#">{{auth()->user()->name}}</a>
@@ -68,11 +61,11 @@
                                             </div>
                                             <div class="account-dropdown__body">
                                                 <div class="account-dropdown__item">
-                                                    <a href="#">
+                                                    <a href="{{ route('users.edit', auth()->user()->id) }}">
                                                         <i class="zmdi zmdi-account"></i>Dados da conta</a>
                                                 </div>
                                                 <div class="account-dropdown__item">
-                                                    <a href="#">
+                                                    <a href="{{ route('config.index') }}">
                                                         <i class="zmdi zmdi-settings"></i>Configurações</a>
                                                 </div>
                                             </div>

@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 
 class Users extends FormRequest
 {
+    private $inputs;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -17,6 +19,12 @@ class Users extends FormRequest
         return Auth::check();
     }
 
+    public function all($keys = null)
+    {
+       return $this->inputs = parent::all();
+    }
+
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -26,9 +34,9 @@ class Users extends FormRequest
     {
         return [
            'name' => 'required',
-           'email' => 'required|unique:users,email',
-           'password' => 'required|same:password_rep',
-           'password_rep' => 'required'
+           'email' =>  (!empty($this->inputs['id']) ? '' : 'required|unique:users,email'),
+           'password' => (!empty($this->inputs['password']) ? 'required|same:password_rep' : ''),
+           'password_rep' => (!empty($this->inputs['password']) ? 'required' : '')
         ];
     }
 

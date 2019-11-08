@@ -14,18 +14,19 @@
                     @endif
                     <div class="card">
                         <div class="card-header">
-                            <strong>Editar </strong>  Gerente Regional
+                            <strong>Editar </strong>  Cadastro de Usuário
                             <small style="color:red" class="text-right"><i>*</i> Campos Obrigatórios</small>
                         </div>
                         <div class="card-body card-block">
-                            <form action="{{route('regionalManager.update', $regionalManager->id)}}" method="post" class="" autocomplete="off">
+                            <form action="{{route('users.update', $user->id)}}" method="post" class="" autocomplete="off">
                                 @csrf
                                 @method('PUT')
+                                <input type="hidden" name="id" value="{{ $user->id }}">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="name" class=" form-control-label">Nome<i style="color:red">*</i></label>
-                                            <input  type="text" id="name" name="name" value="{{old('name') ?? $regionalManager->name}}" class="form-control {{ ($errors->has('name') ? 'is-invalid': '') }}"">
+                                            <input  type="text" id="name" name="name" value="{{old('name') ?? $user->name}}" class="form-control {{ ($errors->has('name') ? 'is-invalid': '') }}"">
                                             @if($errors->has('name'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('name')}}
@@ -35,20 +36,8 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="contact" class=" form-control-label">Contato<i style="color:red">*</i></label>
-                                        <input  type="text" value="{{old('contact') ?? $regionalManager->contact}}" placeholder="(xx) xxxxx-xxxx" id="contact" name="contact"  class="form-control {{ ($errors->has('contact') ? 'is-invalid': '') }}">
-                                            @if($errors->has('contact'))
-                                                @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
-                                                    {{$errors->first('contact')}}
-                                                @endcomponent
-                                            @endif
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="email" class=" form-control-label">E-mail<i style="color:red">*</i></label>
-                                            <input  type="email" value="{{old('email') ?? $regionalManager->email}}" id="email" name="email" class="form-control {{ ($errors->has('email') ? 'is-invalid': '') }}">
+                                            <label for="email" class=" form-control-label">Login<i style="color:red">*</i></label>
+                                            <p>{{ $user->email }}</p>
                                             @if($errors->has('email'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('email')}}
@@ -57,38 +46,37 @@
                                         </div>
                                     </div>
                                 </div>
+                                <p><b>Alterar a senha Atual:</b></p>
                                 <div class="row">
-                                    <div class="col-md-12 mt-4">
-                                        <div class="row">
-                                            <h3 class="title-5 col-md-6">Estabelecimentos associados:</h3>
-                                        </div>
-                                        <input type="hidden" name="selected_establishment" value="{{old('selected_establishment') ?? count($regionalManager->idEstablishments()['ids'])}}">
-                                        <div class="row">
-                                            <div class="col col-md-9 mt-2">
-                                                <select name="establishment_code[]" id="establishment_code" multiple="" class="form-control {{ ($errors->has('selected_establishment') ? 'is-invalid': '') }}">
-                                                    @foreach ($establishments as $establishment)
-                                                        @if (old('establishment_code') || $regionalManager->establishments()->get())
-                                                            @foreach (old('establishment_code') ?? $regionalManager->idEstablishments()['ids'] as $code)
-                                                                @php
-                                                                   $selected = ($establishment->id == $code ? 'selected' : '');
-                                                                   if($selected == 'selected')
-                                                                        break;
-                                                                @endphp
-                                                            @endforeach
-                                                            <option value="{{$establishment->id}}" {{$selected}}>{{$establishment->establishment_code}} - {{$establishment->state}}</option>
-                                                        @else
-                                                            <option value="{{$establishment->id}}" >{{$establishment->establishment_code}} - {{$establishment->state}}</option>
-                                                        @endif
-                                                    @endforeach
-                                                </select>
-                                                 @if($errors->has('selected_establishment'))
+                                        @if($user->ad_user != 1)
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="password" class=" form-control-label">Senha<i style="color:red">*</i></label>
+                                            <input  type="password" value="{{old('password')}}" id="password" name="password"  class="form-control {{ ($errors->has('password') ? 'is-invalid': '') }}">
+                                                @if($errors->has('password'))
                                                     @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
-                                                        {{$errors->first('selected_establishment')}}
+                                                        {{$errors->first('password')}}
                                                     @endcomponent
                                                 @endif
                                             </div>
                                         </div>
-                                    </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="password_rep" class=" form-control-label">Repita a senha<i style="color:red">*</i></label>
+                                            <input  type="password" value="{{old('password_rep')}}" id="password_rep" name="password_rep"  class="form-control {{ ($errors->has('password_rep') ? 'is-invalid': '') }}">
+                                                @if($errors->has('password_rep'))
+                                                    @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
+                                                        {{$errors->first('password_rep')}}
+                                                    @endcomponent
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="col-md-12">
+                                            <p>Se as senhas não apareceram, é por que o usuário em questão foi criado pelo Active Directory. Para alterar a senha, procure seu administrador do dominio.</p>
+                                        </div>
+                                    @endif
                                 </div>
                         </div>
                         <div class="card-footer">
