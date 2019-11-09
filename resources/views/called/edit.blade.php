@@ -14,7 +14,7 @@
                     @endif
 
                     <div class="card">
-                        <div class="card-header" style="background-color: {{($called->status == 1 || $called->status == 7 ? 'lightsalmon' : 'darkseagreen')}}">
+                        <div class="card-header" style="background-color: {{($called->status == 1 || $called->status == 7 ? 'darkseagreen' : 'gold')}}">
                                 <strong>Chamado </strong> {{$called->caller_number}} - Situação: <strong>{{$called->status_show}}</strong>
 
                                 <div class="pull-right">

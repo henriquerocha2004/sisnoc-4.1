@@ -4,8 +4,8 @@ var server = require('http').createServer(onRequest);
 var io = require('socket.io')(server);
 var SSHClient = require('ssh2').Client;
 var host = null;
-var mainUserName = "henrique.souza";
-var mainPassword = "P@ram0004";
+var mainUserName = "sisnoc";
+var mainPassword = "V3Qk#Rx6z";
 var altenateUserName = "reletro";
 var alternatePass = "X4i8m2z5";
 
@@ -14,12 +14,12 @@ var staticFiles = {};
 var basePath = path.join(require.resolve('xterm'), '..');
 
 [
-  'addons/fit/fit.js',  
+  'addons/fit/fit.js',
   'src/xterm.css',
   'xterm.js'
 ].forEach(function(f) {
   staticFiles['/' + f] = fs.readFileSync(path.join(basePath, f));
-  
+
 });
 staticFiles['/terminal'] = fs.readFileSync('index.html');
 
@@ -31,7 +31,7 @@ function onRequest(req, res) {
 
     var urlString = req.url;
     var url = urlString.split("?");
-    
+
     if(/terminal/.test(url[0])){
       var param = url[1].split("=");
       var ip = param[1].split("&");
@@ -42,7 +42,7 @@ function onRequest(req, res) {
          if(param[2] == 'a'){
            mainUserName = altenateUserName;
            mainPassword = alternatePass;
-         } 
+         }
 
       }else{
         console.log("Invalid IP");
@@ -86,7 +86,7 @@ io.on('connection', function(socket) {
   }).on('close', function() {
     socket.emit('data', '\r\n*** Conexão SSH Fechada ***\r\n');
   }).on('error', function(err) {
-    socket.emit('data', '\r\n*** Erro de Conexão SSH : ' + err.message + ' ***\r\n');    
+    socket.emit('data', '\r\n*** Erro de Conexão SSH : ' + err.message + ' ***\r\n');
   }).connect({
     host: host,
     username: mainUserName,

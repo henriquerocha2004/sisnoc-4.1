@@ -6,11 +6,14 @@ use DB;
 use App\Exports\Disponibility;
 use App\Exports\SpreadSheetExport;
 use App\Models\Called;
+use App\Models\Establishment;
 use App\Models\Links;
 use App\Models\SubCaller;
 use App\Utils\DateUtils;
+use Exception;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+
 
 class ReportsController extends Controller
 {
@@ -121,6 +124,58 @@ class ReportsController extends Controller
             [ 'Chamado', 'Link', 'SEMEP']];
 
        return Excel::download(new SpreadSheetExport($dataSource, $header), 'Chamados Abertos SEMEP.xlsx');
+    }
+
+    public function links(){
+
+        ini_set('max_execution_time', 300);
+        $establishments = Establishment::where('establishment_status', '=', 'open')->select('id','establishment_code',
+        'address', 'city', 'neighborhood')->get();
+        $idsEstablishment = $establishments->pluck('id')->all();
+
+        $links = Links::whereIn('establishment_id', $idsEstablishment)->get();
+
+        $typesLink = $links->unique('type_link')->values()->pluck('type_link')->all();
+
+        // dd($typesLink);
+        foreach($establishments as $establishment){
+
+            foreach($typesLink as $type){
+
+                $search = $links->filter(function($item, $key) use ($establishment, $type){
+                    return $item->type_link == $type && $item->establishment_id == $establishment->id;
+                });
+               // dd($search->first()->monitoring_ip);
+                $indentification = (!empty($search) ? $search->pluck('link_identification')->first(): 'Não Possui');
+                $company = $search->first()->telecommunications_company ?? 'Não Possui';
+                $ipMon = $search->first()->monitoring_ip ?? 'Não Possui';
+                $localIp = $search->first()->local_ip_router ?? 'Não Possui';
+
+                $titleCompanyOper = 'operadora_'. $type;
+                $propertyMonitoring = 'ip_monitoring_'.$type;
+                $propertyLocalIp = 'local_ip_'.$type;
+
+                $establishment->$type = $indentification ?? 'Não Possui';
+                $establishment->$titleCompanyOper = $company;
+                $establishment->$propertyMonitoring = $ipMon;
+                $establishment->$propertyLocalIp = $localIp;
+            }
+
+            $search = $links->filter(function($item, $key) use ($establishment){
+                return $item->establishment_id == $establishment->id;
+            });
+
+            for($i = 1; $i <= 3; $i++){
+                $propertyName = "roteador_". $i;
+                $establishment->$propertyName = $search->pluck('installed_router_model')->first();
+                $propertyNameSerial = "serial_router_".$i;
+                $establishment->$propertyNameSerial = $search->pluck('serial_router')->first();
+            }
+
+
+            dd( $establishment);
+        }
+
     }
 
     private function checkOnOff($currentLink, $called){

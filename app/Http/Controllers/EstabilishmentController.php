@@ -179,16 +179,17 @@ class EstabilishmentController extends Controller
     }
 
     public function restartTerminal(){
-        exec("cd {session('config')['path_web_terminal']} && nohup node terminalWeb.js& ", $o);
+
+        exec("cd ".session('config')['path_web_terminal']." && node terminalWeb.js &", $o);
     }
 
     public function checkActiveProcessTerminal(){
 
         $r = ['result' => false];
-        exec("ps -ef| grep -c terminalWeb.js", $out);
-        $qtdProcess = (int) implode("", $out);
+        exec("ps -ef | grep -o terminalWeb.js", $out);
+        $qtdProcess = count($out);
 
-        if($qtdProcess == 1){
+        if($qtdProcess >= 3){
             $r['result'] = true;
         }
 

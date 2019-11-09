@@ -55,6 +55,7 @@
                                                     <div class="card-header">
                                                         <strong class="card-title">{{ $establishment->establishment_code }}
                                                             <small>
+
                                                                 <span class="badge badge-{{ $establishment->establishment_status == 'close' ? 'danger' : 'success' }} float-right mt-1">
                                                                     {{ $establishment->establishment_status == 'close' ? 'Fechado' : 'Aberto' }} </span>
                                                             </small>
