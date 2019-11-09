@@ -26,7 +26,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="name" class=" form-control-label">Nome<i style="color:red">*</i></label>
-                                            <input  type="text" id="name" name="name" value="{{old('name') ?? $user->name}}" class="form-control {{ ($errors->has('name') ? 'is-invalid': '') }}"">
+                                            <input  type="text" id="name" name="name" value="{{ old('name') ?? $user->name }}" class="form-control {{ ($errors->has('name') ? 'is-invalid': '') }}">
                                             @if($errors->has('name'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('name')}}
@@ -44,6 +44,22 @@
                                                 @endcomponent
                                             @endif
                                         </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="form-control-label"> Permissão: </label>
+                                            <select  name="permission" id="permission" class="form-control {{ ($errors->has('permission') ? 'is-invalid': '') }}">
+                                                 <option value="">Selecione</option>
+                                                 <option value="1" {{ $user->permission == 1 ? 'selected' : (old('permission') == 1 ? 'selected' : '')}}>Administrador</option>
+                                                 <option value="2" {{ $user->permission == 2 ? 'selected' : (old('permission') == 2 ? 'selected' : '')}}>Operador Noc </option>
+                                                 <option value="3" {{ $user->permission == 3 ? 'selected' : (old('permission') == 3 ? 'selected' : '')}}>Visitante</option>
+                                            </select>
+                                             @if($errors->has('permission'))
+                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
+                                                     {{$errors->first('permission')}}
+                                                 @endcomponent
+                                             @endif
+                                         </div>
                                     </div>
                                 </div>
                                 <p><b>Alterar a senha Atual:</b></p>

@@ -35,6 +35,11 @@ class TechnicalManagerController extends Controller
      */
     public function create()
     {
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->route('home')->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         $establishments = Establishment::select(['id', 'establishment_code', 'state'])->orderBy('establishment_code')->get();
 
         return view('technicalManager.create', [
@@ -50,6 +55,11 @@ class TechnicalManagerController extends Controller
      */
     public function store(Request $request)
     {
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->route('home')->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
+
         DB::beginTransaction();
 
         try {
@@ -83,7 +93,7 @@ class TechnicalManagerController extends Controller
                 }
             }
 
-            
+
 
             DB::commit();
 
@@ -93,17 +103,6 @@ class TechnicalManagerController extends Controller
             DB::rollback();
             return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -176,16 +175,5 @@ class TechnicalManagerController extends Controller
             DB::rollback();
             return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
         }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

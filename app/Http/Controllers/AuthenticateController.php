@@ -16,6 +16,12 @@ class AuthenticateController extends Controller
 {
     public function index()
     {
+        $users = User::all()->count();
+
+        if($users < 0){
+            $this->createAdmin();
+        }
+
         $config = Config::all()->toArray();
         session(['config' => $config[0]]);
         return view('login');
@@ -129,6 +135,7 @@ class AuthenticateController extends Controller
                     $newUser->email = $user['email'];
                     $newUser->password = $user['password'];
                     $newUser->ad_user = 1;
+                    $newUser->permission = (preg_match('/CN=NOC/', $permission) ? 2 : 3);
                     try {
                         $newUser->save();
                         $auth = Auth::attempt($user);
@@ -160,4 +167,14 @@ class AuthenticateController extends Controller
             return back()->with('alert', ['messageType' => 'danger', 'message' => 'Usuário ou Senha inválidos!']);
         }
     }
+
+    private function createAdmin(){
+        $user = new User();
+        $user->name = 'sisnoc';
+        $user->email = 'admin';
+        $user->password = 'sisnoc';
+        $user->permission = 1;
+        $user->save();
+    }
+
 }

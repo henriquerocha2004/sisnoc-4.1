@@ -24,6 +24,7 @@ class UsersController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = $request->password;
+        $user->permission = $request->permission;
 
         try {
             $user->save();
@@ -46,6 +47,7 @@ class UsersController extends Controller
 
         $user = User::find($id);
         $user->name = $request->name;
+        $user->permission = $request->permission;
 
         if(!empty($request->password)){
             $user->password = $request->password;

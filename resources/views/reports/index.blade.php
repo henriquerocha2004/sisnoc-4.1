@@ -101,10 +101,6 @@
 @section('js')
     <script src="{{url('/l10n/pt.js')}}"></script>
     <script>
-        $("#btn-disponibility").click(function(){
-
-        });
-
         $("#start, #end").flatpickr({
             enableTime:false,
             dateFormat: "d/m/Y",

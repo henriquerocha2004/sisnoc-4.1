@@ -24,7 +24,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="name" class=" form-control-label">Nome<i style="color:red">*</i></label>
-                                            <input  type="text" id="name" name="name" value="{{old('name')}}" class="form-control {{ ($errors->has('name') ? 'is-invalid': '') }}"">
+                                            <input  type="text" id="name" name="name" value="{{old('name')}}" class="form-control {{ ($errors->has('name') ? 'is-invalid': '') }}">
                                             @if($errors->has('name'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('name')}}
@@ -57,13 +57,29 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="password_rep" class=" form-control-label">Repita a senha<i style="color:red">*</i></label>
-                                        <input  type="password" value="{{old('password_rep')}}" id="password_rep" name="password_rep"  class="form-control {{ ($errors->has('password_rep') ? 'is-invalid': '') }}">
+                                            <input  type="password" value="{{old('password_rep')}}" id="password_rep" name="password_rep"  class="form-control {{ ($errors->has('password_rep') ? 'is-invalid': '') }}">
                                             @if($errors->has('password_rep'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('password_rep')}}
                                                 @endcomponent
                                             @endif
                                         </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="form-control-label"> Permissão: </label>
+                                            <select  name="permission" id="permission" class="form-control {{ ($errors->has('permission') ? 'is-invalid': '') }}">
+                                                <option value="">Selecione</option>
+                                                <option value="1" {{  }}>Administrador</option>
+                                                <option value="2">Operador Noc </option>
+                                                <option value="3">Visitante</option>
+                                            </select>
+                                             @if($errors->has('permission'))
+                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
+                                                     {{$errors->first('permission')}}
+                                                 @endcomponent
+                                             @endif
+                                         </div>
                                     </div>
                                 </div>
                         </div>

@@ -20,6 +20,11 @@ class RegionalManagerController extends Controller
      */
     public function index()
     {
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         return view('regionalManager.index');
     }
 
@@ -28,6 +33,11 @@ class RegionalManagerController extends Controller
      */
     public function table()
     {
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         $regionalManagers = RegionalManager::select(['id', 'email', 'name', 'contact', 'status'])->where('id', '<>', 1);
         return DataTables::of($regionalManagers)->make(true);
     }
@@ -40,6 +50,11 @@ class RegionalManagerController extends Controller
      */
     public function create()
     {
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         $establishments = Establishment::select(['id', 'establishment_code', 'state'])->orderBy('establishment_code')->get();
 
         return view('regionalManager.create', [
@@ -55,6 +70,11 @@ class RegionalManagerController extends Controller
      */
     public function store(RegionalManagerRequest $request)
     {
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         DB::beginTransaction();
 
         try {
@@ -87,7 +107,7 @@ class RegionalManagerController extends Controller
                     throw new Exception("Houve uma Falha ao cadastrar os dados");
                 }
             }
-            
+
             DB::commit();
 
             return redirect()->route('regionalManager.index')->with('alert', ['messageType' => 'success', 'message' => 'Gerente Regional cadastrado com sucesso!']);
@@ -98,16 +118,6 @@ class RegionalManagerController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -117,6 +127,12 @@ class RegionalManagerController extends Controller
      */
     public function edit($id)
     {
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
+
         $regionalManager = RegionalManager::find($id);
         $establishments = Establishment::select(['id', 'establishment_code', 'state'])->orderBy('establishment_code')->get();
 
@@ -135,6 +151,10 @@ class RegionalManagerController extends Controller
      */
     public function update(RegionalManagerRequest $request, $id)
     {
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
 
         DB::beginTransaction();
 

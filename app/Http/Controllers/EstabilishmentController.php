@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
+use Gate;
 
 class EstabilishmentController extends Controller
 {
@@ -62,6 +63,10 @@ class EstabilishmentController extends Controller
     public function create()
     {
 
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         $regionalManagers = RegionalManager::select(['id', 'name'])->get();
         $technicalManagers = TechnicalManager::select(['id', 'name'])->get();
 
@@ -79,6 +84,10 @@ class EstabilishmentController extends Controller
      */
     public function store(EstablishmentRequest $request)
     {
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
 
         try {
             $establishment = new Establishment();
@@ -120,6 +129,10 @@ class EstabilishmentController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         $establishment = Establishment::find($id);
         $regionalManagers = RegionalManager::select(['id', 'name'])->get();
         $technicalManagers = TechnicalManager::select(['id', 'name'])->get();
@@ -140,6 +153,12 @@ class EstabilishmentController extends Controller
      */
     public function update(EstablishmentRequest $request, $id)
     {
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
+
       DB::beginTransaction();
 
         try {
@@ -166,6 +185,10 @@ class EstabilishmentController extends Controller
 
     public function holyday(int $id){
 
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         try {
             $establishment = Establishment::find($id);
             $establishment->holyday = date('Y-m-d');
@@ -179,7 +202,6 @@ class EstabilishmentController extends Controller
     }
 
     public function restartTerminal(){
-
         exec("cd ".session('config')['path_web_terminal']." && node terminalWeb.js &", $o);
     }
 
@@ -209,6 +231,9 @@ class EstabilishmentController extends Controller
     }
 
     private function closeEstablishmentRoutine(Establishment $establishment){
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
 
         try {
             //Fechar os chamados Abertos
@@ -226,7 +251,4 @@ class EstabilishmentController extends Controller
         }
 
     }
-
-
-
 }

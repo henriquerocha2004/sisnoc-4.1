@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use Gate;
 use App\Http\Requests\CalledRequest;
 use App\Models\ActionTake;
 use App\Models\ActionTakeCalled;
@@ -61,6 +62,10 @@ class CalledController extends Controller
      */
     public function getLinks(Request $request)
     {
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         $result['response'] = false;
 
         $establishment = Establishment::where(['establishment_code' => $request->establishment_code])->first();
@@ -99,6 +104,10 @@ class CalledController extends Controller
      */
     public function verifyOpenCalled(Request $request)
     {
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         $result['response'] = false;
         $link = Links::find($request->id_link);
 
@@ -121,6 +130,9 @@ class CalledController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
 
         $typeProblems = TypeProblem::select(['id', 'problem_description'])->get();
         $actionsTaken = ActionTake::select(['id', 'action_description'])->get();
@@ -141,6 +153,11 @@ class CalledController extends Controller
      */
     public function store(CalledRequest $request)
     {
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         DB::beginTransaction();
 
         try {
@@ -273,6 +290,10 @@ class CalledController extends Controller
     }
 
     public function storeSubcalled(CalledRequest $request){
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
 
         DB::beginTransaction();
 
@@ -415,6 +436,10 @@ class CalledController extends Controller
      */
     public function newSubCaller($id){
 
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         $typeProblems = TypeProblem::select(['id', 'problem_description'])->get();
         $actionsTaken = ActionTake::select(['id', 'action_description'])->get();
         $categoryProblems = CategoryProblem::select(['id', 'description_category'])->get();
@@ -443,6 +468,11 @@ class CalledController extends Controller
      */
     public function update(CalledRequest $request, $id)
     {
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         DB::beginTransaction();
 
         try {
@@ -481,7 +511,7 @@ class CalledController extends Controller
                 break;
                 case '7':
                     $cancel = $this->setCancel($id);
-                   
+
                     if(!$cancel){
                         throw new Exception("Houve uma falha ao cancelar o chamado");
                     }else{
@@ -522,6 +552,10 @@ class CalledController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function storeNote(Request $request){
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
 
         $subcaller = SubCaller::find($request->subcallerId);
 

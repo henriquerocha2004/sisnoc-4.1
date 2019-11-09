@@ -30,7 +30,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="establishment_code" class=" form-control-label">Cód. Estabelecimento<i style="color:red">*</i></label>
-                                            <input  type="text" id="establishment_code" name="establishment_code" value="{{old('establishment_code')}}" class="form-control {{ ($errors->has('establishment_code') ? 'is-invalid': '') }}"">
+                                            <input  type="text" id="establishment_code" name="establishment_code" value="{{old('establishment_code')}}" class="form-control {{ ($errors->has('establishment_code') ? 'is-invalid': '') }}">
                                             @if($errors->has('establishment_code'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('establishment_code')}}
@@ -191,7 +191,7 @@
                                     <div id="divHrUP" class="col-md-4 extra-input" style="display: none">
                                         <div class="form-group">
                                            <label class="form-control-label"> Horário da Normalização: </label>
-                                           <input  type="text" id="hr_up" name="hr_up" value="{{old('hr_up')}}" class="form-control {{ ($errors->has('hr_up') ? 'is-invalid': '') }}"">
+                                           <input  type="text" id="hr_up" name="hr_up" value="{{old('hr_up')}}" class="form-control {{ ($errors->has('hr_up') ? 'is-invalid': '') }}">
                                             @if($errors->has('hr_up'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('hr_up')}}
@@ -222,7 +222,7 @@
                                     <div id="divCallTel" class="col-md-4 extra-input" style="display: none">
                                         <div class="form-group">
                                            <label for="call_telecommunications_company" class="form-control-label"> Protocolo Operadora: </label>
-                                           <input  type="text" id="call_telecommunications_company" name="call_telecommunications_company" value="{{old('call_telecommunications_company')}}" class="form-control {{ ($errors->has('hr_up') ? 'is-invalid': '') }}"">
+                                           <input  type="text" id="call_telecommunications_company" name="call_telecommunications_company" value="{{old('call_telecommunications_company')}}" class="form-control {{ ($errors->has('hr_up') ? 'is-invalid': '') }}">
                                             @if($errors->has('call_telecommunications_company'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('call_telecommunications_company')}}
@@ -233,7 +233,7 @@
                                     <div id="divDeadLine" class="col-md-4 extra-input" style="display: none">
                                         <div class="form-group">
                                            <label for="deadline" class="form-control-label"> Prazo de Normalização: </label>
-                                           <input  type="text" id="deadline" name="deadline" value="{{old('deadline')}}" class="form-control {{ ($errors->has('deadline') ? 'is-invalid': '') }}"">
+                                           <input  type="text" id="deadline" name="deadline" value="{{old('deadline')}}" class="form-control {{ ($errors->has('deadline') ? 'is-invalid': '') }}">
                                             @if($errors->has('deadline'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('deadline')}}

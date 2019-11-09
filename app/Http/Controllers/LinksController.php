@@ -14,7 +14,6 @@ class LinksController extends Controller
 
     private $typeLink = ['MPLS', 'ADSL', 'XDSL', 'IPConnect', 'Radio', 'SDWAN'];
 
-
     /**
      * Display a listing of the resource.
      *
@@ -22,6 +21,11 @@ class LinksController extends Controller
      */
     public function index()
     {
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         return view('links.index');
     }
 
@@ -30,6 +34,10 @@ class LinksController extends Controller
      */
     public function table()
     {
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         $links = Links::join('establishment', 'links.establishment_id', '=', 'establishment.id')
             ->select(
                 [
@@ -52,6 +60,11 @@ class LinksController extends Controller
      */
     public function create()
     {
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         $establishments = Establishment::select(['id', 'establishment_code'])->get();
         return view('links.create', ['typeLink' => $this->typeLink, 'establishments' => $establishments]);
     }
@@ -64,6 +77,10 @@ class LinksController extends Controller
      */
     public function store(LinksRequest $request)
     {
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
 
         try {
             $link = new Links();
@@ -82,17 +99,6 @@ class LinksController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -100,6 +106,11 @@ class LinksController extends Controller
      */
     public function edit($id)
     {
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         $link = Links::find($id);
         $establishments = Establishment::select(['id', 'establishment_code'])->get();
 
@@ -119,6 +130,11 @@ class LinksController extends Controller
      */
     public function update(LinksRequest $request, $id)
     {
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         try {
             $link = Links::find($id);
             $link->fill($request->all());
@@ -132,16 +148,5 @@ class LinksController extends Controller
         } catch (Exception $e) {
             return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
         }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

@@ -36,14 +36,16 @@ class Users extends FormRequest
            'name' => 'required',
            'email' =>  (!empty($this->inputs['id']) ? '' : 'required|unique:users,email'),
            'password' => (!empty($this->inputs['password']) ? 'required|same:password_rep' : ''),
-           'password_rep' => (!empty($this->inputs['password']) ? 'required' : '')
+           'password_rep' => (!empty($this->inputs['password']) ? 'required' : ''),
+           'permission' => 'required|numeric|between:1,2'
         ];
     }
 
     public function messages()
     {
         return [
-            'password.same' => 'As Senhas informadas não coincidem!'
+            'password.same' => 'As Senhas informadas não coincidem!',
+            'permission.between' => 'Permissão Informada Inválida'
         ];
     }
 

@@ -17,11 +17,22 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ReportsController extends Controller
 {
+
     public function index(){
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         return view('reports.index');
     }
 
     public function disponibility(Request $request){
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
 
         ini_set('max_execution_time', 300);
 
@@ -77,6 +88,10 @@ class ReportsController extends Controller
 
     public function callersTeleCompany(Request $request){
 
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
             $dataSource = Links::join('called', 'called.id_link', '=','links.id')
                     ->join('sub_caller', 'sub_caller.id_caller', '=', 'called.id')
                     ->where('links.type_link', '=', $request->link)
@@ -93,6 +108,10 @@ class ReportsController extends Controller
     }
 
     public function callersOtrs(Request $request){
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
 
         $dataSource = Links::join('called', 'called.id_link', '=','links.id')
             ->join('sub_caller', 'sub_caller.id_caller', '=', 'called.id')
@@ -112,6 +131,10 @@ class ReportsController extends Controller
 
     public function semep(Request $request){
 
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         $dataSource = Links::join('called', 'called.id_link', '=','links.id')
         ->join('sub_caller', 'sub_caller.id_caller', '=', 'called.id')
         ->where('sub_caller.type', '=', 4)
@@ -128,7 +151,12 @@ class ReportsController extends Controller
 
     public function links(){
 
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         ini_set('max_execution_time', 300);
+
         $establishments = Establishment::where('establishment_status', '=', 'open')->select('id','establishment_code',
         'address', 'city', 'neighborhood')->get();
         $idsEstablishment = $establishments->pluck('id')->all();
@@ -137,7 +165,6 @@ class ReportsController extends Controller
 
         $typesLink = $links->unique('type_link')->values()->pluck('type_link')->all();
 
-        // dd($typesLink);
         foreach($establishments as $establishment){
 
             foreach($typesLink as $type){
@@ -145,7 +172,7 @@ class ReportsController extends Controller
                 $search = $links->filter(function($item, $key) use ($establishment, $type){
                     return $item->type_link == $type && $item->establishment_id == $establishment->id;
                 });
-               // dd($search->first()->monitoring_ip);
+
                 $indentification = (!empty($search) ? $search->pluck('link_identification')->first(): 'Não Possui');
                 $company = $search->first()->telecommunications_company ?? 'Não Possui';
                 $ipMon = $search->first()->monitoring_ip ?? 'Não Possui';
@@ -163,18 +190,38 @@ class ReportsController extends Controller
 
             $search = $links->filter(function($item, $key) use ($establishment){
                 return $item->establishment_id == $establishment->id;
-            });
+            })->unique('installed_router_model')->values()->all();
 
             for($i = 1; $i <= 3; $i++){
+                $routeInstalled = (!empty($search[$i]->installed_router_model) ? $search[$i]->installed_router_model : 'Não Possui');
                 $propertyName = "roteador_". $i;
-                $establishment->$propertyName = $search->pluck('installed_router_model')->first();
+                $establishment->$propertyName = $routeInstalled;
                 $propertyNameSerial = "serial_router_".$i;
-                $establishment->$propertyNameSerial = $search->pluck('serial_router')->first();
+                $establishment->$propertyNameSerial = (!empty($search[$i]->serial_router) ? $search[$i]->serial_router : 'Não Possui');
+            }
+        }
+
+        $header = [
+            ['Relação de Links'],
+            ['#', 'Loja', 'Endereço', 'Cidade', 'Bairro']];
+
+            foreach($typesLink as $type){
+                $titles[] = $type;
+                $titles[] = 'Operadora - '.$type;
+                $titles[] = 'Ip Monitoramento - '.$type;
+                $titles[] = 'Ip Lan - '.$type;
             }
 
+            $header[1] = array_merge($header[1], $titles);
 
-            dd( $establishment);
-        }
+            for($i = 1; $i <= 3; $i++){
+                $titlesRoute[] = 'Roteador - '. $i;
+                $titlesRoute[] = 'Serial Roteador - '. $i;
+            }
+
+            $header[1] = array_merge($header[1], $titlesRoute);
+
+            return Excel::download(new SpreadSheetExport($establishments, $header), 'Relação de Links.xlsx');
 
     }
 
