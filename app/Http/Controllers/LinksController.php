@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Gate;
 use App\Http\Requests\LinksRequest;
 use App\Models\Establishment;
 use App\Models\Links;

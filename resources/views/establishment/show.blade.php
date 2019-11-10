@@ -24,12 +24,20 @@
                         <div class="card-header" style="background-color: {{($establishment->establishment_status == 'open' ? ($establishment->holyday == date('Y-m-d') ? 'lightsalmon' : 'darkseagreen') : 'lightsalmon')}}">
                             <div class="row">
                                 <div class="col-md-6">
-                                    Informações da <strong> <a style="color: #666; text-decoration: underline" href="{{route('estabilishment.edit', [$establishment->id])}}">{{$establishment->establishment_code}}</a>
+                                    Informações da <strong>
+                                        @can('manager-establishment-regionalManager-links-caller-create-reports')
+                                            <a style="color: #666; text-decoration: underline" href="{{route('estabilishment.edit', [$establishment->id])}}">{{ $establishment->establishment_code }}</a>
+                                        @else
+                                            {{ $establishment->establishment_code }}
+                                        @endcan
+
                                         {{$establishment->holyday == date('Y-m-d') ? " - Feriado Local" : ($establishment->establishment_status == 'close' ? ' - Estabelecimento Fechado' : '')}}</strong>
                                 </div>
-                                <div class="col-md-6">
-                                    <button type="button" id="btn-holiday" class="btn btn-sm btn-danger pull-right">Informar Feriado</button>
-                                </div>
+                                @can('manager-establishment-regionalManager-links-caller-create-reports')
+                                    <div class="col-md-6">
+                                        <button type="button" id="btn-holiday" class="btn btn-sm btn-danger pull-right">Informar Feriado</button>
+                                    </div>
+                                @endcan
                             </div>
                         </div>
                         <input type="hidden"  id="idEstabilishment" value="{{$establishment->id}}">
@@ -212,10 +220,12 @@
                             <div class="row">
                                 <div class="col-md-11">
                                     <div class="table-data__tool">
-                                        <div class="table-data__tool-right">
-                                            <a href="{{route('called.create')}}" class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                                <i class="zmdi zmdi-plus"></i>Novo Chamado</a>
-                                        </div>
+                                       @can('manager-establishment-regionalManager-links-caller-create-reports')
+                                            <div class="table-data__tool-right">
+                                                <a href="{{route('called.create')}}" class="au-btn au-btn-icon au-btn--green au-btn--small">
+                                                    <i class="zmdi zmdi-plus"></i>Novo Chamado</a>
+                                            </div>
+                                        @endcan
                                     </div>
                                     <div class="table-responsive table-responsive-data2">
                                         <table class="table table-data2">

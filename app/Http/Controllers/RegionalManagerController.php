@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use Gate;
 use App\Models\Establishment;
 use App\Models\RegionalManager;
 use Illuminate\Http\Request;

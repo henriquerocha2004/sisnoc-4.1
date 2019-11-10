@@ -16,10 +16,12 @@
                             @endif
 
                             <div class="table-data__tool">
-                                <div class="table-data__tool-right">
-                                    <a href="{{route('estabilishment.create')}}" class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                        <i class="zmdi zmdi-plus"></i>Cadastrar</a>
-                                </div>
+                                @can('manager-establishment-regionalManager-links-caller-create-reports')
+                                    <div class="table-data__tool-right">
+                                        <a href="{{route('estabilishment.create')}}" class="au-btn au-btn-icon au-btn--green au-btn--small">
+                                            <i class="zmdi zmdi-plus"></i>Cadastrar</a>
+                                    </div>
+                                @endcan
                             </div>
                             <div class="table-responsive table-responsive-data2">
                                 <table class="table table-data2">
@@ -67,9 +69,12 @@
                                     <a class="item" href="{!! url('estabilishment') !!}/${data}" data-toggle="tooltip" data-placement="top" title="Visualizar">
                                         <i class="zmdi zmdi-search"></i>
                                     </a>
+
+                                    @can('manager-establishment-regionalManager-links-caller-create-reports')
                                     <a class="item" href="{!! url('estabilishment') !!}/${data}/edit" data-toggle="tooltip" data-placement="top" title="Editar">
                                         <i class="zmdi zmdi-edit"></i>
                                     </a>
+                                    @endcan
                                 </div>
                             `;
                             }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use Gate;
 use App\Exports\Disponibility;
 use App\Exports\SpreadSheetExport;
 use App\Models\Called;

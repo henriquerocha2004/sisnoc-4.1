@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TechnicalManagerRequest;
 use DB;
+use Gate;
 use App\Models\Establishment;
 use App\Models\TechnicalManager;
 use App\Utils\Utils;
@@ -19,11 +20,22 @@ class TechnicalManagerController extends Controller
      */
     public function index()
     {
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         return view('technicalManager.index');
     }
 
     public function table()
     {
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
+
         $technicalManagers = TechnicalManager::select(['id', 'email', 'name', 'contact', 'status'])->where('id', '<>', 1);
         return DataTables::of($technicalManagers)->make(true);
     }
@@ -35,6 +47,12 @@ class TechnicalManagerController extends Controller
      */
     public function create()
     {
+
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
 
         if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
             return redirect()->route('home')->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
@@ -113,6 +131,13 @@ class TechnicalManagerController extends Controller
      */
     public function edit($id)
     {
+
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
+
         $technicalManager = TechnicalManager::find($id);
         $establishments = Establishment::select(['id', 'establishment_code', 'state'])->orderBy('establishment_code')->get();
 
@@ -131,6 +156,12 @@ class TechnicalManagerController extends Controller
      */
     public function update(TechnicalManagerRequest $request, $id)
     {
+
+        if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
+
         DB::beginTransaction();
 
         try {

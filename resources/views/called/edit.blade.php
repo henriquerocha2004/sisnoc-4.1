@@ -57,7 +57,9 @@
                                     <div class="col-md-12">
                                       <label class=" form-control-label mt-1">Ações Tomadas</label>
                                         @if ($called->status != 1 && $called->status != 7)
-                                            <a href="{{url('new-sub-caller', [$called->id])}}" class="btn btn-sm btn-primary pull-right" > + Nova Ação</a>
+                                            @can('manager-establishment-regionalManager-links-caller-create-reports')
+                                                <a href="{{url('new-sub-caller', [$called->id])}}" class="btn btn-sm btn-primary pull-right" > + Nova Ação</a>
+                                            @endcan
                                         @endif
 
                                         <div class="table-responsive">
@@ -200,14 +202,16 @@
                                             @endif
                                         </div>
                                     </div>
-                                    @if ($called->status != 1 && $called->status != 7)
-                                        <div class="col-md-12 mb-2">
-                                            <div class="btn-group pull-right">
-                                                <button type="button" id="new-note" class="btn btn-sm btn-success">Nova Nota</button>
-                                                <button type="button" id="save-note" disabled class="btn btn-sm btn-success"><i class="fa fa-save"></i> Salvar Nota</button>
+                                    @can('manager-establishment-regionalManager-links-caller-create-reports')
+                                        @if ($called->status != 1 && $called->status != 7)
+                                            <div class="col-md-12 mb-2">
+                                                <div class="btn-group pull-right">
+                                                    <button type="button" id="new-note" class="btn btn-sm btn-success">Nova Nota</button>
+                                                    <button type="button" id="save-note" disabled class="btn btn-sm btn-success"><i class="fa fa-save"></i> Salvar Nota</button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    @endif
+                                        @endif
+                                    @endcan
 
                                     <div class="col-md-12 mb-4 ">
                                         <div id="images" class="mb-3">
@@ -335,11 +339,13 @@
                                     </div>
                         </div>
                         <div class="card-footer">
-                            @if($called->status != 1 && $called->status != 7)
-                                <button id="btn-save" type="submit" disabled class="btn btn-primary btn-sm disabled">
-                                    <i class="fa fa-dot-circle-o"></i> Salvar
-                                </button>
-                            @endif
+                            @can('manager-establishment-regionalManager-links-caller-create-reports')
+                                @if($called->status != 1 && $called->status != 7)
+                                    <button id="btn-save" type="submit" disabled class="btn btn-primary btn-sm disabled">
+                                        <i class="fa fa-dot-circle-o"></i> Salvar
+                                    </button>
+                                @endif
+                            @endcan
                         </div>
                     </form>
                     </div>

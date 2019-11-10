@@ -30,15 +30,17 @@
                                 <li>
                                     <a href="{{route('estabilishment.index')}}"> <i class="fas fa-search"></i> Consultar</a>
                                 </li>
-                                <li>
-                                    <a href="{{route('estabilishment.create')}}"><i class="fas fa-building"></i> Novo </a>
-                                </li>
-                                <li>
-                                    <a href="{{route('regionalManager.index')}}"><i class="fas fa-map"></i> Ger. Regionais</a>
-                                </li>
-                                <li>
-                                    <a href="{{route('technicalManager.index')}}"><i class="fas fa-user"></i> Resp. Técnicos</a>
-                                </li>
+                                @can('manager-establishment-regionalManager-links-caller-create-reports')
+                                    <li>
+                                        <a href="{{route('estabilishment.create')}}"><i class="fas fa-building"></i> Novo </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{route('regionalManager.index')}}"><i class="fas fa-map"></i> Ger. Regionais</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{route('technicalManager.index')}}"><i class="fas fa-user"></i> Resp. Técnicos</a>
+                                    </li>
+                                @endcan
                             </ul>
                     </li>
                     <li>
@@ -48,9 +50,11 @@
                                 <li>
                                     <a href="#"><i class="fas fa-search"></i> Consultar</a>
                                 </li>
-                                <li>
-                                    <a href="#"><i class="fas fa-file-signature"></i> Novo </a>
-                                </li>
+                                @can('manager-establishment-regionalManager-links-caller-create-reports')
+                                    <li>
+                                        <a href="#"><i class="fas fa-file-signature"></i> Novo </a>
+                                    </li>
+                                @endcan
                             </ul>
                     </li>
                     <li>
@@ -101,15 +105,17 @@
                                 <li>
                                     <a href="{{route('estabilishment.index')}}"> <i class="fas fa-search"></i> Consultar</a>
                                 </li>
-                                <li>
-                                    <a href="{{route('estabilishment.create')}}"><i class="fas fa-building"></i> Cadastrar </a>
-                                </li>
-                                <li>
-                                    <a href="{{route('regionalManager.index')}}"><i class="fas fa-map"></i> Ger. Regionais</a>
-                                </li>
-                                <li>
-                                    <a href="{{route('technicalManager.index')}}"><i class="fas fa-user"></i>Resp. Técnicos</a>
-                                </li>
+                                @can('manager-establishment-regionalManager-links-caller-create-reports')
+                                    <li>
+                                        <a href="{{route('estabilishment.create')}}"><i class="fas fa-building"></i> Novo </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{route('regionalManager.index')}}"><i class="fas fa-map"></i> Ger. Regionais</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{route('technicalManager.index')}}"><i class="fas fa-user"></i> Resp. Técnicos</a>
+                                    </li>
+                                @endcan
                             </ul>
                     </li>
                     <li>
@@ -119,32 +125,39 @@
                                 <li>
                                     <a href="{{route('called.index')}}"><i class="fas fa-search"></i> Consultar</a>
                                 </li>
-                                <li>
-                                    <a href="{{route('called.create')}}"><i class="fas fa-file"></i> Novo </a>
-                                </li>
+                                @can('manager-establishment-regionalManager-links-caller-create-reports')
+                                    <li>
+                                        <a href="{{route('called.create')}}"><i class="fas fa-file"></i> Novo </a>
+                                    </li>
+                                @endcan
                             </ul>
                     </li>
-                    <li>
-                        <a class="js-arrow" href="#">
-                        <i class="fas fa-link"></i>Links</a>
-                        <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
-                            <li>
-                                <a href="{{route('links.index')}}"><i class="fas fa-search"></i> Consultar</a>
-                            </li>
-                            <li>
-                                <a href="{{route('links.create')}}"><i class="fas fa-file"></i> Novo </a>
-                            </li>
-                        </ul>
+                    @can('manager-establishment-regionalManager-links-caller-create-reports')
+                        <li>
+                            <a class="js-arrow" href="#">
+                            <i class="fas fa-link"></i>Links</a>
+                            <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
+                                <li>
+                                    <a href="{{route('links.index')}}"><i class="fas fa-search"></i> Consultar</a>
+                                </li>
+                                <li>
+                                    <a href="{{route('links.create')}}"><i class="fas fa-file"></i> Novo </a>
+                                </li>
+                            </ul>
 
-                    </li>
+                        </li>
+
                     <li>
                         <a href="{{route('reports')}}">
                             <i class="fas  fa-files-o"></i>Relatórios</a>
                     </li>
-                    <li>
-                        <a class="js-arrow" href="{{ route('config.index') }}">
-                            <i class="fas fa-gears"></i>Configurações</a>
-                    </li>
+                    @endcan
+                    @can('config-authorization')
+                        <li>
+                            <a class="js-arrow" href="{{ route('config.index') }}">
+                                <i class="fas fa-gears"></i>Configurações</a>
+                        </li>
+                    @endcan
 
                 </ul>
             </nav>
