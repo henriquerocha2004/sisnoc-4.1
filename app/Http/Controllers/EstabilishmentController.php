@@ -6,6 +6,7 @@ use App\Http\Requests\EstablishmentRequest;
 use App\Models\Called;
 use App\Models\Establishment;
 use App\Models\Links;
+use App\Models\NotesEstablishment;
 use App\Models\RegionalManager;
 use App\Models\TechnicalManager;
 use App\Utils\NetWork;
@@ -114,7 +115,7 @@ class EstabilishmentController extends Controller
      */
     public function show($id)
     {
-        $establishment = Establishment::find($id);
+        $establishment = Establishment::with('links')->find($id);
 
         return view('establishment.show', [
             'establishment' => $establishment
@@ -228,6 +229,27 @@ class EstabilishmentController extends Controller
         ];
 
        return response()->json($r);
+    }
+
+    public function notesEstablishment(Request $request){
+
+        $request->validate([
+            'desc' => 'required',
+            'validate' => 'required'
+        ]);
+
+        $note = new NotesEstablishment();
+        $note->desc = $request->desc;
+        $note->validate = $request->validate;
+
+        try {
+            $note->save();
+
+
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
     }
 
     private function closeEstablishmentRoutine(Establishment $establishment){

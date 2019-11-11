@@ -11,14 +11,29 @@ use Yajra\DataTables\DataTables;
 class UsersController extends Controller
 {
     public function index(){
+
+        if(Gate::denies('config-authorization')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         return view('users.index');
     }
 
     public function create(){
+
+        if(Gate::denies('config-authorization')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         return view('users.create');
     }
 
     public function store(Users $request){
+
+        if(Gate::denies('config-authorization')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
 
         $user = new User();
         $user->name = $request->name;
@@ -36,6 +51,11 @@ class UsersController extends Controller
 
     public function edit($id){
 
+        if(Gate::denies('config-authorization')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
+
         $user = User::find($id);
 
         return view('users.edit', [
@@ -44,6 +64,11 @@ class UsersController extends Controller
     }
 
     public function update(Users $request, $id){
+
+        if(Gate::denies('config-authorization')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
 
         $user = User::find($id);
         $user->name = $request->name;
@@ -64,6 +89,11 @@ class UsersController extends Controller
 
     public function table()
     {
+
+        if(Gate::denies('config-authorization')){
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
+        }
+
         $users = User::select(['id', 'name', 'email'])->get();
         return DataTables::of($users)->make(true);
     }

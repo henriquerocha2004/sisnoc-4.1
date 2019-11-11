@@ -44,8 +44,8 @@ class AuthenticateController extends Controller
             }
         } else {
             return back()->with('alert', ['messageType' => 'warning', 'message' => 'Informe os dados para entrar!']);
-        }
-    }
+
+}    }
 
     public function logout()
     {
@@ -57,13 +57,12 @@ class AuthenticateController extends Controller
         $dashBoard = null;
 
         //Verifica quantos estabelecimentos estão ativos
-        $dashBoard['qtd_active_establishment'] = Establishment::where('establishment_status', 'open')->get()->count();
+        $dashBoard['qtd_active_establishment'] = Establishment::select('id')->where('establishment_status', 'open')->get()->count();
 
         //Verifica a quantidade de chamados abertos
-        $dashBoard['qtd_open_called'] = Called::whereBetween('status', [2,6])->get()->count();
+        $dashBoard['qtd_open_called'] = Called::select('id')->whereBetween('status', [2,6])->get()->count();
 
         //Typos de links
-
         $dashBoard['typeLinks'] = Links::distinct()->get(['type_link'])->pluck('type_link')->all();
 
         //Links Ativos
@@ -76,15 +75,13 @@ class AuthenticateController extends Controller
         //Quantidade de chamados abertos por link
         foreach($links as $link){
             $idsLinkType = Links::where('type_link', $link->type_link)->select('id')->get()->pluck('id')->all();
-            $dashBoard['qtd_open_called_by_link'][$link->type_link] = Called::whereIn('id_link', $idsLinkType)->whereBetween('status', [2,6])->get()->count();
+            $dashBoard['qtd_open_called_by_link'][$link->type_link] = Called::select('id')->whereIn('id_link', $idsLinkType)->whereBetween('status', [2,6])->get()->count();
         }
 
         //Chamados Abertos no dia Atual
         $dashBoard['called_open_current_date'] = Called::whereBetween('created_at', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->whereBetween('status', [2,6])->get();
-
         //Chamados Fechados no dia atual
         $dashBoard['called_closed_current_date'] = Called::whereBetween('updated_at', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->where('status', 1)->get();
-
         //Chamados Abertos por responsabilidade
         $responsable = ['Operadora' => 2 , 'Técnico Local' => 3 , 'SEMEP' => 4, 'Inadiplência' => 6, 'Falta de Energia' => 5];
 
@@ -95,7 +92,6 @@ class AuthenticateController extends Controller
 
         //Chamados Abertos pelo usuário logado
         $dashBoard['my_callers'] = Called::where(['id_user_open' => Auth::user()->id])->whereBetween('status', [2,6])->get();
-
 
         return view('home', [
             'dashboard' => $dashBoard

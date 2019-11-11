@@ -3,6 +3,7 @@
 namespace App\Utils;
 
 use DateTime;
+use Illuminate\Support\Facades\Date;
 
 class DateUtils
 {
@@ -14,10 +15,17 @@ class DateUtils
         }
 
         $data = explode(" ", $dataParam);
-        list($day, $month, $year) = explode('/', $data[0]);
-        list($hour, $minutes) = explode(":", $data[1]);
 
-        return (new DateTime($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minutes))->format('Y-m-d H:i');
+        list($day, $month, $year) = explode('/', $data[0]);
+
+        $date = (new Date($year . '-' . $month . '-' . $day))->format('Y-m-d');
+
+        if(count($data) >= 2){
+           list($hour, $minutes) = explode(":", $data[1]);
+           $date =  (new DateTime($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minutes))->format('Y-m-d H:i');
+        }
+
+        return $date;
     }
 
     public static function convertDataToBR($data, $time = false)

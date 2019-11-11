@@ -31,6 +31,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('check-service-terminal', 'EstabilishmentController@checkActiveProcessTerminal');
     Route::get('ping-test', 'EstabilishmentController@pingTest');
     Route::post('holyday/{id}', 'EstabilishmentController@holyday');
+    Route::post('notesEstablishment', 'EstabilishmentController@notesEstablishment')->name('establishment.note');
 
     //Rotas de Gerente Regional
     Route::resource('regionalManager', 'RegionalManagerController');

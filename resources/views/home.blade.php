@@ -163,79 +163,81 @@
             <div class="row">
                 @foreach ($dashboard['called_open_by_responsability'] as $key => $item)
 
-                  <div id="{{ $key }}"></div>
+                  @if($item['total'] >= 1)
+                    <div id="{{ $key }}"></div>
 
-                  <div  class="col-md-10">
-                        @if($key == 'Operadora' || $key == 'Técnico Local' || $key == 'SEMEP')
-                           <h2 class="title-1 m-b-25">Solicitações feitas a(o) {{ $key }} </h2>
-                        @elseif($key == 'Inadiplência' || $key == 'Falta de Energia')
-                           <h2 class="title-1 m-b-25"> Chamados Por {{ $key }} </h2>
-                        @endif
-                  </div>
-                  @if($key == 'Operadora')
+                    <div  class="col-md-10">
+                            @if($key == 'Operadora' || $key == 'Técnico Local' || $key == 'SEMEP')
+                            <h2 class="title-1 m-b-25">Solicitações feitas a(o) {{ $key }} </h2>
+                            @elseif($key == 'Inadiplência' || $key == 'Falta de Energia')
+                            <h2 class="title-1 m-b-25"> Chamados Por {{ $key }} </h2>
+                            @endif
+                    </div>
+                    @if($key == 'Operadora')
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <button class="btn btn-success" data-toggle="modal" data-target="#modal-sheet" >Gerar Planilha</button>
+                                </div>
+                            </div>
+                    @elseif($key == 'Técnico Local' || $key == 'SEMEP')
                         <div class="row">
                             <div class="col-md-3">
-                                <button class="btn btn-success" data-toggle="modal" data-target="#modal-sheet" >Gerar Planilha</button>
+                                <form action="{{ ($key == 'Técnico Local' ? route('reports.callersOtrs') : route('reports.semep') ) }}" method="POST">
+                                    @csrf
+                                    <button class="btn btn-success" >Gerar Planilha</button>
+                                </form>
                             </div>
                         </div>
-                  @elseif($key == 'Técnico Local' || $key == 'SEMEP')
-                    <div class="row">
-                        <div class="col-md-3">
-                            <form action="{{ ($key == 'Técnico Local' ? route('reports.callersOtrs') : route('reports.semep') ) }}" method="POST">
-                                @csrf
-                                <button class="btn btn-success" >Gerar Planilha</button>
-                            </form>
-                        </div>
+                    @endif
+
+                    <div class="col-md-3 col-lg-3">
+                            <div class="statistic__item">
+                                <h2 class="number">{{ $item['total'] }}</h2>
+                                @if($key == 'Operadora' || $key == 'Técnico Local' || $key == 'SEMEP')
+                                    <span class="desc">Solicitações abertas</span>
+                                @elseif($key == 'Inadiplência' || $key == 'Falta de Energia')
+                                    <span class="desc">Chamados Abertos</span>
+                                @endif
+
+                                <div class="icon">
+                                    <i class="zmdi zmdi-file"></i>
+                                </div>
+                            </div>
                     </div>
-                  @endif
-
-                  <div class="col-md-3 col-lg-3">
-                        <div class="statistic__item">
-                            <h2 class="number">{{ $item['total'] }}</h2>
-                            @if($key == 'Operadora' || $key == 'Técnico Local' || $key == 'SEMEP')
-                                <span class="desc">Solicitações abertas</span>
-                            @elseif($key == 'Inadiplência' || $key == 'Falta de Energia')
-                                <span class="desc">Chamados Abertos</span>
-                            @endif
-
-                            <div class="icon">
-                                <i class="zmdi zmdi-file"></i>
-                            </div>
-                        </div>
-                   </div>
-                   <div class="col-md-9" >
-                        <div class="table-responsive table--no-card m-b-40" style="overflow: scroll; height: 40vh ">
-                            <table class="table table-borderless table-striped table-earning">
-                                <thead>
-                                    <tr>
-                                        <th>Número</th>
-                                        <th>Link</th>
-                                        <th> Chamado {{ ($key == 'Operadora' ? 'Operadora' : ($key == 'Técnico Local' ? 'OTRS' : ($key == 'SEMEP' ? 'SISMAN' : ''))) }}</th>
-                                        @if($key == 'Operadora')
-                                            <th>Prazo de Normalização</th>
-                                        @endif
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($item['callers'] as $subCalled)
+                    <div class="col-md-9" >
+                            <div class="table-responsive table--no-card m-b-40" style="overflow: scroll; height: 40vh ">
+                                <table class="table table-borderless table-striped table-earning">
+                                    <thead>
                                         <tr>
-                                            <td><a href="{{ route('called.edit', [$subCalled->called()->first()->id, $subCalled->id]) }}">{{ $subCalled->called()->first()->caller_number }}</a></td>
-                                            <td>{{ $subCalled->called()->first()->link()->first()->type_link }}</td>
-                                            <td>  {{ ($key == 'Operadora' ? $subCalled->call_telecommunications_company_number : ($key == 'Técnico Local' ? $subCalled->otrs : ($key == 'SEMEP' ? $subCalled->sisman : ''))) }}</td>
+                                            <th>Número</th>
+                                            <th>Link</th>
+                                            <th> Chamado {{ ($key == 'Operadora' ? 'Operadora' : ($key == 'Técnico Local' ? 'OTRS' : ($key == 'SEMEP' ? 'SISMAN' : ''))) }}</th>
                                             @if($key == 'Operadora')
-                                                <td>{{ $subCalled->deadline }}</td>
+                                                <th>Prazo de Normalização</th>
                                             @endif
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($item['callers'] as $subCalled)
+                                            <tr>
+                                                <td><a href="{{ route('called.edit', [$subCalled->called()->first()->id, $subCalled->id]) }}">{{ $subCalled->called()->first()->caller_number }}</a></td>
+                                                <td>{{ $subCalled->called()->first()->link()->first()->type_link }}</td>
+                                                <td>  {{ ($key == 'Operadora' ? $subCalled->call_telecommunications_company_number : ($key == 'Técnico Local' ? $subCalled->otrs : ($key == 'SEMEP' ? $subCalled->sisman : ''))) }}</td>
+                                                @if($key == 'Operadora')
+                                                    <td>{{ $subCalled->deadline }}</td>
+                                                @endif
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
+                  @endif
+
+
 
                 @endforeach
             </div>
-
-
             @include('footer.footer')
         </div>
     </div>

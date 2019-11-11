@@ -35,6 +35,7 @@
                                 </div>
                                 @can('manager-establishment-regionalManager-links-caller-create-reports')
                                     <div class="col-md-6">
+                                        <button type="button" class="btn btn-sm btn-danger pull-right" data-toggle="modal" data-target="#modal-data">Nota</button>
                                         <button type="button" id="btn-holiday" class="btn btn-sm btn-danger pull-right">Informar Feriado</button>
                                     </div>
                                 @endcan
@@ -208,7 +209,7 @@
                             <div class="row">
                                 <div class="col-md-12" >
                                     <div id="terminal-container" style="width: 87%">
-                                    <iframe name="interno" style="width: 100%; background-color: black; height: 71vh" id="terminal" src="http://{{ env('TERMINAL_WEB_IP') }}:8000/terminal?ip={{$establishment->links()->first()->monitoring_ip}}&lg=d"></iframe>
+                                        <iframe name="interno" style="width: 100%; background-color: black; height: 71vh" id="terminal" src="http://{{ env('TERMINAL_WEB_IP') }}:8000/terminal?ip={{$establishment->links()->first()->monitoring_ip}}&lg=d"></iframe>
                                     </div>
                                 </div>
                             </div>
@@ -251,18 +252,64 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-data" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mediumModalLabel">Nota do estabelecimento</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ route('establishment.note') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="form-control-label" for="desc"> Observações </label>
+                                    <textarea name="desc" id="desc" cols="30" rows="5" class="form-control {{ ($errors->has('desc') ? 'is-invalid': '') }}">{{old('desc')}}</textarea>
+                                    @if($errors->has('desc'))
+                                        @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
+                                            {{$errors->first('desc')}}
+                                        @endcomponent
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="validate" class="form-control-label">Validade<i style="color:red">*</i></label>
+                                    <input required readonly  type="text" id="validate" name="validate"  class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-primary">Confirmar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+</div>
+
 @endsection
 
 @section('js')
+<script src="{{url('/l10n/pt.js')}}"></script>
 <script src="{{asset('js/datatables.js')}}"></script>
       <script>
           $(function(){
+            $("#validate").flatpickr({
+                enableTime:false,
+                dateFormat: "d/m/Y",
+                locale: "pt"
+            });
 
             //Evento que faz os testes de ping nos links do estabelecimento$("#idEstabilishment").val()
             $("#tblLinks > tbody > tr").each(function(i, v){
                 checkStatusLink(v.getAttribute('data-id-link'));
             });
-
 
             //Evento que verifica se o serviço de terminal está ativo.
             $.get('{{url('check-service-terminal')}}', function(r){
