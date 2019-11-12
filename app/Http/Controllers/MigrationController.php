@@ -138,7 +138,7 @@ class MigrationController extends Controller
     }
 
 
-    public function lojas(){
+    public function called(){
         set_time_limit(3600);
 
         DB::beginTransaction();

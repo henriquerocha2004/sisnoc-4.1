@@ -37,7 +37,7 @@
                         </div>
                     </div>
                 </div>
-                @foreach ($dashboard['qtd_links_active'] as $key => $link)
+                @forelse ($dashboard['qtd_links_active'] as $key => $link)
                     <div class="col-md-3 col-lg-3">
                         <div class="statistic__item">
                             <h2 class="number">{{ $link }}</h2>
@@ -47,7 +47,9 @@
                             </div>
                         </div>
                     </div>
-                @endforeach
+                @empty
+
+                @endforelse
             </div>
             <div class="row">
                 <div id="chamados-abertos-link" class="col-md-12 mb-3">
@@ -57,7 +59,7 @@
                 </div>
             </div>
             <div class="row">
-                @foreach ($dashboard['qtd_open_called_by_link'] as $key => $link)
+                @forelse ($dashboard['qtd_open_called_by_link'] as $key => $link)
                     @if($key == '4G')
                         @php continue; @endphp
                     @endif
@@ -70,7 +72,9 @@
                             </div>
                         </div>
                     </div>
-                @endforeach
+                @empty
+
+                @endforelse
             </div>
             <div class="row" id="chamados-current">
                 @if(count($dashboard['called_open_current_date']) >= 1)
@@ -161,7 +165,7 @@
             </div>
 
             <div class="row">
-                @foreach ($dashboard['called_open_by_responsability'] as $key => $item)
+                @forelse ($dashboard['called_open_by_responsability'] as $key => $item)
 
                   @if($item['total'] >= 1)
                     <div id="{{ $key }}"></div>
@@ -234,9 +238,9 @@
                         </div>
                   @endif
 
+                @empty
 
-
-                @endforeach
+                @endforelse
             </div>
             @include('footer.footer')
         </div>
@@ -261,9 +265,11 @@
                                 <label for="start" class=" form-control-label">Informe o link: <i style="color:red">*</i></label>
                                 <select name="link" class="form-control">
                                     <option value="">Selecione</option>
-                                    @foreach ( $dashboard['typeLinks'] as $type)
+                                    @forelse ( $dashboard['typeLinks'] as $type)
                                         <option value="{{ $type }}">{{ $type }}</option>
-                                    @endforeach
+                                    @empty
+
+                                    @endforelse
                                     <option value="ALL">Todos</option>
                                 </select>
                             </div>

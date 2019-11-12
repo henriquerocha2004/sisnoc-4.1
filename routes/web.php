@@ -90,4 +90,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('reports/callers-otrs', 'ReportsController@callersOtrs')->name('reports.callersOtrs');
     Route::post('reports/callers-semep', 'ReportsController@semep')->name('reports.semep');
     Route::post('reports/links', 'ReportsController@links')->name('reports.links');
+
+
+    //rotas de migração
+    Route::get('migration/regional-manager', 'MigrationController@RegionalManager');
+    Route::get('migration/technical', 'MigrationController@TecnicalManager');
+    Route::get('migration/establishment', 'MigrationController@establishment');
+    Route::get('migration/links', 'MigrationController@links');
+    Route::get('migration/called', 'MigrationController@called');
+
 });
