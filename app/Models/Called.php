@@ -71,8 +71,8 @@ class Called extends Model
         return DateUtils::convertDataToBR($value, true);
     }
 
-    public function getCreatedAtAttribute($value){
-        return DateUtils::convertDataToBR($value);
+    public function getCreatedAtShowAttribute($value){
+        return DateUtils::convertDataToBR($this->attributes['created_at']);
     }
 
     public function getStatusShowAttribute(){

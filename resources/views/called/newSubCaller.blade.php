@@ -70,7 +70,7 @@
                                                         <tr>
                                                             <td>{{$subcaller->type_show}}</td>
                                                             <td>{{$subcaller->user()->first()->name}}</td>
-                                                            <td>{{$subcaller->created_at}}</td>
+                                                            <td>{{$subcaller->created_at_show}}</td>
                                                             <td>{{$subcaller->status_establishment_show}}</td>
                                                             <td data-url-show="{{route('called.edit', [$called->id, $subcaller->id])}}" style="cursor: pointer" class="showSubSaller {{($subcaller->status_show == 'Aberto' ? 'process' : 'denied')}}">{{$subcaller->status_show}}</td>
                                                         </tr>

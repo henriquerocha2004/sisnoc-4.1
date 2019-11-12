@@ -18,7 +18,7 @@ class DateUtils
 
         list($day, $month, $year) = explode('/', $data[0]);
 
-        $date = (new Date($year . '-' . $month . '-' . $day))->format('Y-m-d');
+        $date = $year . '-' . $month . '-' . $day;
 
         if(count($data) >= 2){
            list($hour, $minutes) = explode(":", $data[1]);

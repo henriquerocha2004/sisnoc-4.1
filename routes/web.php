@@ -67,6 +67,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('type-problem-table', 'TypeProblemController@table');
     Route::resource('action-take', 'ActionTakeController');
     Route::get('action-take-table', 'ActionTakeController@table');
+    Route::resource('notes-establishment', 'NotesEstablishmentController');
+    Route::get('notes-establishment-table', 'NotesEstablishmentController@table');
 
     //Rotas para usuários
     Route::get('users', 'UsersController@index')->name('users.index');

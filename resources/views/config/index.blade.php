@@ -35,6 +35,7 @@
                             <div class="col-md-6 mt-3">
                                 <div class="btn-group">
                                     <a href="{{ route('users.index') }}" class="btn btn-primary">Ger. de Usuários</a>
+                                    <a href="{{ route('notes-establishment.index') }}" class="btn btn-primary">Ger. de Notas de Estab.</a>
                                 </div>
                             </div>
                         </div>

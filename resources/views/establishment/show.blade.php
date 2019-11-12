@@ -44,6 +44,17 @@
                         <input type="hidden"  id="idEstabilishment" value="{{$establishment->id}}">
                         <div class="card-body card-block">
                             <div class="row">
+                                @forelse ($notes as $note)
+                                    @component('compoments.message', ['type' => 'warning'])
+                                        <div class="col-md-12 ml-3">
+                                            <p style="font-size: 0.8em;">{{ $note->user()->first()->name }}, disse: {{ $note->desc }}</p>
+                                        </div>
+                                    @endcomponent
+                                @empty
+
+                                @endforelse
+                            </div>
+                            <div class="row">
                                 <div class="table-responsive col-md-11">
                                     <table class="table table-borderless table-data3">
                                         <thead>
@@ -268,6 +279,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="form-control-label" for="desc"> Observações </label>
+                                    <input type="hidden" name="id_establishment" value="{{ $establishment->id }}">
                                     <textarea name="desc" id="desc" cols="30" rows="5" class="form-control {{ ($errors->has('desc') ? 'is-invalid': '') }}">{{old('desc')}}</textarea>
                                     @if($errors->has('desc'))
                                         @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
@@ -301,6 +313,7 @@
       <script>
           $(function(){
             $("#validate").flatpickr({
+                minDate: "today",
                 enableTime:false,
                 dateFormat: "d/m/Y",
                 locale: "pt"

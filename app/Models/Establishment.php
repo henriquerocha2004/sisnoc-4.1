@@ -57,6 +57,10 @@ class Establishment extends Model
         return $this->hasMany(Links::class, 'establishment_id', 'id');
     }
 
+    public function notesEstablishment(){
+        return $this->hasMany(NotesEstablishment::class, 'id_establishment', 'id');
+    }
+
 
     //Access e Mutators
     public function setDocumentEstablishmentAttribute($value)

@@ -51,7 +51,6 @@ class ReportsController extends Controller
 
        foreach($calleds as $key => $called)
        {
-
           $time = explode(' ', $called->created_at);
 
           $data[$key]['Data'] = DateUtils::convertDataToBR($time[0]);
@@ -165,6 +164,9 @@ class ReportsController extends Controller
         $links = Links::whereIn('establishment_id', $idsEstablishment)->get();
 
         $typesLink = $links->unique('type_link')->values()->pluck('type_link')->all();
+
+
+
 
         foreach($establishments as $establishment){
 

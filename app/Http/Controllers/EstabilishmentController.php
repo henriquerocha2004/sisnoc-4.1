@@ -115,10 +115,12 @@ class EstabilishmentController extends Controller
      */
     public function show($id)
     {
-        $establishment = Establishment::with('links')->find($id);
+        $establishment = Establishment::with(['links', 'notesEstablishment'])->find($id);
+        $notes = $establishment->notesEstablishment()->where('validate', '>=', date('Y-m-d'))->get();
 
         return view('establishment.show', [
-            'establishment' => $establishment
+            'establishment' => $establishment,
+            'notes' => $notes
         ]);
     }
 
@@ -241,13 +243,14 @@ class EstabilishmentController extends Controller
         $note = new NotesEstablishment();
         $note->desc = $request->desc;
         $note->validate = $request->validate;
+        $note->id_establishment = $request->id_establishment;
+        $note->user_id = auth()->user()->id;
 
         try {
             $note->save();
-
-
-        } catch (\Throwable $th) {
-            //throw $th;
+            return redirect()->route('estabilishment.show', $request->id_establishment)->with('alert', ['messageType' => 'success', 'message' => 'Nota Inserida com sucesso!']);
+        } catch (Exception $e) {
+            return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Houve uma falha ao salvar a nota!']);
         }
 
     }

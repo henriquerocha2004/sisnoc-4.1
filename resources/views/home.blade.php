@@ -150,7 +150,7 @@
                                         <tr>
                                             <td><a href="{{ route('called.edit', [$called->id, $called->subCallers()->first()->id]) }}">{{$called->caller_number }}</a></td>
                                             <td>{{ $called->link()->first()->type_link }}</td>
-                                            <td>{{ $called->created_at }}</td>
+                                            <td>{{ $called->created_at_show }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
