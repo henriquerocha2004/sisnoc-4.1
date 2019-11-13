@@ -21,7 +21,7 @@
             <div class="row m-t-25">
                 <div class="col-md-3 col-lg-3">
                     <div class="statistic__item">
-                        <h2 class="number">{{ $dashboard['qtd_active_establishment'] }}</h2>
+                        <h2 class="number">{{ $dashboard['qtd_active_establishment'] ?? 0}}</h2>
                         <span class="desc">Lojas Ativas</span>
                         <div class="icon">
                             <i class="zmdi zmdi-home"></i>
@@ -30,26 +30,28 @@
                 </div>
                 <div class="col-md-3 col-lg-3">
                     <div class="statistic__item">
-                        <h2 class="number">{{ $dashboard['qtd_open_called'] }}</h2>
+                        <h2 class="number">{{ $dashboard['qtd_open_called'] ?? 0}}</h2>
                         <span class="desc">Chamados Abertos</span>
                         <div class="icon">
                             <i class="zmdi zmdi-file"></i>
                         </div>
                     </div>
                 </div>
-                @forelse ($dashboard['qtd_links_active'] as $key => $link)
-                    <div class="col-md-3 col-lg-3">
-                        <div class="statistic__item">
-                            <h2 class="number">{{ $link }}</h2>
-                            <span class="desc">Total de {{ $key }}</span>
-                            <div class="icon">
-                                <i class="zmdi zmdi-link"></i>
+                @if(!empty($dashboard['qtd_links_active']))
+                    @forelse ($dashboard['qtd_links_active'] as $key => $link)
+                        <div class="col-md-3 col-lg-3">
+                            <div class="statistic__item">
+                                <h2 class="number">{{ $link }}</h2>
+                                <span class="desc">Total de {{ $key }}</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-link"></i>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @empty
+                    @empty
 
-                @endforelse
+                    @endforelse
+                @endif
             </div>
             <div class="row">
                 <div id="chamados-abertos-link" class="col-md-12 mb-3">
@@ -59,22 +61,24 @@
                 </div>
             </div>
             <div class="row">
-                @forelse ($dashboard['qtd_open_called_by_link'] as $key => $link)
-                    @if($key == '4G')
-                        @php continue; @endphp
-                    @endif
-                    <div class="col-md-3 col-lg-3">
-                        <div class="statistic__item">
-                            <h2 class="number">{{ $link }}</h2>
-                            <span class="desc">{{ $key }}</span>
-                            <div class="icon">
-                                <i class="zmdi zmdi-file"></i>
+                @if(!empty($dashboard['qtd_open_called_by_link']))
+                    @forelse ($dashboard['qtd_open_called_by_link'] as $key => $link)
+                        @if($key == '4G')
+                            @php continue; @endphp
+                        @endif
+                        <div class="col-md-3 col-lg-3">
+                            <div class="statistic__item">
+                                <h2 class="number">{{ $link }}</h2>
+                                <span class="desc">{{ $key }}</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-file"></i>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @empty
+                    @empty
 
-                @endforelse
+                    @endforelse
+                @endif
             </div>
             <div class="row" id="chamados-current">
                 @if(count($dashboard['called_open_current_date']) >= 1)

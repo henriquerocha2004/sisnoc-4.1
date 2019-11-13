@@ -97,6 +97,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('migration/technical', 'MigrationController@TecnicalManager');
     Route::get('migration/establishment', 'MigrationController@establishment');
     Route::get('migration/links', 'MigrationController@links');
+    Route::get('migration/sdwan', 'MigrationController@importSDWAN');
     Route::get('migration/called', 'MigrationController@called');
 
 });

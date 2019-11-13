@@ -112,7 +112,7 @@ class MigrationController extends Controller
                 if($esta != null){
                     $link = new Links();
                     $link->establishment_id = $esta->id;
-                    $link->type_link = $circuito->cir_link;
+                    $link->type_link = ($circuito->cir_oper == 'CENTURYLINK' ? 'SDWAN' : $circuito->cir_link);
                     $link->bandwidth = $circuito->cir_band;
                     $link->link_identification = $circuito->cir_desig;
                     $link->telecommunications_company = $circuito->cir_oper;
@@ -137,6 +137,53 @@ class MigrationController extends Controller
         echo "Fim da Execução";
     }
 
+    public function importSDWAN(){
+
+        $path = storage_path('app/public/SD_WAN_12_11.csv');
+        $file = fopen($path, "r");
+
+        while(($data = fgetcsv( $file, 200, '#')) !== false){
+
+            $line = array_filter(explode(';', $data[0]));
+            $establishment = Establishment::where('establishment_code', '=', $line[0])->where('establishment_status', '=', 'open')->first();
+            if(count($establishment) >= 1){
+                $links = $establishment->links()->where('link_identification', '=', $line[1])->get();
+
+                if(count($links) >= 1){
+                    continue;
+                }else{
+
+                    for($i = 2; $i <= 3; $i++){
+                        $newLink = new Links();
+                        $newLink->bandwidth = '4MB';
+                        $newLink->link_identification = $line[1] ?? '#ND';
+                        $newLink->telecommunications_company = 'CENTURYLINK';
+                        $newLink->monitoring_ip = $line[$i] ?? '0.0.0.0';
+                        $newLink->local_ip_router = '0.0.0.0';
+                        $newLink->installed_router_model = 'FortiGate 60E';
+                        $newLink->status = 'active';
+                        $newLink->establishment_id = $establishment->id;
+
+                        DB::beginTransaction();
+
+                        try {
+                            $newLink->save();
+
+                        } catch (Exception $e) {
+                            DB::rollback();
+                            dd($e->getMessage());
+                        }
+                    }
+
+                    DB::commit();
+
+                }
+
+            }
+
+
+        }
+    }
 
     public function called(){
         set_time_limit(3600);
