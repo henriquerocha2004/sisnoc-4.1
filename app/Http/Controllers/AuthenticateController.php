@@ -18,12 +18,20 @@ class AuthenticateController extends Controller
     {
         $users = User::all()->count();
 
-        if($users < 0){
+        if($users <= 0){
             $this->createAdmin();
         }
 
-        $config = Config::all()->toArray();
-        session(['config' => $config[0]]);
+        $config = Config::first();
+
+        if(!$config){
+            $config = new Config();
+            $config->send_email = 0;
+            $config->path_web_terminal  = '/var/www/html/sisnoc/terminal_web/';
+            $config->save();
+        }
+
+        session(['config' => $config]);
         return view('login');
     }
 
@@ -79,19 +87,19 @@ class AuthenticateController extends Controller
         }
 
         //Chamados Abertos no dia Atual
-        $dashBoard['called_open_current_date'] = Called::whereBetween('created_at', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->whereBetween('status', [2,6])->get();
+        $dashBoard['called_open_current_date'] = Called::whereBetween('created_at', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->whereBetween('status', [2,6])->orderBy('created_at', 'DESC')->get();
         //Chamados Fechados no dia atual
-        $dashBoard['called_closed_current_date'] = Called::whereBetween('updated_at', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->where('status', 1)->get();
+        $dashBoard['called_closed_current_date'] = Called::whereBetween('updated_at', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->where('status', 1)->orderBy('created_at', 'DESC')->get();
         //Chamados Abertos por responsabilidade
         $responsable = ['Operadora' => 2 , 'Técnico Local' => 3 , 'SEMEP' => 4, 'Inadiplência' => 6, 'Falta de Energia' => 5];
 
         foreach($responsable as $key => $resp){
-            $dashBoard['called_open_by_responsability'][$key]['callers'] = SubCaller::where(['status' => 'open', 'type' => $resp])->get()   ;
+            $dashBoard['called_open_by_responsability'][$key]['callers'] = SubCaller::where(['status' => 'open', 'type' => $resp])->orderby('created_at', 'ASC')->get();
             $dashBoard['called_open_by_responsability'][$key]['total'] = $dashBoard['called_open_by_responsability'][$key]['callers']->count();
         }
 
         //Chamados Abertos pelo usuário logado
-        $dashBoard['my_callers'] = Called::where(['id_user_open' => Auth::user()->id])->whereBetween('status', [2,6])->get();
+        $dashBoard['my_callers'] = Called::where(['id_user_open' => Auth::user()->id])->whereBetween('status', [2,6])->orderby('created_at', 'ASC')->get();
 
         return view('home', [
             'dashboard' => $dashBoard

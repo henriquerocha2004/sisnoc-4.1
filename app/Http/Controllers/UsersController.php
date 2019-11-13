@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Gate;
 use App\Http\Requests\Users;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -51,7 +52,7 @@ class UsersController extends Controller
 
     public function edit($id){
 
-        if(Gate::denies('config-authorization')){
+        if(Gate::denies('config-authorization') && auth()->user()->id != $id){
             return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
         }
 
@@ -65,7 +66,7 @@ class UsersController extends Controller
 
     public function update(Users $request, $id){
 
-        if(Gate::denies('config-authorization')){
+        if(Gate::denies('config-authorization') && auth()->user()->id != $id){
             return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
         }
 
@@ -80,7 +81,12 @@ class UsersController extends Controller
 
         try {
             $user->save();
-            return redirect()->route('users.index')->with('alert', ['messageType' => 'success', 'message' => 'Usuário Atualizado com sucesso!']);
+
+            if(auth()->user()->permission > 1 ){
+                return redirect()->route('logout')->with('alert', ['messageType' => 'success', 'message' => 'Usuário Atualizado com sucesso!']);
+            }else{
+                return redirect()->route('users.index')->with('alert', ['messageType' => 'success', 'message' => 'Usuário Atualizado com sucesso!']);
+            }
 
         } catch (Exception $e) {
             return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => 'Houve um erro ao atualizar o usuário!']);
