@@ -174,7 +174,45 @@
                     </div>
                 @endif
             </div>
+            @if(count($dashboard['called_without_protocol']) >= 1)
+            <div class="row">
+                    <div  class="col-md-10">
+                            <h2 class="title-1 m-b-25">Chamados Abertos Sem Protocolo Operadora</h2>
+                        </div>
+                        <div class="col-md-3 col-lg-3">
+                            <div class="statistic__item">
+                                <h2 class="number">{{ count($dashboard['called_without_protocol']) }}</h2>
+                                    <span class="desc">Solicitações sem Protocolo e Prazo</span>
+                                <div class="icon">
+                                    <i class="zmdi zmdi-file"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-9" >
+                            <div class="table-responsive table--no-card m-b-40" style="overflow: scroll; height: 40vh ">
+                                <table class="table table-borderless table-striped table-earning">
+                                    <thead>
+                                        <tr>
+                                            <th>Número</th>
+                                            <th>Link</th>
+                                            <th>Aberto Por</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($dashboard['called_without_protocol'] as $subCalled)
+                                            <tr>
+                                                <td><a href="{{ route('called.edit', [$subCalled->called()->first()->id, $subCalled->id]) }}">{{ $subCalled->called()->first()->caller_number }}</a></td>
+                                                <td>{{ $subCalled->called()->first()->link()->first()->type_link }}</td>
+                                                <td>  {{ $subCalled->called()->first()->userOpen()->first()->name }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+            </div>
 
+            @endif
             <div class="row">
                 @forelse ($dashboard['called_open_by_responsability'] as $key => $item)
 
