@@ -103,10 +103,8 @@ class AuthenticateController extends Controller
 
         //Chamados Abertos na Operadora sem Protocolo e Prazo
         $dashBoard['called_without_protocol'] =  $dashBoard['called_open_by_responsability']['Operadora']['callers']->filter(function($item, $key){
-            return $item->call_telecommunications_company_number == '' && $item->deadline = '';
+            return $item->call_telecommunications_company_number == null && $item->deadline == null;
         });
-
-        dd(dashBoard['called_without_protocol']);
 
         //Chamados Abertos pelo usuário logado
         $dashBoard['my_callers'] = Called::with(['link', 'subCallers'])
