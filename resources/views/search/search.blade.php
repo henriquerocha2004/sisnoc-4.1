@@ -70,6 +70,13 @@
                                                                         Feriado Local/Nacional </span>
                                                                 </small>
                                                             @endif
+
+                                                            @if($establishment->energy_fault == 1)
+                                                                <small>
+                                                                    <span class="badge badge-danger float-right mt-1">
+                                                                        Loja Sem energia</span>
+                                                                </small>
+                                                            @endif
                                                         </strong>
                                                     </div>
                                                     <div class="card-body">
