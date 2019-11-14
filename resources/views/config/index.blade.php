@@ -1,5 +1,10 @@
 @extends('master.master')
 
+@section('title')
+    <title>Sisnoc | Configurações</title>
+@endsection
+
+
 @section('content')
 
 <div class="main-content">
@@ -36,6 +41,7 @@
                                 <div class="btn-group">
                                     <a href="{{ route('users.index') }}" class="btn btn-primary">Ger. de Usuários</a>
                                     <a href="{{ route('notes-establishment.index') }}" class="btn btn-primary">Ger. de Notas de Estab.</a>
+                                    <a href="{{ route('config.holyday') }}" class="btn btn-primary">Ajustes Feriados</a>
                                 </div>
                             </div>
                         </div>

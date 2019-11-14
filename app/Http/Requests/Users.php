@@ -37,7 +37,7 @@ class Users extends FormRequest
            'email' =>  (!empty($this->inputs['id']) ? '' : 'required|unique:users,email'),
            'password' => (!empty($this->inputs['password']) ? 'required|same:password_rep' : ''),
            'password_rep' => (!empty($this->inputs['password']) ? 'required' : ''),
-           'permission' => 'required|numeric|between:1,2'
+           'permission' => 'required_if:current_permission,1|numeric|between:1,2'
         ];
     }
 

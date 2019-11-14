@@ -1,5 +1,8 @@
  @extends('master.master')
 
+ @section('title')
+     <title>Sisnoc | Dashboard</title>
+ @endsection
 
  @section('content')
  <!-- MAIN CONTENT-->
@@ -37,6 +40,7 @@
                         </div>
                     </div>
                 </div>
+
                 @if(!empty($dashboard['qtd_links_active']))
                     @forelse ($dashboard['qtd_links_active'] as $key => $link)
                         <div class="col-md-3 col-lg-3">
@@ -53,6 +57,8 @@
                     @endforelse
                 @endif
             </div>
+
+
             <div class="row">
                 <div id="chamados-abertos-link" class="col-md-12 mb-3">
                     <div class="overview-wrap">
@@ -80,6 +86,7 @@
                     @endforelse
                 @endif
             </div>
+
             <div class="row" id="chamados-current">
                 @if(count($dashboard['called_open_current_date']) >= 1)
                     <div  class="col-md-6" >

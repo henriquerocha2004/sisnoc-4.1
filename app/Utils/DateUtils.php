@@ -64,6 +64,7 @@ class DateUtils
 
     public static function calcDowntime($hrDown, $hrUp)
     {
+
         $date = new DateTime($hrUp);
         $compare = $date->diff(new DateTime($hrDown));
         $downtime = $compare->h . ':' . $compare->i . ':' . $compare->s;

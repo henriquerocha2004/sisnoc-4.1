@@ -9,7 +9,7 @@
     <meta name="author" content="Henrique Rocha">
     <meta name="csrf-token" content="{{csrf_token()}}">
     <!-- Title Page-->
-    <title></title>
+    @yield('title')
 
     <!-- Fontfaces CSS-->
     <link href="{{asset('/css/fonts.css')}}" rel="stylesheet" media="all">
@@ -48,7 +48,9 @@
                                     <div class="account-item clearfix js-item-menu">
 
                                         <div class="content">
-                                            <a class="js-acc-btn" href="#">{{auth()->user()->name}}</a>
+                                            <a class="js-acc-btn" href="#">{{auth()->user()->name}}</a><br>
+                                            <small>Perfil: {{ auth()->user()->permission == 1 ? 'Administrador' : (auth()->user()->permission == 2 ? 'Operador NOC' : 'Visitante') }}</small>
+
                                         </div>
                                         <div class="account-dropdown js-dropdown">
                                             <div class="info clearfix">
@@ -64,10 +66,12 @@
                                                     <a href="{{ route('users.edit', auth()->user()->id) }}">
                                                         <i class="zmdi zmdi-account"></i>Dados da conta</a>
                                                 </div>
-                                                <div class="account-dropdown__item">
-                                                    <a href="{{ route('config.index') }}">
-                                                        <i class="zmdi zmdi-settings"></i>Configurações</a>
-                                                </div>
+                                                @can('config-autorization')
+                                                    <div class="account-dropdown__item">
+                                                        <a href="{{ route('config.index') }}">
+                                                            <i class="zmdi zmdi-settings"></i>Configurações</a>
+                                                    </div>
+                                                @endcan
                                             </div>
                                             <div class="account-dropdown__footer">
                                                 <a href="{{route('logout')}}">

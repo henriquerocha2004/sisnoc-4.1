@@ -51,14 +51,14 @@ class SubCaller extends Model
 
     // Access e Mutators
 
-    public function setDeadlineAttribute($value)
-    {
-        $this->attributes['deadline'] = DateUtils::convertDataDataBase($value);
-    }
+     public function setDeadlineAttribute($value)
+     {
+         $this->attributes['deadline'] = DateUtils::convertDataDataBase($value);
+     }
 
     public function getDeadlineAttribute($value)
     {
-        return DateUtils::convertDataToBR($value, true);
+       return DateUtils::convertDataToBR($value, true);
     }
 
     public function setHrOpenCallTelecommunicationsCompanyAttribute($value)

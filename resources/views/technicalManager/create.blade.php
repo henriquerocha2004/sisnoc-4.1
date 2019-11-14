@@ -1,5 +1,10 @@
 @extends('master.master')
 
+@section('title')
+    <title>Sisnoc | Cadastrar Técnico</title>
+@endsection
+
+
 @section('content')
 
 <div class="main-content">

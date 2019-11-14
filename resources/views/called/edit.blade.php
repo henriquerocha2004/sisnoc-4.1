@@ -1,5 +1,10 @@
 @extends('master.master')
 
+@section('title')
+    <title>Sisnoc | Visualizar Chamado: {{ $called->caller_number }}</title>
+@endsection
+
+
 @section('content')
 
 <div class="main-content">

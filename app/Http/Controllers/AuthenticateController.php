@@ -11,6 +11,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AuthenticateController extends Controller
 {
@@ -18,12 +19,20 @@ class AuthenticateController extends Controller
     {
         $users = User::all()->count();
 
-        if($users < 0){
+        if($users <= 0){
             $this->createAdmin();
         }
 
-        $config = Config::all()->toArray();
-        session(['config' => $config[0]]);
+        $config = Config::first();
+
+        if(!$config){
+            $config = new Config();
+            $config->send_email = 0;
+            $config->path_web_terminal  = '/var/www/html/sisnoc/terminal_web/';
+            $config->save();
+        }
+
+        session(['config' => $config]);
         return view('login');
     }
 
@@ -66,32 +75,41 @@ class AuthenticateController extends Controller
         $dashBoard['typeLinks'] = Links::distinct()->get(['type_link'])->pluck('type_link')->all();
 
         //Links Ativos
-        $links = Links::where('status', '=', 'active')->groupBy('type_link')->get();
+        //  $links = Links::where('status', '=', 'active')->groupBy('type_link')->get();
+         $typeLinks = Links::distinct()->select('type_link')->get()->pluck('type_link')->all();
 
-        foreach($links as $link){
-            $dashBoard['qtd_links_active'][$link->type_link] = Links::where(['status' => 'active', 'type_link' => $link->type_link])->get()->count();
-        }
+
+         foreach($typeLinks as $link){
+            $dashBoard['qtd_links_active'][$link] = DB::select('SELECT COUNT(*) as qtd FROM links WHERE status = ? AND type_link = ?', ['active', $link])[0]->qtd;
+         }
 
         //Quantidade de chamados abertos por link
-        foreach($links as $link){
-            $idsLinkType = Links::where('type_link', $link->type_link)->select('id')->get()->pluck('id')->all();
-            $dashBoard['qtd_open_called_by_link'][$link->type_link] = Called::select('id')->whereIn('id_link', $idsLinkType)->whereBetween('status', [2,6])->get()->count();
-        }
+         foreach($typeLinks as $link){
+             $idsLinkType = collect(DB::select('SELECT id FROM links WHERE type_link = ? AND status = ?', [$link, 'active']))->pluck('id')->all();
+             $dashBoard['qtd_open_called_by_link'][$link] = Called::select('id')->whereIn('id_link', $idsLinkType)->whereBetween('status', [2,6])->get()->count();
+         }
 
         //Chamados Abertos no dia Atual
-        $dashBoard['called_open_current_date'] = Called::whereBetween('created_at', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->whereBetween('status', [2,6])->get();
+        $dashBoard['called_open_current_date'] = Called::whereBetween('created_at', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->whereBetween('status', [2,6])->orderBy('created_at', 'DESC')->get();
         //Chamados Fechados no dia atual
-        $dashBoard['called_closed_current_date'] = Called::whereBetween('updated_at', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->where('status', 1)->get();
+        $dashBoard['called_closed_current_date'] = Called::whereBetween('updated_at', [date('Y-m-d') . ' 00:00:00', date('Y-m-d') . ' 23:59:59'])->where('status', 1)->orderBy('created_at', 'DESC')->get();
         //Chamados Abertos por responsabilidade
         $responsable = ['Operadora' => 2 , 'Técnico Local' => 3 , 'SEMEP' => 4, 'Inadiplência' => 6, 'Falta de Energia' => 5];
 
-        foreach($responsable as $key => $resp){
-            $dashBoard['called_open_by_responsability'][$key]['callers'] = SubCaller::where(['status' => 'open', 'type' => $resp])->get()   ;
-            $dashBoard['called_open_by_responsability'][$key]['total'] = $dashBoard['called_open_by_responsability'][$key]['callers']->count();
-        }
+          foreach($responsable as $key => $resp){
+              $dashBoard['called_open_by_responsability'][$key]['callers'] = SubCaller::where(['status' => 'open', 'type' => $resp])->orderby('created_at', 'ASC')->get();
+              $dashBoard['called_open_by_responsability'][$key]['total'] = $dashBoard['called_open_by_responsability'][$key]['callers']->count();
+          }
+
+        //Chamados Abertos na Operadora sem Protocolo e Prazo
+        $dashBoard['called_without_protocol'] =  $dashBoard['called_open_by_responsability']['Operadora']['callers']->filter(function($item, $key){
+            return $item->call_telecommunications_company_number == '' && $item->deadline = '';
+        });
 
         //Chamados Abertos pelo usuário logado
-        $dashBoard['my_callers'] = Called::where(['id_user_open' => Auth::user()->id])->whereBetween('status', [2,6])->get();
+        $dashBoard['my_callers'] = Called::with(['link', 'subCallers'])
+                                    ->where(['id_user_open' => Auth::user()->id])
+                                    ->whereBetween('status', [2,6])->orderby('created_at', 'DESC')->get();
 
         return view('home', [
             'dashboard' => $dashBoard

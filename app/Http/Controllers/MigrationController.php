@@ -110,11 +110,19 @@ class MigrationController extends Controller
                 $esta = Establishment::where(['establishment_code' => $circuito->cir_loja])->first();
 
                 if($esta != null){
+
                     $link = new Links();
                     $link->establishment_id = $esta->id;
                     $link->type_link = ($circuito->cir_oper == 'CENTURYLINK' ? 'SDWAN' : $circuito->cir_link);
                     $link->bandwidth = $circuito->cir_band;
-                    $link->link_identification = $circuito->cir_desig;
+
+                    $identificationLink = ($circuito->cir_oper == 'CENTURYLINK' && preg_match('/65/', $circuito->cir_ip_link) ? $circuito->cir_desig . ' - (Wan 1)' : (
+                        $circuito->cir_oper == 'CENTURYLINK' && preg_match('/66/', $circuito->cir_ip_link) ? $circuito->cir_desig . ' - (Wan 2)' : (
+                            $circuito->cir_oper == 'CENTURYLINK' && preg_match('/67/', $circuito->cir_ip_link) ? $circuito->cir_desig . ' - (Wan 3)' : $circuito->cir_desig
+                        )
+                    ) );
+
+                    $link->link_identification = $identificationLink;
                     $link->telecommunications_company = $circuito->cir_oper;
                     $link->monitoring_ip = $circuito->cir_ip_link;
                     $link->installed_router_model = $circuito->cir_model_router;
@@ -122,7 +130,7 @@ class MigrationController extends Controller
                     $link->local_ip_router = $circuito->cir_ip_lan_router ?? '0.0.0.0';
                     $link->status = ($esta->establishment_status == 'open' ? 'active' : 'inactive');
 
-                    $link->save();
+                   $link->save();
                 }
 
             }
@@ -145,44 +153,50 @@ class MigrationController extends Controller
         while(($data = fgetcsv( $file, 200, '#')) !== false){
 
             $line = array_filter(explode(';', $data[0]));
-            $establishment = Establishment::where('establishment_code', '=', $line[0])->where('establishment_status', '=', 'open')->first();
-            if(count($establishment) >= 1){
-                $links = $establishment->links()->where('link_identification', '=', $line[1])->get();
 
-                if(count($links) >= 1){
-                    continue;
-                }else{
+            if(count($line) > 2){
 
-                    for($i = 2; $i <= 3; $i++){
-                        $newLink = new Links();
-                        $newLink->bandwidth = '4MB';
-                        $newLink->link_identification = $line[1] ?? '#ND';
-                        $newLink->telecommunications_company = 'CENTURYLINK';
-                        $newLink->monitoring_ip = $line[$i] ?? '0.0.0.0';
-                        $newLink->local_ip_router = '0.0.0.0';
-                        $newLink->installed_router_model = 'FortiGate 60E';
-                        $newLink->status = 'active';
-                        $newLink->establishment_id = $establishment->id;
+                $establishment = Establishment::where('establishment_code', '=', $line[0])->where('establishment_status', '=', 'open')->first();
 
-                        DB::beginTransaction();
+                if($establishment){
+                    $links = $establishment->links()->where('link_identification', '=', $line[1])->get();
 
-                        try {
-                            $newLink->save();
+                    if(count($links) >= 1){
+                        continue;
+                    }else{
 
-                        } catch (Exception $e) {
-                            DB::rollback();
-                            dd($e->getMessage());
+                        for($i = 2; $i <= 3; $i++){
+                            $newLink = new Links();
+                            $newLink->bandwidth = '4MB';
+
+                            $identificationLink = (preg_match('/65/',  $line[$i] ) ? $line[1] . ' - (Wan 1)' : (
+                                preg_match('/66/',  $line[$i] ) ? $line[1] . ' - (Wan 2)' : (
+                                     preg_match('/67/',  $line[$i] ) ? $line[1] . ' - (Wan 3)' : $line[1]
+                                )
+                            ) );
+
+
+                            $newLink->link_identification = $identificationLink ?? '#ND';
+                            $newLink->telecommunications_company = 'CENTURYLINK';
+                            $newLink->type_link = 'SDWAN';
+                            $newLink->monitoring_ip = $line[$i] ?? '0.0.0.0';
+                            $newLink->local_ip_router = $establishment->links()->where(['type_link' => 'MPLS'])->first()->local_ip_router ?? '0.0.0.0';
+                            $newLink->installed_router_model = 'FortiGate 60E';
+                            $newLink->status = 'active';
+                            $newLink->establishment_id = $establishment->id;
+                            try {
+                              $newLink->save();
+
+                            } catch (Exception $e) {
+                                dd($e->getMessage());
+                            }
                         }
                     }
-
-                    DB::commit();
-
                 }
-
             }
-
-
         }
+
+        dump("Terminou");
     }
 
     public function called(){

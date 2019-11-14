@@ -69,6 +69,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('action-take-table', 'ActionTakeController@table');
     Route::resource('notes-establishment', 'NotesEstablishmentController');
     Route::get('notes-establishment-table', 'NotesEstablishmentController@table');
+    Route::get('holyday-manager', 'ConfigController@holyDayManager')->name('config.holyday');
+    Route::get('holyday-manager-table', 'ConfigController@holyDayTable');
+    Route::delete('holyday-manager-delete/{id}', 'ConfigController@removeHolyday');
 
     //Rotas para usuários
     Route::get('users', 'UsersController@index')->name('users.index');

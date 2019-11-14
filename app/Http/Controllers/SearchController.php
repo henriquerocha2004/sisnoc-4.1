@@ -35,7 +35,7 @@ class SearchController extends Controller
     private function searchByEstablishment(){
 
         $this->establishment = Establishment::whereRaw("MATCH (establishment_code, address, neighborhood, city, state, manager_name) against('{$this->term}')")
-                                ->select(['id', 'establishment_code', 'address', 'neighborhood', 'city', 'state', 'manager_name', 'establishment_status'])->take(20)->get();
+                                ->select(['id', 'establishment_code', 'address', 'neighborhood', 'city', 'state', 'manager_name', 'establishment_status', 'holyday'])->take(20)->get();
 
         if(count($this->establishment) == 0){
             $this->searchByLink();

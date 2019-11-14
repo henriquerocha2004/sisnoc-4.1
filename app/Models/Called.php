@@ -72,7 +72,7 @@ class Called extends Model
     }
 
     public function getCreatedAtShowAttribute($value){
-        return DateUtils::convertDataToBR($this->attributes['created_at']);
+        return DateUtils::convertDataToBR($this->attributes['created_at'], true);
     }
 
     public function getStatusShowAttribute(){

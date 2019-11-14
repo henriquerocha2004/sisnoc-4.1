@@ -1,5 +1,10 @@
 @extends('master.master')
 
+@section('title')
+    <title>Sisnoc | Resultados de busca para {{ $term }}</title>
+@endsection
+
+
 @section('content')
 
 <div class="main-content">
@@ -57,8 +62,14 @@
                                                             <small>
 
                                                                 <span class="badge badge-{{ $establishment->establishment_status == 'close' ? 'danger' : 'success' }} float-right mt-1">
-                                                                    {{ $establishment->establishment_status == 'close' ? 'Fechado' : 'Aberto' }} </span>
+                                                                    {{ $establishment->establishment_status == 'close' ? 'Encerrou Atividades' : 'Ativa' }} </span>
                                                             </small>
+                                                            @if($establishment->holyday == date('Y-m-d'))
+                                                                <small>
+                                                                    <span class="badge badge-danger float-right mt-1">
+                                                                        Feriado Local/Nacional </span>
+                                                                </small>
+                                                            @endif
                                                         </strong>
                                                     </div>
                                                     <div class="card-body">

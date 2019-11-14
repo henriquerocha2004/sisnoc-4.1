@@ -1,5 +1,9 @@
 @extends('master.master')
 
+@section('title')
+    <title>Sisnoc | Relatórios </title>
+@endsection
+
 @section('content')
 
 <div class="main-content">

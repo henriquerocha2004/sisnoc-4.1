@@ -1,5 +1,10 @@
 @extends('master.master')
 
+@section('title')
+    <title>Sisnoc | Editar Gerente Regional</title>
+@endsection
+
+
 @section('content')
 
 <div class="main-content">

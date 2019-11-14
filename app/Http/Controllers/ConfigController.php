@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Config;
+use App\Models\Establishment;
 use Exception;
 use Gate;
 use Illuminate\Http\Request;
-
+use Yajra\DataTables\DataTables;
 
 class ConfigController extends Controller
 {
@@ -38,5 +39,26 @@ class ConfigController extends Controller
         } catch (Exception $e) {
             return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Houve uma falha ao salvar as configurações']);
         }
+    }
+
+    public function holyDayManager(){
+        return view('config.holydayManager.index');
+    }
+
+    public function holyDayTable(){
+        $establishment = Establishment::where('holyday', '=', date('Y-m-d'));
+        return DataTables::of($establishment)->make(true);
+    }
+
+    public function removeHolyday($id){
+        try {
+            $establishment = Establishment::find($id);
+            $establishment->holyday = '';
+            $establishment->save();
+            return  response()->json(['result' => true, 'message' => 'Operação feita com sucesso!']);
+        } catch (Exception $e) {
+            return response()->json(['result' => false, 'message' => 'Houve uma falha ao alterar!']);
+        }
+
     }
 }

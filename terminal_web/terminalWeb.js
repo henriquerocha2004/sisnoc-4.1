@@ -19,7 +19,6 @@ var basePath = path.join(require.resolve('xterm'), '..');
   'xterm.js'
 ].forEach(function(f) {
   staticFiles['/' + f] = fs.readFileSync(path.join(basePath, f));
-
 });
 staticFiles['/terminal'] = fs.readFileSync('index.html');
 

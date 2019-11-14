@@ -1,5 +1,10 @@
 @extends('master.master')
 
+@section('title')
+    <title>Sisnoc | Editar Usuário</title>
+@endsection
+
+
 @section('content')
 
 <div class="main-content">
@@ -22,6 +27,7 @@
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="id" value="{{ $user->id }}">
+                                <input type="hidden" name="current_permission" value="{{ auth()->user()->permission }}">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -45,22 +51,25 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="form-control-label"> Permissão: </label>
-                                            <select  name="permission" id="permission" class="form-control {{ ($errors->has('permission') ? 'is-invalid': '') }}">
-                                                 <option value="">Selecione</option>
-                                                 <option value="1" {{ $user->permission == 1 ? 'selected' : (old('permission') == 1 ? 'selected' : '')}}>Administrador</option>
-                                                 <option value="2" {{ $user->permission == 2 ? 'selected' : (old('permission') == 2 ? 'selected' : '')}}>Operador Noc </option>
-                                                 <option value="3" {{ $user->permission == 3 ? 'selected' : (old('permission') == 3 ? 'selected' : '')}}>Visitante</option>
-                                            </select>
-                                             @if($errors->has('permission'))
-                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
-                                                     {{$errors->first('permission')}}
-                                                 @endcomponent
-                                             @endif
-                                         </div>
-                                    </div>
+                                    @can('config-authorization')
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-control-label"> Permissão: </label>
+                                                <select  name="permission" id="permission" class="form-control {{ ($errors->has('permission') ? 'is-invalid': '') }}">
+                                                    <option value="">Selecione</option>
+                                                    <option value="1" {{ $user->permission == 1 ? 'selected' : (old('permission') == 1 ? 'selected' : '')}}>Administrador</option>
+                                                    <option value="2" {{ $user->permission == 2 ? 'selected' : (old('permission') == 2 ? 'selected' : '')}}>Operador Noc </option>
+                                                    <option value="3" {{ $user->permission == 3 ? 'selected' : (old('permission') == 3 ? 'selected' : '')}}>Visitante</option>
+                                                </select>
+                                                @if($errors->has('permission'))
+                                                    @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
+                                                        {{$errors->first('permission')}}
+                                                    @endcomponent
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endcan
+
                                 </div>
                                 <p><b>Alterar a senha Atual:</b></p>
                                 <div class="row">
