@@ -106,6 +106,8 @@ class AuthenticateController extends Controller
             return $item->call_telecommunications_company_number == '' && $item->deadline = '';
         });
 
+        dd(dashBoard['called_without_protocol']);
+
         //Chamados Abertos pelo usuário logado
         $dashBoard['my_callers'] = Called::with(['link', 'subCallers'])
                                     ->where(['id_user_open' => Auth::user()->id])
