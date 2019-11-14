@@ -70,14 +70,19 @@ class CalledController extends Controller
 
         $establishment = Establishment::where(['establishment_code' => $request->establishment_code])->first();
 
+
+
         if ($establishment != null) {
 
+            $idEstablishment = $establishment->id;
             //Verifica se a loja está marcada como feriado
-
-            if($establishment->holyday != date('Y-m-d')){
-                $idEstablishment = $establishment->id;
+            if($establishment->establishment_status == 'close'){
+                $result['message'] = "Essa loja encerrou as atividades!!";
+            }elseif($establishment->holyday == date('Y-m-d')){
+                $result['message'] = "Foi informado Feriado local para esse estabelecimento e não será possível abrir chamado hoje!";
+            }else{
                 $links = Links::select(['id', 'link_identification', 'type_link'])
-                    ->where(['establishment_id' => $idEstablishment])->get();
+                    ->where(['establishment_id' => $idEstablishment, 'status' => 'active'])->get();
 
                 if (count($links) > 0) {
                     $result['response'] = true;
@@ -88,8 +93,6 @@ class CalledController extends Controller
                 } else {
                     $result['message'] = "Esse estabelecimento não possui links cadastrados!";
                 }
-            }else{
-              $result['message'] = "Foi informado Feriado local para esse estabelecimento e não será possível abrir chamado hoje!";
             }
 
         } else {
@@ -539,6 +542,8 @@ class CalledController extends Controller
 
         } catch (Exception $e) {
             DB::rollback();
+
+            dd($e->getMessage(), $e->getLine(), $e->getFile());
             return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
         }
 
@@ -675,7 +680,7 @@ class CalledController extends Controller
         $called->id_problem_cause = $request->id_problem_cause;
         $called->id_user_close = auth()->user()->id;
         $called->status = 1;
-        $called->downtime = DateUtils::calcDowntime($called->hr_down, $called->hr_up);
+        $called->downtime = DateUtils::calcDowntime($called->hr_down, $request->hr_up);
         $called->work_downtime = DateUtils::calcWorkDowntime($called->hr_up, $called->hr_down, $called->downtime);
 
         return $called->save();

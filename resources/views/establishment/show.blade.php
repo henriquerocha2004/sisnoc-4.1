@@ -1,5 +1,9 @@
 @extends('master.master')
 
+@section('title')
+    <title>Sisnoc | Dados da Loja {{ $establishment->establishment_code }}</title>
+@endsection
+
 @section('content')
 
 @section('css')

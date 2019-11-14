@@ -1,5 +1,9 @@
 @extends('master.master')
 
+@section('title')
+    <title>Sisnoc | Nova Ação para o Chamado: {{ $called->caller_number }}</title>
+@endsection
+
 @section('content')
 
 <div class="main-content">
@@ -14,7 +18,7 @@
                     @endif
                     <div class="card">
                         <div class="card-header" style="background-color: skyblue">
-                                <strong>Nova Ação do Chamado: </strong> {{$called->caller_number}}
+                                <strong>Nova Ação do Chamado: </strong> {{ $called->caller_number }}
 
                                 <div class="pull-right">
                                     <small style="color:red" class="text-right"><i>*</i> Campos Obrigatórios</small>

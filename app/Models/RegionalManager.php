@@ -28,7 +28,6 @@ class RegionalManager extends Model
     {
 
         $collect = collect($this->establishments()->select('id')->get()->toArray())->pluck('id');
-
         $ids = null;
 
         foreach ($collect as $value) {

@@ -9,7 +9,7 @@
     <meta name="author" content="Henrique Rocha">
     <meta name="csrf-token" content="{{csrf_token()}}">
     <!-- Title Page-->
-    <title></title>
+    @yield('title')
 
     <!-- Fontfaces CSS-->
     <link href="{{asset('/css/fonts.css')}}" rel="stylesheet" media="all">

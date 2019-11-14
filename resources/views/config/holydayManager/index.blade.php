@@ -1,10 +1,5 @@
 @extends('master.master')
 
-@section('title')
-    <title>Sisnoc | Lista de Gerentes Regionais</title>
-@endsection
-
-
 @section('content')
 
 <div class="main-content">
@@ -13,28 +8,18 @@
                 <div class="row">
                         <div class="col-md-12">
                             <!-- DATA TABLE -->
-                            <h3 class="title-5 m-b-35">Gerentes Regional</h3>
+                            <h3 class="title-5 m-b-35">Ajustes Feriados</h3>
                             @if (session('alert'))
                                 @component('compoments.message', ['type' => session('alert')['messageType']])
                                     {{session('alert')['message']}}
                                 @endcomponent
                             @endif
-
-                            <div class="table-data__tool">
-                                <div class="table-data__tool-right">
-                                    <a href="{{route('regionalManager.create')}}" class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                        <i class="zmdi zmdi-plus"></i>Cadastrar</a>
-                                </div>
-                            </div>
                             <div class="table-responsive table-responsive-data2">
                                 <table class="table table-data2">
                                     <thead>
                                         <tr>
-                                            <th>Nome</th>
-                                            <th>Contato</th>
-                                            <th>Email</th>
-                                            <th>Status</th>
-                                            <th>Opções</th>
+                                            <th>Loja</th>
+                                            <th>Ação</th>
                                         </tr>
                                     </thead>
 
@@ -60,17 +45,14 @@
                     autoWidth: false,
                     processing: true,
                     serverSide: true,
-                    ajax: "{!! url('table-regional-manager')!!}",
+                    ajax: "{!! url('holyday-manager-table')!!}",
                     columns: [
-                        {data: 'name', name: 'name'},
-                        {data: 'contact', name: 'contact'},
-                        {data: 'email', name: 'email'},
-                        {data: 'status', name: 'status'},
+                        {data: 'establishment_code', name: 'establishment_code'},
                         {data: 'id', render: function (data, type, row, meta) {
                             return `
                                 <div class="table-data-feature">
-                                    <a class="item" href="{!! url('regionalManager') !!}/${data}/edit" data-toggle="tooltip" data-placement="top" title="Editar">
-                                        <i class="zmdi zmdi-edit"></i>
+                                    <a class="item" id="btn-delete" data-id-delete="${data}" href="#" data-toggle="tooltip" data-placement="top" title="Editar">
+                                        <i class="zmdi zmdi-delete"></i>
                                     </a>
                                 </div>
                             `;
@@ -79,6 +61,40 @@
 
                     ]
             });
+
+            $(".table-data2").on('click', '#btn-delete',function(){
+
+                var idCause = $(this).attr('data-id-delete');
+
+                $.confirm({
+                    title: 'Aviso | Sisnoc',
+                    content: 'Tem Certeza que deseja fazer isso?',
+                    type: 'red',
+                    buttons: {
+                        SIM: function () {
+
+                           $.ajax({
+                               url: '{{ url('holyday-manager-delete') }}/'+idCause,
+                               type: 'DELETE',
+                               success: function(rs){
+                                $.alert({
+                                    title: 'Aviso | Sisnoc',
+                                    type: (rs.result == true ? 'blue' : 'red'),
+                                    content: rs.message
+                                });
+                               }
+                           });
+
+                           window.location.reload();
+
+                        },
+                        Não: function () {},
+                    }
+                });
+
+            });
+
+
         });
     </script>
 @endsection

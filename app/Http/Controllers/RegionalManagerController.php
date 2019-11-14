@@ -134,8 +134,8 @@ class RegionalManagerController extends Controller
         }
 
 
-        $regionalManager = RegionalManager::find($id);
-        $establishments = Establishment::select(['id', 'establishment_code', 'state'])->orderBy('establishment_code')->get();
+        $regionalManager = RegionalManager::with('establishments')->find($id);
+        $establishments = Establishment::select(['id', 'establishment_code', 'state'])->where(['establishment_status' => 'open'])->orderBy('establishment_code')->get();
 
         return view('regionalManager.edit', [
             'regionalManager' => $regionalManager,
