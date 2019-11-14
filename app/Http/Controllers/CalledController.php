@@ -53,7 +53,7 @@ class CalledController extends Controller
                     'called.status',
                     'users.name'
                 ]
-            );
+            )->orderBy('called.created_at', 'DESC');
         return DataTables::of($calleds)->make(true);
     }
 
