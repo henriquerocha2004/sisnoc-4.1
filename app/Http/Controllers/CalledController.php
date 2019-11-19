@@ -586,7 +586,7 @@ class CalledController extends Controller
         $subcaller = SubCaller::find($request->subcallerId);
 
         $note = $this->setNotes($request, $subcaller);
-        $note['user'] = $note->subCaller()->first()->user()->first()->name;
+        $note['user'] = $note->user()->first()->name;
 
         if(!$note){
             return response()->json(['result' => false, 'message' => 'Houve uma falha ao salvar a nota!']);
@@ -758,6 +758,7 @@ class CalledController extends Controller
         $notes = new Notes();
         $notes->id_sub_caller = $subcaller->id;
         $notes->content = $request->content;
+        $notes->id_user = auth()->user()->id;
 
         if($notes->save()){
             return $notes;

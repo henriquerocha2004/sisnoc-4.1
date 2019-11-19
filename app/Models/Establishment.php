@@ -77,4 +77,8 @@ class Establishment extends Model
     {
         $this->attributes['manager_contact'] = TextUtil::clearText($value);
     }
+
+    public function getEstablishmentStatusShowAttribute(){
+        return ($this->attributes['establishment_status'] == 'open' ? 'Aberta' : 'Fechada');
+    }
 }

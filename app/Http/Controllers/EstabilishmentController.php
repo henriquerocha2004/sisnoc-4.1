@@ -51,7 +51,7 @@ class EstabilishmentController extends Controller
                     'called.status',
                     'users.name'
                 ]
-            )->where(['establishment.id' => $request->id]);
+            )->where(['establishment.id' => $request->id])->orderBy('called.status', 'DESC');
         return DataTables::of($calleds)->make(true);
     }
 
