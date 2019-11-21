@@ -20,6 +20,10 @@ class Notes extends Model
         return $this->belongsTo(SubCaller::class, 'id_sub_caller', 'id');
     }
 
+    public function user(){
+        return $this->belongsTo(User::class, 'id_user', 'id');
+    }
+
     //Access
     public function getCreatedAtAttribute($value){
         return DateUtils::convertDataToBR($value, true);

@@ -1,13 +1,13 @@
 {
-    "/css/fonts.css": "/css/fonts.css?id=dd0e74a7f39e4d15f557",
-    "/css/vendor.css": "/css/vendor.css?id=bb8f99ec9be03710653a",
-    "/css/theme.css": "/css/theme.css?id=85b293330421079d1974",
-    "/css/login.css": "/css/login.css?id=69a0f4e1d0ae99e047d9",
-    "/js/vendors.js": "/js/vendors.js?id=729540f29a96f69b8566",
+    "/css/fonts.css": "/css/fonts.css?id=c81a94788a5f58c4b489",
+    "/css/vendor.css": "/css/vendor.css?id=094ee6c0f2f532713919",
+    "/css/theme.css": "/css/theme.css?id=07db6771fef15fc2dfaa",
+    "/css/login.css": "/css/login.css?id=4c9dd32adaba3e09cdcb",
+    "/js/vendors.js": "/js/vendors.js?id=60e6dba7adc420d18cec",
     "/js/datatables.js": "/js/datatables.js?id=ad95fcbfbf1442e29439",
-    "/js/main.js": "/js/main.js?id=ade54eabb55996314add",
-    "/js/caller/callerEdit.js": "/js/caller/callerEdit.js?id=a96609445ddd5c521dde",
-    "/js/echo/echo.js": "/js/echo/echo.js?id=417154a8b5166f2287cf",
-    "/js/echo/echo.iife.js": "/js/echo/echo.iife.js?id=afef0d9d7a80282a0bfd",
+    "/js/main.js": "/js/main.js?id=26f439d6c3fec4a86360",
+    "/js/caller/callerEdit.js": "/js/caller/callerEdit.js?id=e99a2d690d96ae584fbf",
+    "/js/echo/echo.js": "/js/echo/echo.js?id=d41d8cd98f00b204e980",
+    "/js/echo/echo.iife.js": "/js/echo/echo.iife.js?id=d41d8cd98f00b204e980",
     "/l10n/pt.js": "/l10n/pt.js?id=31ed33e19d10d4fd24e4"
 }

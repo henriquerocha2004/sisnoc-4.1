@@ -115,7 +115,7 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>{{$establishment->establishment_status}}</td>
+                                                <td>{{$establishment->establishment_status_show}}</td>
                                                 <td>{{$establishment->opening_hours}}</td>
                                                 <td>{{$establishment->manager_name}}</td>
                                                 <td>{{$establishment->manager_contact}}</td>

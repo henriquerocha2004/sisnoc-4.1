@@ -53,7 +53,7 @@ $(function(){
             $.get(routes.insertNotes, dados, function(response){
 
                 if(response.result){
-
+                    console.log(response);
                     $("#btn-notes").append(
                        `<button type="button" data-id-note="${response.note.id}" class="btn btn-sm btn-success btn-notes mb-2"><i class="fa fa-sticky-note"></i> Nota de ${response.note.user}<br><small>${response.note.created_at}</small></button>`
                     );

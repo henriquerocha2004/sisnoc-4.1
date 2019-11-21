@@ -48,7 +48,7 @@
                                         <div class="form-group">
                                             <label for="id_link" class=" form-control-label">Tipo de link<i style="color:red">*</i></label>
                                             <select  name="id_link" id="id_link" class="form-control {{ ($errors->has('id_link') ? 'is-invalid': '') }}">
-                                                <option selected value="{{$called->id_link}}">{{$called->link()->first()->type_link}}</option>
+                                                <option selected value="{{$called->id_link}}">{{ $called->link()->first()->type_link }} - {{ $called->link()->first()->link_identification }}</option>
                                             </select>
                                             @if($errors->has('id_link'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
@@ -191,7 +191,7 @@
                                             <label class="form-control-label"> Observações </label><br>
                                             @if (!empty($lastSubCaller->notes))
                                                 @foreach ($lastSubCaller->notes as $note)
-                                                    <button type="button" data-id-note="{{$note->id}}" class="btn btn-sm btn-success btn-notes mb-2"><i class="fa fa-sticky-note"></i> Nota de {{ $note->subCaller()->first()->user()->first()->name }}<br><small>{{$note->created_at}}</small></button>
+                                                    <button type="button" data-id-note="{{$note->id}}" class="btn btn-sm btn-success btn-notes mb-2"><i class="fa fa-sticky-note"></i> Nota de {{ $note->user()->first()->name }}<br><small>{{$note->created_at}}</small></button>
                                                 @endforeach
                                             @endif
                                         </div>

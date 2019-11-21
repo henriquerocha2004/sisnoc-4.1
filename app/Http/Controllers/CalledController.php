@@ -80,6 +80,8 @@ class CalledController extends Controller
                 $result['message'] = "Essa loja encerrou as atividades!!";
             }elseif($establishment->holyday == date('Y-m-d')){
                 $result['message'] = "Foi informado Feriado local para esse estabelecimento e não será possível abrir chamado hoje!";
+            }elseif($establishment->energy_fault == 1){
+                $result['message'] = "Essa loja está com falta de energia e já existe chamado aberto para esse problema!";
             }else{
                 $links = Links::select(['id', 'link_identification', 'type_link'])
                     ->where(['establishment_id' => $idEstablishment, 'status' => 'active'])->get();
@@ -486,8 +488,15 @@ class CalledController extends Controller
                     $subCallers = $called->subCallers()->get();
                     $closeSubCallers = $this->closeAllSubCallers($subCallers, $request);
 
+
                     if(!$closeSubCallers){
                         new Exception("Houve uma falha ao fechar o sub-chamado!");
+                    }
+
+                    $removeEnergyFault = $this->removeEnergyFault($called->establishment()->first()->id);
+
+                    if(!$removeEnergyFault){
+                        new Exception("Houve uma falha interna");
                     }
 
                     $closeCalled = $this->setCloseCalled($called, $request);
@@ -499,6 +508,12 @@ class CalledController extends Controller
                 case '9':
                     $subCaller = SubCaller::find($request->lastSubcallerId);
                     $closeSubCaller = $this->setCloseSubCaller($subCaller, $request, $id);
+
+                    $removeEnergyFault = $this->removeEnergyFault($called->establishment()->first()->id);
+
+                    if(!$removeEnergyFault){
+                        new Exception("Houve uma falha interna");
+                    }
 
                     if(!$closeSubCaller){
                         new Exception("Houve uma falha ao fechar o sub-chamado!");
@@ -514,6 +529,12 @@ class CalledController extends Controller
                 break;
                 case '7':
                     $cancel = $this->setCancel($id);
+
+                    $removeEnergyFault = $this->removeEnergyFault($called->establishment()->first()->id);
+
+                    if(!$removeEnergyFault){
+                        new Exception("Houve uma falha interna");
+                    }
 
                     if(!$cancel){
                         throw new Exception("Houve uma falha ao cancelar o chamado");
@@ -565,7 +586,7 @@ class CalledController extends Controller
         $subcaller = SubCaller::find($request->subcallerId);
 
         $note = $this->setNotes($request, $subcaller);
-        $note['user'] = $note->subCaller()->first()->user()->first()->name;
+        $note['user'] = $note->user()->first()->name;
 
         if(!$note){
             return response()->json(['result' => false, 'message' => 'Houve uma falha ao salvar a nota!']);
@@ -629,7 +650,16 @@ class CalledController extends Controller
     private function setEnergyFault(SubCaller $subcaller, $request, $idCalled)
     {
         $subcaller->type = 5;
-        return $subcaller->save();
+        $establishment = Establishment::where('establishment_code', '=', $request->establishment_code)->first();
+        $establishment->energy_fault = 1;
+        try {
+            $subcaller->save();
+            $establishment->save();
+            return true;
+        } catch (Exception $e) {
+           throw new Exception($e->getMessage());
+        }
+
     }
 
     private function setDebtor(SubCaller $subcaller, $request, $idCalled)
@@ -728,6 +758,7 @@ class CalledController extends Controller
         $notes = new Notes();
         $notes->id_sub_caller = $subcaller->id;
         $notes->content = $request->content;
+        $notes->id_user = auth()->user()->id;
 
         if($notes->save()){
             return $notes;
@@ -751,4 +782,11 @@ class CalledController extends Controller
 
         return true;
     }
+
+    private function removeEnergyFault($idEstablishment){
+        $establishment = Establishment::find($idEstablishment);
+        $establishment->energy_fault = 0;
+        $establishment->save();
+    }
+
 }

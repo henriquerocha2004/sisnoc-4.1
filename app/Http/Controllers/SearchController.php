@@ -22,7 +22,6 @@ class SearchController extends Controller
         if((empty($this->establishment) || count($this->establishment) == 0 ) && (empty($this->called) || count($this->called) == 0)){
             return redirect()->route('home')->with('alert', ['messageType' => 'danger', 'message' => 'Não Encontramos resultados com o termo ultilizado']);
         }else{
-
             return view('search.search', [
                 'term' => $this->term,
                 'establishments' => $this->establishment,
@@ -35,7 +34,7 @@ class SearchController extends Controller
     private function searchByEstablishment(){
 
         $this->establishment = Establishment::whereRaw("MATCH (establishment_code, address, neighborhood, city, state, manager_name) against('{$this->term}')")
-                                ->select(['id', 'establishment_code', 'address', 'neighborhood', 'city', 'state', 'manager_name', 'establishment_status', 'holyday'])->take(20)->get();
+                                ->select(['id', 'establishment_code', 'address', 'neighborhood', 'city', 'state', 'manager_name', 'establishment_status', 'holyday', 'energy_fault'])->take(20)->get();
 
         if(count($this->establishment) == 0){
             $this->searchByLink();
