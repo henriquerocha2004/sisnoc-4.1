@@ -4,7 +4,8 @@ $(function(){
     var statusSubcaller = null;
 
     //Verify if exists return of validation
-    if($('#establishment_code').val() !== ''){
+    if($('#establishment_code').val() != ''){
+        console.log($('#establishment_code').val());
         $.get(routes.getLinksEstablishment, {establishment_code: $('#establishment_code').val()}, function(r){
             if(r.response){
                 popoverData = r;

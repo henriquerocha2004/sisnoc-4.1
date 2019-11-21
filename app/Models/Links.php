@@ -17,7 +17,8 @@ class Links extends Model
         'installed_router_model',
         'local_ip_router',
         'establishment_id',
-        'serial_router'
+        'serial_router',
+        'status'
     ];
 
 
@@ -34,7 +35,7 @@ class Links extends Model
 
     //Metodos acessores e mutantes
 
-    public function getStatusAttribute(){
+    public function getStatusShowAttribute(){
         return $this->attributes['status'] = ($this->attributes['status'] == 'active' ? 'Ativo' : 'Inativo');
     }
 }

@@ -115,7 +115,7 @@ class RegionalManagerController extends Controller
         } catch (Exception $e) {
 
             DB::rollback();
-            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
+            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => 'Falha ao salvar o regional']);
         }
     }
 
@@ -199,7 +199,7 @@ class RegionalManagerController extends Controller
             return redirect()->route('regionalManager.index')->with('alert', ['messageType' => 'success', 'message' => 'Gerente Regional atualizado com sucesso!']);
         } catch (Exception $e) {
             DB::rollback();
-            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
+            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => 'Falha ao atualizar o regional']);
         }
     }
 }

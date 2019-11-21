@@ -102,7 +102,7 @@ class EstabilishmentController extends Controller
             return redirect()->route('estabilishment.index')->with('alert', ['messageType' => 'success', 'message' => 'Estabelecimento Cadastrado com sucesso!']);
 
         } catch (Exception $e) {
-            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
+            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => 'Falha ao salvar o estabelecimento']);
         }
 
     }
@@ -182,7 +182,7 @@ class EstabilishmentController extends Controller
 
         } catch (Exception $e) {
             DB::rollback();
-            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
+            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => 'Falha ao atualizar o estabelecimento']);
         }
     }
 

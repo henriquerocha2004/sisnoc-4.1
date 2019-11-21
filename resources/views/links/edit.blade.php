@@ -124,10 +124,12 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="status" class=" form-control-label">Status<i style="color:red">*</i></label>
+                                        
                                            <select  name="status" id="status" class="form-control {{ ($errors->has('status') ? 'is-invalid': '') }}">
+                                                   
                                                     <option value="">Selecione</option>
-                                                    <option value="active" {{(old('status') == 'active' ? 'selected' : ($link->status == 'Ativo' ? 'selected' : ''))}} >Ativado</option>
-                                                    <option value="inactive" {{(old('status') == 'inactive' ? 'selected' : ($link->status == 'Ativo' ? 'selected' : ''))}} >Desativado</option>
+                                                    <option value="active" {{(old('status') == 'active' ? 'selected' : ($link->status == 'active' ? 'selected' : ''))}} >Ativado</option>
+                                                    <option value="inactive" {{(old('status') == 'inactive' ? 'selected' : ($link->status == 'inactive' ? 'selected' : ''))}} >Desativado</option>
                                                 </select>
                                                  @if($errors->has('status'))
                                                     @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])

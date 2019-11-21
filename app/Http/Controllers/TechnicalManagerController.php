@@ -119,7 +119,7 @@ class TechnicalManagerController extends Controller
         } catch (Exception $e) {
 
             DB::rollback();
-            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
+            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => 'Falha ao salvar o técnico!']);
         }
     }
 
@@ -131,8 +131,6 @@ class TechnicalManagerController extends Controller
      */
     public function edit($id)
     {
-
-
         if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
             return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
         }
@@ -204,7 +202,7 @@ class TechnicalManagerController extends Controller
             return redirect()->route('technicalManager.index')->with('alert', ['messageType' => 'success', 'message' => 'Responsável Tecnico atualizado com sucesso!']);
         } catch (Exception $e) {
             DB::rollback();
-            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
+            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => 'Falha ao atualizar o técnico']);
         }
     }
 }

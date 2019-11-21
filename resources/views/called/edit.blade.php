@@ -346,7 +346,7 @@
                         <div class="card-footer">
                             @can('manager-establishment-regionalManager-links-caller-create-reports')
                                 @if($called->status != 1 && $called->status != 7)
-                                    <button id="btn-save" type="submit" disabled class="btn btn-primary btn-sm disabled">
+                                    <button id="btn-save" type="submit" class="btn btn-primary btn-sm">
                                         <i class="fa fa-dot-circle-o"></i> Salvar
                                     </button>
                                 @endif

@@ -13,7 +13,7 @@ use Yajra\DataTables\Facades\DataTables;
 class LinksController extends Controller
 {
 
-    private $typeLink = ['MPLS', 'ADSL', 'XDSL', 'IPConnect', 'Radio', 'SDWAN'];
+    private $typeLink = ['MPLS', 'ADSL', 'XDSL', 'IPConnect', 'Radio', 'SDWAN', '4G'];
 
     /**
      * Display a listing of the resource.
@@ -95,7 +95,7 @@ class LinksController extends Controller
             return redirect()->route('links.index')->with('alert', ['messageType' => 'success', 'message' => 'Link cadastrado com sucesso!']);
 
         } catch (Exception $e) {
-            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
+            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => 'Falha ao cadastrar o link']);
         }
     }
 
@@ -131,7 +131,6 @@ class LinksController extends Controller
      */
     public function update(LinksRequest $request, $id)
     {
-
         if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
             return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
         }
@@ -147,7 +146,7 @@ class LinksController extends Controller
             return redirect()->route('links.index')->with('alert', ['messageType' => 'success', 'message' => 'Link atualizado com sucesso!']);
 
         } catch (Exception $e) {
-            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
+            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => 'Falha ao atualizar o link!']);
         }
     }
 }

@@ -70,8 +70,6 @@ class CalledController extends Controller
 
         $establishment = Establishment::where(['establishment_code' => $request->establishment_code])->first();
 
-
-
         if ($establishment != null) {
 
             $idEstablishment = $establishment->id;
@@ -290,7 +288,7 @@ class CalledController extends Controller
             return redirect()->route('called.index')->with('alert', ['messageType' => 'success', 'message' => 'Chamado nº ' . $called->caller_number . ' gerado com sucesso!']);
         } catch (Exception $e) {
             DB::rollback();
-            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
+            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => 'Falha ao salvar o chamado!']);
         }
     }
 
@@ -393,7 +391,7 @@ class CalledController extends Controller
 
         } catch (Exception $e) {
             DB::rollback();
-            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
+            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => 'Falha ao salvar o chamado!']);
         }
     }
 
@@ -565,7 +563,7 @@ class CalledController extends Controller
             DB::rollback();
 
             dd($e->getMessage(), $e->getLine(), $e->getFile());
-            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => $e->getMessage()]);
+            return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => 'Falha ao atualizar o chamado!']);
         }
 
     }
