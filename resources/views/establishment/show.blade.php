@@ -173,7 +173,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($establishment->links()->get() as $link)
+                                                @foreach ($establishment->links()->where(['status' => 'active'])->get() as $link)
                                                 <tr data-id-link="{{$link->id}}">
                                                     <td><a style="color: #666; text-decoration: underline" href="{{route('links.edit', [$link->id])}}">{{$link->type_link}}</a></td>
                                                     <td>{{$link->link_identification}}</td>
