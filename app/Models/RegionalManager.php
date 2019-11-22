@@ -26,15 +26,8 @@ class RegionalManager extends Model
 
     public function idEstablishments()
     {
-
-        $collect = collect($this->establishments()->select('id')->get()->toArray())->pluck('id');
-        $ids = null;
-
-        foreach ($collect as $value) {
-            $ids['ids'][] = $value;
-        }
-
-        return $ids;
+        $idsEstablishments = $this->establishments()->select('id')->get()->pluck('id')->all();
+        return $idsEstablishments;
     }
 
     public function createDefaultRegional()

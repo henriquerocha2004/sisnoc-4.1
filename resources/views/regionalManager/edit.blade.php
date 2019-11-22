@@ -67,24 +67,13 @@
                                         <div class="row">
                                             <h3 class="title-5 col-md-6">Estabelecimentos associados:</h3>
                                         </div>
-                                        <input type="hidden" name="selected_establishment" value="{{old('selected_establishment') ?? count($regionalManager->idEstablishments()['ids'])}}">
+                                        <input type="hidden" name="selected_establishment" value=" {{  count(old('selected_establishment', $regionalManager->idEstablishments())) }}">
                                         <div class="row">
                                             <div class="col col-md-9 mt-2">
                                                 <select name="establishment_code[]" id="establishment_code" multiple="" class="form-control {{ ($errors->has('selected_establishment') ? 'is-invalid': '') }}">
-                                                    @foreach ($establishments as $establishment)
-                                                        @if (old('establishment_code') || $regionalManager->establishments()->get())
-                                                            @foreach (old('establishment_code') ?? $regionalManager->idEstablishments()['ids'] as $code)
-                                                                @php
-                                                                   $selected = ($establishment->id == $code ? 'selected' : '');
-                                                                   if($selected == 'selected')
-                                                                        break;
-                                                                @endphp
-                                                            @endforeach
-                                                            <option value="{{$establishment->id}}" {{$selected}}>{{$establishment->establishment_code}} - {{$establishment->state}}</option>
-                                                        @else
-                                                            <option value="{{$establishment->id}}" >{{$establishment->establishment_code}} - {{$establishment->state}}</option>
-                                                        @endif
-                                                    @endforeach
+                                                        @foreach ($establishments as $establishment)
+                                                                <option value="{{$establishment->id}}" {{ (in_array($establishment->id, old('establishment_code') ?? $regionalManager->idEstablishments()) ? 'selected' : '') }} >{{$establishment->establishment_code}} - {{$establishment->state}}</option>
+                                                        @endforeach
                                                 </select>
                                                  @if($errors->has('selected_establishment'))
                                                     @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])

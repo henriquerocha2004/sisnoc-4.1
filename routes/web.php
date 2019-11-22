@@ -81,26 +81,15 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('users/{id}', 'UsersController@update')->name('users.update');
     Route::get('table-users', 'UsersController@table');
 
-    //Rota para migração
-    Route::get('migracao', 'MigrationController@lojas')->name('migracao');
-
     //Rotas para Busca
     Route::post('search', 'SearchController@search')->name('search');
 
+    //Rotas para relatórios
     Route::get('reports', 'ReportsController@index')->name('reports');
     Route::post('reports/disponibility', 'ReportsController@disponibility')->name('reports.disponibility');
     Route::post('reports/callers-teleCompany', 'ReportsController@callersTeleCompany')->name('reports.callersTeleCompany');
     Route::post('reports/callers-otrs', 'ReportsController@callersOtrs')->name('reports.callersOtrs');
     Route::post('reports/callers-semep', 'ReportsController@semep')->name('reports.semep');
     Route::post('reports/links', 'ReportsController@links')->name('reports.links');
-
-
-    //rotas de migração
-    Route::get('migration/regional-manager', 'MigrationController@RegionalManager');
-    Route::get('migration/technical', 'MigrationController@TecnicalManager');
-    Route::get('migration/establishment', 'MigrationController@establishment');
-    Route::get('migration/links', 'MigrationController@links');
-    Route::get('migration/sdwan', 'MigrationController@importSDWAN');
-    Route::get('migration/called', 'MigrationController@called');
 
 });

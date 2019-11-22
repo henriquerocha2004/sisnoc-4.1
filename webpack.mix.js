@@ -64,7 +64,6 @@ mix
         'node_modules/jquery-confirm/dist/jquery-confirm.min.js',
         'node_modules/flatpickr/dist/flatpickr.min.js',
         'resources/CoolAdmin-master/vendor/Checkbox2Button/js/checkbox2button.min.js',
-        'node_modules/pusher-js/dist/web/pusher.min.js',
     ], 'public/js/vendors.js')
     .scripts([
         'node_modules/datatables.net/js/jquery.dataTables.min.js',
