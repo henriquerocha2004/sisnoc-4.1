@@ -57,7 +57,7 @@ class CalledRequest extends FormRequest
             'actionsTaken' => 'required|min:1',
             'next_action' => 'required|numeric',
             'otrs' => 'required_if:next_action, 3',
-            'sisman' => 'required_if:next_action,4',
+            'semep' => 'required_if:next_action,4',
             'hr_up' => 'required_if:next_action,1',
             'call_telecommunications_company' => 'required_if:next_action,10',
             'deadline' => 'required_if:next_action, 10',
