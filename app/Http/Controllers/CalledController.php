@@ -662,7 +662,7 @@ class CalledController extends Controller
 
     private function setDebtor(SubCaller $subcaller, $request, $idCalled)
     {
-        $subcaller->type = 8;
+        $subcaller->type = 6;
         return $subcaller->save();
     }
 
