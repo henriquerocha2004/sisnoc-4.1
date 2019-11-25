@@ -94,11 +94,16 @@ class ReportsController extends Controller
 
             $dataSource = Links::join('called', 'called.id_link', '=','links.id')
                     ->join('sub_caller', 'sub_caller.id_caller', '=', 'called.id')
-                    ->where('links.type_link', '=', $request->link)
                     ->where('sub_caller.type', '=', 2)
                     ->where('sub_caller.status', '=', 'open')
                     ->select(DB::raw("distinct(sub_caller.id_caller)"), 'called.caller_number', 'links.type_link',
-                    'sub_caller.call_telecommunications_company_number', 'sub_caller.deadline')->get();
+                    'sub_caller.call_telecommunications_company_number', 'sub_caller.deadline');
+
+            if($request->link != 'ALL'){
+                $dataSource->where('links.type_link', '=', $request->link);
+            }
+
+            $dataSource = $dataSource->get();
 
             $header = [
                 ['Chamados Abertos para a Operadora'],
