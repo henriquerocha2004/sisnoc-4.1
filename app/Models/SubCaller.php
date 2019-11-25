@@ -72,7 +72,7 @@ class SubCaller extends Model
     }
 
     public function getTypeShowAttribute($value){
-        return ($this->attributes['type'] == 2 ? 'Operadora' : ($this->attributes['type'] == 3 ? 'Otrs (Técnico)' : ($this->attributes['type'] == 4 ? 'Semep' : ($this->attributes['type'] == 5 ? 'Energia' : ($this->attributes['type'] == 8 ? 'Inadiplência' : $this->attributes['type'])))));
+        return ($this->attributes['type'] == 2 ? 'Operadora' : ($this->attributes['type'] == 3 ? 'Otrs (Técnico)' : ($this->attributes['type'] == 4 ? 'Semep' : ($this->attributes['type'] == 5 ? 'Energia' : ($this->attributes['type'] == 6 ? 'Inadiplência' : $this->attributes['type'])))));
     }
 
     public function getCreatedAtAttribute($value)
