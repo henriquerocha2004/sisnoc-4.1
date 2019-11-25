@@ -94,9 +94,10 @@ class ReportsController extends Controller
 
             $dataSource = Links::join('called', 'called.id_link', '=','links.id')
                     ->join('sub_caller', 'sub_caller.id_caller', '=', 'called.id')
+                    ->join('establishment', 'establishment.id', 'called.id_establishment')
                     ->where('sub_caller.type', '=', 2)
                     ->where('sub_caller.status', '=', 'open')
-                    ->select(DB::raw("distinct(sub_caller.id_caller)"), 'called.caller_number', 'links.type_link',
+                    ->select(DB::raw("distinct(sub_caller.id_caller)"),'establishment.establishment_code',  'called.caller_number', 'links.type_link',
                     'sub_caller.call_telecommunications_company_number', 'sub_caller.deadline');
 
             if($request->link != 'ALL'){
@@ -107,7 +108,7 @@ class ReportsController extends Controller
 
             $header = [
                 ['Chamados Abertos para a Operadora'],
-                [ 'Loja', 'Chamado', 'Link', 'Chamado Operadora', 'Prazo de Normalização']];
+                ['#', 'Loja', 'Chamado', 'Link', 'Chamado Operadora', 'Prazo de Normalização']];
 
         return Excel::download(new SpreadSheetExport($dataSource, $header), 'Chamados Abertos Operadora.xlsx');
     }
