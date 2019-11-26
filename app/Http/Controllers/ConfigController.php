@@ -61,4 +61,8 @@ class ConfigController extends Controller
         }
 
     }
+
+    public function updateSystem(){
+        return view('config.updateSystem.index');
+    }
 }
