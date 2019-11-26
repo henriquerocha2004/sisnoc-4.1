@@ -52,7 +52,7 @@
 @section('js')
     <script src="{{asset('js/datatables.js')}}"></script>
     <script>
-
+//tetsttststts
         var term = localStorage.getItem("term-called");
 
         $(function(){

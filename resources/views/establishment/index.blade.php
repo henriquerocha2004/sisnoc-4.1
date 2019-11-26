@@ -55,7 +55,6 @@
     <script src="{{asset('js/datatables.js')}}"></script>
     <script>
         $(function(){
-
             var term = localStorage.getItem("term-establisment");
 
             $('.table-data2').DataTable({
