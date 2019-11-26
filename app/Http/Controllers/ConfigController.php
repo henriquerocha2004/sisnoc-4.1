@@ -65,4 +65,24 @@ class ConfigController extends Controller
     public function updateSystem(){
         return view('config.updateSystem.index');
     }
+
+    public static function checkUpdate(){
+
+      $remote  = (int) shell_exec("cd C:\\xampp\\htdocs\\sisnoc && git rev-list  --remotes --count");
+      $local = (int) shell_exec("cd C:\\xampp\\htdocs\\sisnoc && git rev-list --all --count");
+      $lastCommitInfo = null;
+
+      if(!empty($remote) && !empty($local)){
+          if($remote < $local){
+            exec("cd C:\\xampp\\htdocs\\sisnoc && git rev-list  --remotes --pretty --max-count=1", $lastCommitInfo);
+            $lastCommitInfo = array_filter($lastCommitInfo);
+          }
+      }
+
+
+
+
+    }
+
+
 }
