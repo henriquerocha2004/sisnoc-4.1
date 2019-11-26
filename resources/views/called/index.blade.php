@@ -52,6 +52,9 @@
 @section('js')
     <script src="{{asset('js/datatables.js')}}"></script>
     <script>
+
+        var term = localStorage.getItem("term-called");
+
         $(function(){
             $('.table-data2').DataTable({
                     language: {
@@ -117,6 +120,10 @@
                         }
 
                     ]
+            }).search((term != null ? term : '')).draw();
+
+            $(".table-responsive").on('keyup', 'input[type="search"]', function(){
+                localStorage.setItem('term-called', $(this).val());
             });
         });
     </script>

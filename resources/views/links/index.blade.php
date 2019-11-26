@@ -12,6 +12,7 @@
         <div class="container-fluid">
                 <div class="row">
                         <div class="col-md-12">
+                            <input type="hidden" id="term" value="">
                             <!-- DATA TABLE -->
                             <h3 class="title-5 m-b-35">Links Cadastrados</h3>
                             @if (session('alert'))
@@ -53,6 +54,9 @@
 @section('js')
     <script src="{{asset('js/datatables.js')}}"></script>
     <script>
+
+        var term = localStorage.getItem("term-links");
+
         $(function(){
             $('.table-data2').DataTable({
                     language: {
@@ -80,7 +84,13 @@
                         }
 
                     ]
-            });
+            }).search((term != null ? term : '')).draw();
         });
+
+        $(".table-responsive").on('keyup', 'input[type="search"]', function(){
+            localStorage.setItem('term-links', $(this).val());
+        });
+
+
     </script>
 @endsection

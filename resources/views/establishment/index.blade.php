@@ -55,6 +55,9 @@
     <script src="{{asset('js/datatables.js')}}"></script>
     <script>
         $(function(){
+
+            var term = localStorage.getItem("term-establisment");
+
             $('.table-data2').DataTable({
                     language: {
                       "url": '{!! url('js/traducao-table-pt-br.json') !!}'
@@ -86,6 +89,10 @@
                         }
 
                     ]
+            }).search((term != null ? term : '')).draw();
+
+            $(".table-responsive").on('keyup', 'input[type="search"]', function(){
+                localStorage.setItem('term-establisment', $(this).val());
             });
         });
     </script>

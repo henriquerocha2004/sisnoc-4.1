@@ -30,7 +30,7 @@
                                 <div class="col-md-6">
                                     Informações da <strong>
                                         @can('manager-establishment-regionalManager-links-caller-create-reports')
-                                            <a style="color: #666; text-decoration: underline" href="{{route('estabilishment.edit', [$establishment->id])}}">{{ $establishment->establishment_code }}</a>
+                                            <a style="color: #666; text-decoration: underline" target="_blank"  href="{{route('estabilishment.edit', [$establishment->id])}}">{{ $establishment->establishment_code }}</a>
                                         @else
                                             {{ $establishment->establishment_code }}
                                         @endcan
@@ -175,7 +175,7 @@
                                             <tbody>
                                                 @foreach ($establishment->links()->where(['status' => 'active'])->get() as $link)
                                                 <tr data-id-link="{{$link->id}}">
-                                                    <td><a style="color: #666; text-decoration: underline" href="{{route('links.edit', [$link->id])}}">{{$link->type_link}}</a></td>
+                                                    <td><a style="color: #666; text-decoration: underline" target="_blank" href="{{route('links.edit', [$link->id])}}">{{$link->type_link}}</a></td>
                                                     <td>{{$link->link_identification}}</td>
                                                     <td>{{$link->bandwidth}}</td>
                                                     <td>{{$link->telecommunications_company}}</td>
