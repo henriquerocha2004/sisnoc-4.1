@@ -152,7 +152,6 @@ class RegionalManagerController extends Controller
      */
     public function update(RegionalManagerRequest $request, $id)
     {
-
         if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
             return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
         }
@@ -169,7 +168,7 @@ class RegionalManagerController extends Controller
 
             $idsEstalishmentDB = $regionalManager->idEstablishments();
 
-            $compareNewOld = Utils::getDataOfArraysByComparing($idsEstalishmentDB['ids'], $request->establishment_code);
+            $compareNewOld = Utils::getDataOfArraysByComparing($idsEstalishmentDB, $request->establishment_code);
 
             if ($compareNewOld['delete']) {
                 foreach ($compareNewOld['delete'] as $idDeleted) {
