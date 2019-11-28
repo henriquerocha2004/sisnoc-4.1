@@ -155,7 +155,6 @@ class RegionalManagerController extends Controller
         if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
             return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
         }
-
         DB::beginTransaction();
 
         try {
@@ -197,6 +196,8 @@ class RegionalManagerController extends Controller
 
             return redirect()->route('regionalManager.index')->with('alert', ['messageType' => 'success', 'message' => 'Gerente Regional atualizado com sucesso!']);
         } catch (Exception $e) {
+             dd($e->getMessage());
+
             DB::rollback();
             return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => 'Falha ao atualizar o regional']);
         }

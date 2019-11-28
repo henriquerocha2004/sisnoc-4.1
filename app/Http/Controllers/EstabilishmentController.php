@@ -173,7 +173,7 @@ class EstabilishmentController extends Controller
                throw new Exception("Houve uma Falha ao atualizar os dados");
             }
 
-            if($establishment->establishment_status = 'close'){
+            if($establishment->establishment_status == 'close'){
                 $this->closeEstablishmentRoutine($establishment);
             }
 

@@ -67,7 +67,7 @@
                                         <div class="row">
                                             <h3 class="title-5 col-md-6">Estabelecimentos associados:</h3>
                                         </div>
-                                        <input type="hidden" name="selected_establishment" value=" {{  count(old('selected_establishment', $regionalManager->idEstablishments())) }}">
+                                        {{-- <input type="hidden" name="selected_establishment" value=" {{  count(old('selected_establishment', $regionalManager->idEstablishments())) }}"> --}} --}}
                                         <div class="row">
                                             <div class="col col-md-9 mt-2">
                                                 <select name="establishment_code[]" id="establishment_code" multiple="" class="form-control {{ ($errors->has('selected_establishment') ? 'is-invalid': '') }}">
