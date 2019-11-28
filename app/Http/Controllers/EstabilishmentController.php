@@ -261,6 +261,10 @@ class EstabilishmentController extends Controller
         }
 
         try {
+
+            $establishment->closed_at = date('Y-m-d');
+            $establishment->save();
+
             //Fechar os chamados Abertos
             $establishment->calls()->update(['status' => 1, 'id_user_close' => auth()->user()->id]);
 

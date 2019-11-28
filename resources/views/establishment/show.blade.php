@@ -35,7 +35,9 @@
                                             {{ $establishment->establishment_code }}
                                         @endcan
 
-                                        {{$establishment->holyday == date('Y-m-d') ? " - Feriado Local" : ($establishment->establishment_status == 'close' ? ' - Estabelecimento Fechado' : '')}}</strong>
+                                        {{$establishment->holyday == date('Y-m-d') ? " - Feriado Local" : ($establishment->establishment_status == 'close' ? ' - Estabelecimento Fechado' : '')}}
+                                        {{ (!empty($establishment->closed_at) ? 'Fechado no dia : ' . date('d/m/Y', strtotime($establishment->closed_at)) : '') }}
+                                    </strong>
                                 </div>
                                 @can('manager-establishment-regionalManager-links-caller-create-reports')
                                     <div class="col-md-6">
