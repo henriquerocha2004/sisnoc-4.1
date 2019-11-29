@@ -224,10 +224,10 @@
                                     <div id="divSemep" class="col-md-4 extra-input" style="display: none">
                                         <div class="form-group">
                                            <label class="form-control-label"> SEMEP: </label>
-                                           <input  type="text" id="sisman" name="sisman" value="{{old('sisman')}}" class="form-control {{ ($errors->has('sisman') ? 'is-invalid': '') }}"">
-                                            @if($errors->has('sisman'))
+                                           <input  type="text" id="semep" name="semep" value="{{old('semep')}}" class="form-control {{ ($errors->has('semep') ? 'is-invalid': '') }}"">
+                                            @if($errors->has('semep'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
-                                                    {{$errors->first('sisman')}}
+                                                    {{$errors->first('semep')}}
                                                 @endcomponent
                                             @endif
                                         </div>

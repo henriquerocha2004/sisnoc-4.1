@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 
 class Audit extends Model
@@ -20,7 +21,7 @@ class Audit extends Model
             $log->save();
 
         } catch (Exception $e) {
-
+            throw new Exception("Erro ao Gerar o log");
         }
     }
 }
