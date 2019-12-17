@@ -66,9 +66,6 @@ class RotinaFaltaEnergia extends Command
                 $establishment = $called->establishment()->first();
                 $establishment->energy_fault = 0;
                 $establishment->save();
-
-               echo "FIM";
-               $this->info('Example Cron comando rodando com êxito');
            }
 
        }
