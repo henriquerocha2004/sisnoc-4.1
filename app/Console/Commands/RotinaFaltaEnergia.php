@@ -67,7 +67,7 @@ class RotinaFaltaEnergia extends Command
                 $establishment->energy_fault = 0;
                 $establishment->save();
 
-                $this->info('Rotina efetuada com sucesso!');
+               echo "FIM";
            }
 
        }
