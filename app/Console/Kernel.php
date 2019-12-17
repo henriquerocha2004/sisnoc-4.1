@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('FaltaDeEnergia:cron')->everyMinute();
+        $schedule->command('FaltaDeEnergia:cron')->everyFiveMinutes();
     }
 
     /**
