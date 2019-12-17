@@ -561,8 +561,6 @@ class CalledController extends Controller
 
         } catch (Exception $e) {
             DB::rollback();
-
-            dd($e->getMessage(), $e->getLine(), $e->getFile());
             return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => 'Falha ao atualizar o chamado!']);
         }
 

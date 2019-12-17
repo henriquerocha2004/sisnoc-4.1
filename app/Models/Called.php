@@ -84,4 +84,9 @@ class Called extends Model
             return "Aberto";
         }
     }
+
+
+    public function closeCalled(){
+
+    }
 }

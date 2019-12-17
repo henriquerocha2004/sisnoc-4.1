@@ -18,6 +18,7 @@ class NetWork
         self::$ip = $ip;
         self::$link = $link;
         self::checkOS();
+
         if (self::$os) {
             exec("ping " . self::$ip, $output, $return_var);
         } else {
@@ -29,7 +30,8 @@ class NetWork
     }
     public static function checkOS()
     {
-        self::$os = preg_match('/(Win32)|(Win64)/', $_SERVER['SERVER_SOFTWARE']);
+        // self::$os = preg_match('/(Win32)|(Win64)/', $_SERVER['SERVER_SOFTWARE'] ?? $_SERVER['OS']);
+        self::$os = preg_match('/Windows_NT/', $_SERVER['SERVER_SOFTWARE'] ?? $_SERVER['OS']);
     }
     private static function checkResult()
     {
