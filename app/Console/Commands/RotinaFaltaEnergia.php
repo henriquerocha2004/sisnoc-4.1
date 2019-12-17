@@ -51,7 +51,7 @@ class RotinaFaltaEnergia extends Command
            if($testePing->retorno == true){
                 $called->hr_up = date('Y-m-d H:i:s');
                 $called->id_problem_cause = 35;
-                $called->id_user_close = 3;
+                $called->id_user_close = 14;
                 $called->status = 1;
                 $called->downtime = DateUtils::calcDowntime($called->hr_down, date('Y-m-d H:i:s'));
                 $called->work_downtime = DateUtils::calcWorkDowntime($called->hr_up, $called->hr_down, $called->downtime);
@@ -60,7 +60,7 @@ class RotinaFaltaEnergia extends Command
                 $subCaller = $called->subCallers()->first();
 
                 $subCaller->status = 'closed';
-                $subCaller->id_user_close = 3;
+                $subCaller->id_user_close = 14;
                 $subCaller->save();
 
                 $establishment = $called->establishment()->first();
