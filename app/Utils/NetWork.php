@@ -31,7 +31,7 @@ class NetWork
     public static function checkOS()
     {
         // self::$os = preg_match('/(Win32)|(Win64)/', $_SERVER['SERVER_SOFTWARE'] ?? $_SERVER['OS']);
-        self::$os = preg_match('/Windows_NT/', $_SERVER['SERVER_SOFTWARE'] ?? $_SERVER['OS']);
+        self::$os = preg_match('/(Win32)|(Win64)/', $_SERVER['SERVER_SOFTWARE']);
     }
     private static function checkResult()
     {
