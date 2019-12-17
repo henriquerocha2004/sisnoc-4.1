@@ -53,7 +53,7 @@
                                 @forelse ($notes as $note)
                                     @component('compoments.message', ['type' => 'warning'])
                                         <div class="col-md-12 ml-3">
-                                            <p style="font-size: 0.8em;">{{ $note->user()->first()->name }}, disse: {{ $note->desc }}</p>
+                                            <p style="font-size: 0.8em;">{{ $note->user()->first()->name }} em {{ date('d/m/Y', strtotime($note->created_at)) }}, disse: {{ $note->desc }}</p>
                                         </div>
                                     @endcomponent
                                 @empty

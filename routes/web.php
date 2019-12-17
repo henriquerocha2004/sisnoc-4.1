@@ -72,7 +72,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('holyday-manager', 'ConfigController@holyDayManager')->name('config.holyday');
     Route::get('holyday-manager-table', 'ConfigController@holyDayTable');
     Route::delete('holyday-manager-delete/{id}', 'ConfigController@removeHolyday');
-    Route::get('update-system', 'ConfigController@updateSystem')->name('config.systemUpdate');
 
     //Rotas para usuários
     Route::get('users', 'UsersController@index')->name('users.index');
