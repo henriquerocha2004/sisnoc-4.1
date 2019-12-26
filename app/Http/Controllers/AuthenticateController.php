@@ -8,6 +8,7 @@ use App\Models\Establishment;
 use App\Models\Links;
 use App\Models\SubCaller;
 use App\Models\User;
+use App\Utils\NetWork;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -181,6 +182,44 @@ class AuthenticateController extends Controller
             return back()->with('alert', ['messageType' => 'danger', 'message' => 'Usuário ou Senha inválidos!']);
         }
     }
+
+    public function relationCompany(){
+
+        ini_set('max_execution_time', 300);
+
+        $companys = Links::select('telecommunications_company')->distinct()->get()->pluck('telecommunications_company');
+        $callers = Called::where(['status' => 2])->get();
+        $dados = null;
+
+        foreach($companys as $company){
+
+           foreach($callers as $caller){
+
+               if($caller->link()->first()->telecommunications_company == $company){
+                    $testePing =  json_decode(NetWork::testePing($caller->link()->first()->monitoring_ip, $caller->link()->first()));
+
+                    if(in_array(1, $caller->typeProblem()->get()->pluck('id_problem_type')->toArray())
+                    && $testePing->retorno == true){
+                        $dados[$company]['Normalizados'][] = $caller;
+                    }
+
+                    if(in_array(1, $caller->typeProblem()->get()->pluck('id_problem_type')->toArray()) &&  $testePing->retorno == false){
+                        $dados[$company]['Pendentes'][] = $caller;
+                    }elseif(!in_array(1, $caller->typeProblem()->get()->pluck('id_problem_type')->toArray())){
+                        $dados[$company]['Pendentes'][] = $caller;
+                    }
+               }
+           }
+        }
+
+
+
+        return view('list.relation-by-company', [
+            'dados' => $dados
+        ]);
+    }
+
+
 
     private function createAdmin(){
         $user = new User();

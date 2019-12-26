@@ -22,6 +22,7 @@ Route::get('/logout', 'AuthenticateController@logout')->name('logout');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', 'AuthenticateController@home')->name('home');
+    Route::get('/relation-company', 'AuthenticateController@relationCompany')->name('home.relation-company');
 
     //Rotas de estabelecimentos
     Route::resource('estabilishment', 'EstabilishmentController');

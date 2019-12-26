@@ -59,6 +59,10 @@ class Called extends Model
         return $this->belongsTo(ProblemCause::class, 'id_problem_cause', 'id');
     }
 
+    public function typeProblem(){
+        return $this->hasMany(TypeProblemCalled::class, 'id_called', 'id');
+    }
+
 
 
     //Access e Mutators

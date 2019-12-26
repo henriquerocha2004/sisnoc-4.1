@@ -60,11 +60,16 @@
 
 
             <div class="row">
-                <div id="chamados-abertos-link" class="col-md-12 mb-3">
+                <div id="chamados-abertos-link" class="col-md-6 mb-3">
                     <div class="overview-wrap">
                         <h2 class="title-1">Chamados Abertos por Link</h2>
                     </div>
                 </div>
+
+                <div class="col-md-6">
+                    <button class="btn btn-success pull-right" id="btn-rel-opr" >Gerar Relação por Operadora</button>
+                </div>
+
             </div>
             <div class="row">
                 @if(!empty($dashboard['qtd_open_called_by_link']))
@@ -333,8 +338,13 @@
         </div>
     </div>
 </div>
-
-
-
 <!-- END MAIN CONTENT-->
+@endsection
+
+@section('js')
+     <script>
+          $("#btn-rel-opr").click(function(){
+            window.open("{{ route('home.relation-company') }}", 'rel-opr', 'width=500, height=500, top=100, left=699, scrollbars=yes, status=no, toolbar=no, location=no, menubar=no, resizable=no, fullscreen=no')
+          });
+     </script>
 @endsection
