@@ -212,8 +212,6 @@ class AuthenticateController extends Controller
            }
         }
 
-
-
         return view('list.relation-by-company', [
             'dados' => $dados
         ]);

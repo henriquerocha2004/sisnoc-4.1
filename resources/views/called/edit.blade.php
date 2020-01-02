@@ -24,7 +24,7 @@
 
                                 <div class="pull-right">
                                     <small style="color:red" class="text-right"><i>*</i> Campos Obrigatórios</small>
-                                    <button type="button" id="btn-popover" class="btn btn-sm btn-primary"  data-toggle="popover" title="Informações do Estabelecimento" data-content="">Aguardando estabelecimento ...</button>
+                                    <a type="button" id="btn-popover" class="btn btn-sm btn-primary" target="_blank" style="color:white" href="{{ route('estabilishment.show', $called->establishment()->first()->id) }}">Informações do Estabelecimento</a>
                                 </div>
                         </div>
                         <div class="card-body card-block">
@@ -199,7 +199,7 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <textarea name="content" id="content" cols="30" rows="10" class="form-control {{ ($errors->has('content') ? 'is-invalid': '') }}">{{old('content') ?? ($lastSubCaller->notes()->first()->content ?? '') }}</textarea>
+                                            <textarea name="content" id="content" cols="30" rows="10" {{ !empty($lastSubCaller->notes()->first()->content) ? 'readonly' : '' }} class="form-control {{ ($errors->has('content') ? 'is-invalid': '') }}">{{old('content') ?? ($lastSubCaller->notes()->first()->content ?? '') }}</textarea>
                                             @if($errors->has('content'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('content')}}

@@ -22,7 +22,7 @@
                                 <div class="col-md-12">
                                         <strong>Novo </strong> Chamado
                                         <small style="color:red" class="text-right"><i>*</i> Campos Obrigatórios</small>
-                                        <button type="button" id="btn-popover" class="btn btn-sm btn-primary" style="margin-left: 70%" data-toggle="popover" title="Informações do Estabelecimento" data-content="">Aguardando estabelecimento ...</button>
+                                        <a type="button" id="btn-popover" class="btn btn-sm btn-primary pull-right" target="_blank" style="color:white" href="#">Aguardando Estabelecimento...</a>
                                 </div>
                             </div>
                         </div>
@@ -318,9 +318,8 @@
 
             function getLinks(establishmentCode){
                 $.get('{{url('get-links-establishment')}}', {establishment_code: establishmentCode}, function(r){
-
                     if(r.response){
-
+                        $("#btn-popover").attr('href', window.location.origin + '/sisnoc/public/estabilishment/' + r.establishment.info.id).html('Informações do Estabelecimento');
                         var options = '<option value="">Selecione</option>';
                         popoverData = r;
                         var old = {{old('id_link') ?? 0 }};

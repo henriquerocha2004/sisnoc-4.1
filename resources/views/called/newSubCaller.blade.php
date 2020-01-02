@@ -22,7 +22,7 @@
 
                                 <div class="pull-right">
                                     <small style="color:red" class="text-right"><i>*</i> Campos Obrigatórios</small>
-                                    <button type="button" id="btn-popover" class="btn btn-sm btn-primary"  data-toggle="popover" title="Informações do Estabelecimento" data-content="">Aguardando estabelecimento ...</button>
+                                    <a type="button" id="btn-popover" class="btn btn-sm btn-primary" target="_blank" style="color:white" href="{{ route('estabilishment.show', $called->establishment()->first()->id) }}">Informações do Estabelecimento</a>
                                 </div>
                         </div>
                         <div class="card-body card-block">
@@ -45,7 +45,7 @@
                                         <div class="form-group">
                                             <label for="id_link" class=" form-control-label">Tipo de link<i style="color:red">*</i></label>
                                             <select  name="id_link" id="id_link" class="form-control {{ ($errors->has('id_link') ? 'is-invalid': '') }}">
-                                                <option selected value="{{$called->id_link}}">{{$called->link()->first()->type_link}}</option>
+                                                <option selected value="{{$called->id_link}}">{{$called->link()->first()->type_link}} - {{$called->link()->first()->link_identification}}</option>
                                             </select>
                                             @if($errors->has('id_link'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])

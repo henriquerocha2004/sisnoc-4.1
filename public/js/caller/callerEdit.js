@@ -38,6 +38,7 @@ $(function(){
     //Ação relacionada ao botão nova nota
     $("#new-note").click(function(){
         $("#content").val("");
+        $("#content").attr('readonly', false);
         $(this).attr('disabled', true);
         $("#save-note").attr('disabled', false);
     });
@@ -61,6 +62,7 @@ $(function(){
 
                     $("#save-note").attr('disabled', true);
                     $("#new-note").attr('disabled', false);
+                    $("#content").attr('readonly', true);
 
                 }else{
                     $.alert({
