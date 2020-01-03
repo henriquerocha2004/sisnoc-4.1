@@ -3,6 +3,8 @@ $(function(){
     var popoverData = null;
     var statusSubcaller = null;
 
+    testLink();
+
     //Verify if exists return of validation
     if($('#establishment_code').val() != ''){
         console.log($('#establishment_code').val());
@@ -14,7 +16,6 @@ $(function(){
         });
     }
 
-    console.log($('#next_action').val());
 
     if($('#next_action').val() != null){
         showInputExtras($('#next_action').val(), 'true');
@@ -90,6 +91,7 @@ $(function(){
         $.get(routes.getNotes, {idnote: idNote}, function(r){
             if(r.response){
                 $("#content").val(r.content);
+                $("#content").attr('readonly', true);
             }else{
                 $.alert({
                     title: "Aviso | Sisnoc",
@@ -206,5 +208,24 @@ $(function(){
                 $("#btn-save").attr('disabled', false).removeClass('disabled');
 
         });
+    }
+
+    function testLink(){
+        var id = $("#link-status").attr('data-link-id');
+
+        $.get(routes.pingTest, {idLink : id}, function(r){
+
+            console.log(r.testResults);
+
+            if(r.testResults.retorno == true){
+                $("#link-status").html("<span class='badge badge-success'>Online</span>");
+            }else if(r.testResults.msg){
+                $("#link-status").html("<span class='badge badge-warning'>Perda de Pacotes</span>");
+            }else{
+                $("#link-status").html("<span class='badge badge-danger'>Offline</span>");
+            }
+        });
+
+
     }
 });

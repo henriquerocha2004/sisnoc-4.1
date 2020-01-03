@@ -49,15 +49,20 @@ class RotinaFaltaEnergia extends Command
            $testePing = json_decode( NetWork::testePing($link->monitoring_ip, $link->type_link));
 
            if($testePing->retorno == true){
-                $called->hr_up = date('Y-m-d H:i:s');
-                $called->id_problem_cause = 35;
-                $called->id_user_close = 14;
-                $called->status = 1;
-                $called->downtime = DateUtils::calcDowntime($called->hr_down, date('Y-m-d H:i:s'));
-                $called->work_downtime = DateUtils::calcWorkDowntime($called->hr_up, $called->hr_down, $called->downtime);
-                $called->save();
 
-                $subCaller = $called->subCallers()->first();
+                $subCaller = $called->subCallers()->where(['status' => 'open']);
+
+                if($subCaller->get()->count() == 1){
+                    $called->hr_up = date('Y-m-d H:i:s');
+                    $called->id_problem_cause = 35;
+                    $called->id_user_close = 14;
+                    $called->status = 1;
+                    $called->downtime = DateUtils::calcDowntime($called->hr_down, date('Y-m-d H:i:s'));
+                    $called->work_downtime = DateUtils::calcWorkDowntime($called->hr_up, $called->hr_down, $called->downtime);
+                    $called->save();
+                }
+
+                $subCaller =  $subCaller->where(['type' => '5'])->first();
 
                 $subCaller->status = 'closed';
                 $subCaller->id_user_close = 14;

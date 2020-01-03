@@ -222,6 +222,7 @@ class EstabilishmentController extends Controller
     }
 
     public function pingTest(Request $request){
+
         $link = Links::find($request->idLink);
         $testPing = NetWork::testePing($link->monitoring_ip, $link->type_link);
 

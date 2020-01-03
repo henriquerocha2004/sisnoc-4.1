@@ -34,7 +34,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="establishment_code" class=" form-control-label">Cód. Estabelecimento<i style="color:red">*</i></label>
-                                            <input  type="text" id="establishment_code" name="establishment_code" value="{{old('establishment_code')}}" class="form-control {{ ($errors->has('establishment_code') ? 'is-invalid': '') }}">
+                                            <input  type="text" id="establishment_code" name="establishment_code" value="{{old('establishment_code', $establishmentCode)}}" class="form-control {{ ($errors->has('establishment_code') ? 'is-invalid': '') }}">
                                             @if($errors->has('establishment_code'))
                                                 @component('compoments.feedbackInputs', ['typeFeed' => 'invalid'])
                                                     {{$errors->first('establishment_code')}}
@@ -271,10 +271,12 @@
         //Verify if exists return of validation
         if($('#establishment_code').val() !== ''){
              getLinks($('#establishment_code').val());
-             $("#called").show(800);
-             showInputExtras($("#next_action").val());
-             $("#btn-save").attr('disabled', false).removeClass('disabled');
-             getInfoEstablishment({{ old('id_link') }});
+             if($('.is-invalid').length >= 1){
+                $("#called").show(800);
+                showInputExtras($("#next_action").val());
+                $("#btn-save").attr('disabled', false).removeClass('disabled');
+                getInfoEstablishment({{ old('id_link') }});
+             }
         }
 
         $("#hr_down, #hr_up, #deadline").flatpickr({
@@ -333,6 +335,8 @@
                             title: "Aviso | Sisnoc",
                             content: r.message
                         });
+
+                        $("#called").hide(800);
                     }
                 }, 'json');
             }

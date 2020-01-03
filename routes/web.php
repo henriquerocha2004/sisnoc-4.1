@@ -48,6 +48,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Rotas para Chamados
     Route::resource('called', 'CalledController');
+    Route::get('called-with-establishment/{establishment?}', 'CalledController@create')->name('called.create-with-establishment');
     Route::get('table-called', 'CalledController@table');
     Route::get('get-links-establishment', 'CalledController@getLinks');
     Route::get('verify-open-called', 'CalledController@verifyOpenCalled');

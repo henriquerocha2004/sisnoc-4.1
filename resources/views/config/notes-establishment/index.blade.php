@@ -49,8 +49,8 @@
                     ajax: "{!! url('notes-establishment-table')!!}",
                     columns: [
                         {data: 'desc', name: 'desc'},
-                        {data: 'establishment_code', name: 'establishment_code'},
-                        {data: 'name', name: 'name'},
+                        {data: 'establishment_code', name: 'establishment.establishment_code'},
+                        {data: 'name', name: 'users.name'},
                         {data: 'id', render: function (data, type, row, meta) {
                             return `
                                 <div class="table-data-feature">

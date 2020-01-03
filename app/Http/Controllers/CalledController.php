@@ -131,7 +131,7 @@ class CalledController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($establishmentCode = null)
     {
         if(Gate::denies('manager-establishment-regionalManager-links-caller-create-reports')){
             return redirect()->back()->with('alert', ['messageType' => 'danger', 'message' => 'Ops! Você não está autorizado a acessar esse recurso!']);
@@ -144,7 +144,8 @@ class CalledController extends Controller
         return view('called.create', [
             'typeProblems' => $typeProblems,
             'actionsTaken' => $actionsTaken,
-            'categoryProblems' => $categoryProblems
+            'categoryProblems' => $categoryProblems,
+            'establishmentCode' => $establishmentCode
         ]);
     }
 

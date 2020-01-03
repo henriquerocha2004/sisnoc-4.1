@@ -57,6 +57,14 @@
                                             @endif
                                         </div>
                                     </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="id_link" class=" form-control-label">Status do Link</label>
+                                            <div id="link-status" data-link-id="{{ $called->link()->first()->id }}" >
+                                                <i class="fa fa-refresh fa-spin"></i>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
@@ -370,7 +378,8 @@
            "insertNotes" : '{{url('insert-notes')}}',
            "getNotes" : '{{url('get-notes')}}',
            "verifyOpenCalled" :'{{url('verify-open-called')}}',
-           "getLinksEstablishment" : '{{url('get-links-establishment')}}'
+           "getLinksEstablishment" : '{{url('get-links-establishment')}}',
+           "pingTest": '{{url('ping-test')}}'
        }
     </script>
     <script src="{{url('/js/caller/callerEdit.js')}}"></script>

@@ -170,7 +170,6 @@
                                                     <th>Chassi</th>
                                                     <th>Ip Mon.</th>
                                                     <th>Ip local</th>
-                                                    <th style="width: 8%">Ativo?</th>
                                                     <th>Status</th>
                                                 </tr>
                                             </thead>
@@ -185,7 +184,6 @@
                                                     <td>{{$link->serial_router}}</td>
                                                     <td>{{$link->monitoring_ip}}</td>
                                                     <td>{{$link->local_ip_router}}</td>
-                                                    <td>{{$link->status}}</td>
                                                     <td class="refresh" id="{{$link->id}}">
                                                         <i class="fa fa-refresh fa-spin"></i>
                                                     </td>
@@ -203,7 +201,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12 mb-2">
-                                    @foreach ($establishment->links()->get() as $link)
+                                    @foreach ($establishment->links()->where(['status' => 'active'])->get() as $link)
                                         <button type="button" class="btn-type-link btn btn-sm btn-primary mb-1" data-ip-mon="{{$link->monitoring_ip}}">Conectar pelo {{$link->type_link}}</button>
                                     @endforeach
                                 </div>
@@ -240,7 +238,7 @@
                                     <div class="table-data__tool">
                                        @can('manager-establishment-regionalManager-links-caller-create-reports')
                                             <div class="table-data__tool-right">
-                                                <a href="{{route('called.create')}}" class="au-btn au-btn-icon au-btn--green au-btn--small">
+                                                <a href="{{route('called.create-with-establishment', $establishment->establishment_code)}}" class="au-btn au-btn-icon au-btn--green au-btn--small">
                                                     <i class="zmdi zmdi-plus"></i>Novo Chamado</a>
                                             </div>
                                         @endcan
