@@ -75,7 +75,7 @@
                                             <label class="form-control-label"> Permissão: </label>
                                             <select  name="permission" id="permission" class="form-control {{ ($errors->has('permission') ? 'is-invalid': '') }}">
                                                 <option value="">Selecione</option>
-                                                <option value="1" {{  }}>Administrador</option>
+                                                <option value="1">Administrador</option>
                                                 <option value="2">Operador Noc </option>
                                                 <option value="3">Visitante</option>
                                             </select>

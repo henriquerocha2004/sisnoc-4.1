@@ -175,7 +175,11 @@ class EstabilishmentController extends Controller
 
             if($establishment->establishment_status == 'close'){
                 $this->closeEstablishmentRoutine($establishment);
+            }else{
+                $establishment->closed_at = '';
+                $estabilishment->save();
             }
+
 
             DB::commit();
             return redirect()->route('estabilishment.index')->with('alert', ['messageType' => 'success', 'message' => 'Estabelecimento Atualizado com sucesso!']);
