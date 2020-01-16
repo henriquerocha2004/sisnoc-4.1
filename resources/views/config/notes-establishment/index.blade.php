@@ -87,17 +87,12 @@
                                 });
                                }
                            });
-
                            window.location.reload();
-
                         },
                         Não: function () {},
                     }
                 });
-
             });
-
-
         });
     </script>
 @endsection

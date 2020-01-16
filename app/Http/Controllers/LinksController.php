@@ -13,7 +13,7 @@ use Yajra\DataTables\Facades\DataTables;
 class LinksController extends Controller
 {
 
-    private $typeLink = ['MPLS', 'ADSL', 'XDSL', 'IPConnect', 'Radio', 'SDWAN', '4G'];
+    private $typeLink = ['MPLS', 'ADSL', 'XDSL', 'IPConnect', 'Radio', 'SDWAN', '4G', 'LAN2LAN'];
 
     /**
      * Display a listing of the resource.
