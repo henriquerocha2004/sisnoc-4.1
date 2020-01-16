@@ -177,15 +177,13 @@ class EstabilishmentController extends Controller
                 $this->closeEstablishmentRoutine($establishment);
             }else{
                 $establishment->closed_at = '';
-                $estabilishment->save();
+                $establishment->save();
             }
-
 
             DB::commit();
             return redirect()->route('estabilishment.index')->with('alert', ['messageType' => 'success', 'message' => 'Estabelecimento Atualizado com sucesso!']);
 
         } catch (Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
             return back()->withInput()->with('alert', ['messageType' => 'danger', 'message' => 'Falha ao atualizar o estabelecimento']);
         }
