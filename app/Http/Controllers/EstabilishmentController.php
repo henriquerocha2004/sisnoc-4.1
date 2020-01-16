@@ -176,7 +176,7 @@ class EstabilishmentController extends Controller
             if($establishment->establishment_status == 'close'){
                 $this->closeEstablishmentRoutine($establishment);
             }else{
-                $establishment->closed_at = '';
+                $establishment->closed_at = null;
                 $establishment->save();
             }
 
