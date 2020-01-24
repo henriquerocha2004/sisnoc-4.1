@@ -48,7 +48,7 @@ class LinksController extends Controller
                     'links.type_link',
                     'links.link_identification',
                     'links.telecommunications_company',
-                    'links.bandwidth'
+                    'links.monitoring_ip'
                 ]
             );
         return DataTables::of($links)->make(true);

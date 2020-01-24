@@ -188,7 +188,10 @@ class AuthenticateController extends Controller
         ini_set('max_execution_time', 300);
 
         $companys = Links::select('telecommunications_company')->distinct()->get()->pluck('telecommunications_company');
-        $callers = Called::where(['status' => 2])->get();
+        $callers = Called::where(['status' => 2])->whereHas('subCallers', function ($query){
+            $query->where('deadline', '<=', date('Y-m-d H:i:s'));
+        })->get();
+
         $dados = null;
 
         foreach($companys as $company){

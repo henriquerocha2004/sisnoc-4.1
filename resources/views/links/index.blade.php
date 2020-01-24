@@ -35,7 +35,7 @@
                                             <th>Identificação</th>
                                             <th>Estabelecimento</th>
                                             <th>Operadora</th>
-                                            <th>Banda</th>
+                                            <th>IP Mon.</th>
                                             <th>Ações</th>
                                         </tr>
                                     </thead>
@@ -71,7 +71,7 @@
                         {data: 'link_identification', name: 'link_identification'},
                         {data: 'establishment_code', name: 'establishment.establishment_code'},
                         {data: 'telecommunications_company', name: 'telecommunications_company'},
-                        {data: 'bandwidth', name: 'bandwidth'},
+                        {data: 'monitoring_ip', name: 'monitoring_ip'},
                         {data: 'id', render: function (data, type, row, meta) {
                             return `
                                 <div class="table-data-feature">
