@@ -228,7 +228,8 @@ class EstabilishmentController extends Controller
 
         $link = Links::find($request->idLink);
         $testPing = NetWork::testePing($link->monitoring_ip, $link->type_link);
-
+        $testeLanPing = null;
+        
         if($request->lan == true){
            $testeLanPing = NetWork::testePing($link->local_ip_router, $link->type_link);
         }
