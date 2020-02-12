@@ -167,27 +167,29 @@
                                                     <th style="width: 8%">Banda</th>
                                                     <th>ISP</th>
                                                     <th>Router</th>
-                                                    <th>Chassi</th>
                                                     <th>Ip Mon.</th>
                                                     <th>Ip local</th>
-                                                    <th>Status</th>
+                                                    <th style="width: 8%">St. Mon.</th>
+                                                    <th>St. Local</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach ($establishment->links()->where(['status' => 'active'])->get() as $link)
-                                                <tr data-id-link="{{$link->id}}">
-                                                    <td><a style="color: #666; text-decoration: underline" target="_blank" href="{{route('links.edit', [$link->id])}}">{{$link->type_link}}</a></td>
-                                                    <td>{{$link->link_identification}}</td>
-                                                    <td>{{$link->bandwidth}}</td>
-                                                    <td>{{$link->telecommunications_company}}</td>
-                                                    <td>{{$link->installed_router_model}}</td>
-                                                    <td>{{$link->serial_router}}</td>
-                                                    <td>{{$link->monitoring_ip}}</td>
-                                                    <td>{{$link->local_ip_router}}</td>
-                                                    <td class="refresh" id="{{$link->id}}">
-                                                        <i class="fa fa-refresh fa-spin"></i>
-                                                    </td>
-                                                </tr>
+                                                    <tr data-id-link="{{$link->id}}">
+                                                        <td><a style="color: #666; text-decoration: underline" target="_blank" href="{{route('links.edit', [$link->id])}}">{{$link->type_link}}</a></td>
+                                                        <td>{{$link->link_identification}}</td>
+                                                        <td>{{$link->bandwidth}}</td>
+                                                        <td>{{$link->telecommunications_company}}</td>
+                                                        <td>{{$link->installed_router_model}}</td>
+                                                        <td>{{$link->monitoring_ip}}</td>
+                                                        <td>{{$link->local_ip_router}}</td>
+                                                        <td class="refresh" id="{{$link->id}}">
+                                                            <i class="fa fa-refresh fa-spin"></i>
+                                                        </td>
+                                                        <td class="refresh" id="{{$link->local_ip_router}}">
+                                                            <i class="fa fa-refresh fa-spin"></i>
+                                                        </td>
+                                                    </tr>
                                                 @endforeach
                                             </tbody>
                                         </table>
@@ -202,7 +204,7 @@
                             <div class="row">
                                 <div class="col-md-12 mb-2">
                                     @foreach ($establishment->links()->where(['status' => 'active'])->get() as $link)
-                                        <button type="button" class="btn-type-link btn btn-sm btn-primary mb-1" data-ip-mon="{{$link->monitoring_ip}}">Conectar pelo {{$link->type_link}}</button>
+                                        <button type="button" class="btn-type-link btn btn-sm btn-primary mb-1 d-none" id="{{$link->type_link}}-{{$link->id}}" data-ip-lan="{{$link->local_ip_router}}">Conectar pelo {{$link->type_link}}</button>
                                     @endforeach
                                 </div>
                             </div>
@@ -224,7 +226,7 @@
                             <div class="row">
                                 <div class="col-md-12" >
                                     <div id="terminal-container" style="width: 87%">
-                                        <iframe name="interno" style="width: 100%; background-color: black; height: 71vh" id="terminal" src="http://{{ env('TERMINAL_WEB_IP') }}:8000/terminal?ip={{$establishment->links()->first()->monitoring_ip}}&lg=d"></iframe>
+                                        <iframe name="interno" style="width: 100%; background-color: black; height: 71vh" id="terminal" src="http://{{ env('TERMINAL_WEB_IP') }}:8000/terminal?ip={{$establishment->links()->first()->local_ip_router}}&lg=d"></iframe>
                                     </div>
                                 </div>
                             </div>
@@ -347,7 +349,7 @@
 
           //Evento que conecta ao terminal pelo ip de cada link cadastrado
           $(".btn-type-link").click(function(){
-              var ip = $(this).attr('data-ip-mon');
+              var ip = $(this).attr('data-ip-lan');
               var lg = $(':checkbox').is(':checked') ? 'd' : 'a';
               $("#terminal").attr('src', mountUrlTerminal(ip, lg))
           });
@@ -462,9 +464,7 @@
 
           function checkStatusLink(idLink){
 
-            $.get('{{url('ping-test')}}', {idLink : idLink}, function(r){
-
-                console.log(r.testResults);
+            $.get('{{url('ping-test')}}', {idLink : idLink, lan : true}, function(r){
 
                 if(r.testResults.retorno == true){
                     $("#" + r.link.id).html("<span class='badge badge-success'>Online</span>");
@@ -472,6 +472,17 @@
                     $("#" + r.link.id).html("<span class='badge badge-warning'>Perda de Pacotes</span>");
                 }else{
                     $("#" + r.link.id).html("<span class='badge badge-danger'>Offline</span>");
+                }
+
+                if(r.testeLanResults.retorno == true){
+                    $("#" + r.link.id).next().html("<span class='badge badge-success'>Online</span>");
+                    $("#" + r.link.type_link + "-" + r.link.id).removeClass('d-none');
+                }else if(r.testeLanResults.msg){
+                    $("#" + r.link.local_ip_router).next().html("<span class='badge badge-warning'>Perda de Pacotes</span>");
+                    $("#" + r.link.type_link + "-" + r.link.id).removeClass('d-none');
+                }else{
+                    $("#" + r.link.local_ip_router).next().html("<span class='badge badge-danger'>Offline</span>");
+                    $("#" + r.link.type_link).addClass('d-none');
                 }
             });
           }

@@ -230,5 +230,4 @@ class AuthenticateController extends Controller
         $user->permission = 1;
         $user->save();
     }
-
 }
