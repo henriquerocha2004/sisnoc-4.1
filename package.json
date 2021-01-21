@@ -31,7 +31,7 @@
         "laravel-echo": "^1.6.1",
         "multi.js": "^0.5.1",
         "select2": "^4.0.10",
-        "socket.io": "^2.3.0",
+        "socket.io": "^2.4.0",
         "ssh2": "^0.8.5",
         "xterm": "^4.1.0"
     }
